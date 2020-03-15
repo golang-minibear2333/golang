@@ -21,19 +21,33 @@ type Coding3min struct {
 	ResultCode int64  `json:"result_code"`
 }
 
+//把string解析成struct
 func parseJson(jsonStr string) (Coding3min, error) {
 	var coding3min Coding3min
 	err := json.Unmarshal([]byte(jsonStr), &coding3min)
 	return coding3min, err
 }
 
+//把struct编译成string
+func convertJson(c Coding3min) (res string, err error) {
+	resBytes, err := json.Marshal(c)
+	return string(resBytes), err
+}
+
 func main() {
 	jsonStr := `{"data":{"items":[{"_id":"2"}],"total_count":1},"message":"","result_code":200}`
+	//解析
 	coding3min, err := parseJson(jsonStr)
 	if err != nil {
-		fmt.Println("parseJsonErr error:" + err.Error())
+		fmt.Println("parseJson error:" + err.Error())
 		return
 	}
 	printStr := fmt.Sprintf("%v", coding3min)
 	fmt.Println(printStr)
+	//编译
+	resStr, err := convertJson(coding3min)
+	if err != nil {
+		fmt.Println("convertJson error: " + err.Error())
+	}
+	fmt.Println(resStr)
 }
