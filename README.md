@@ -19,8 +19,12 @@
 
 博客语法备忘快速查询：[Golang](https://coding3min.com/561.html)
 
+我是按从易到难的顺序来排序的，有可能后面的知识会用到前面的。
+
 |                  Title                   |                  Golang                  |     Python3                  |           
 | ---- | :--------------------------------------: | :--------------------------------------: | 
+| 代码运行时间（测速）| [Golang](golang/easy/speed/speed.go) | no |
+| 快速拼接字符串|[Golang](golang/easy/string/append_string.go) / [博客应用](https://coding3min.com/675.html)| no | 
 | json解析与编码   | [Golang](golang/easy/json/parse_json.go) | no | 
-| 灵活解析多版本字段类型稍微不同的json   | [Golang](golang/easy/json/json_interface/fixed_json.go) | - | 
+| 灵活解析多版本字段类型稍微不同的json   | [Golang](golang/medium/json_interface/fixed_json.go) | - | 
 
