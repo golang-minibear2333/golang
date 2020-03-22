@@ -32,7 +32,10 @@
 
 |                  Title                   |                  Golang                  |     Python3                |           Python2 |
 | ---- | :--------------------------------------: | :--------------------------------------: |  :--------------------------------------: | 
-| 解析域名得到ip | no | [Python](python/network/pase_hostname.py) | 同Python3 |
+| 解析域名得到ip | no | [Python3](python/network/pase_hostname.py) | 同Python3 |
+| 解析url或者其中的域名 | no |no |  [Python2](python/network/py2_parse_url_hostname.py)  |
+
+
 
 
 
