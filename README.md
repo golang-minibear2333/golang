@@ -23,6 +23,7 @@
 
 |                  Title                   |                  Golang                  |     Python3                |           Python2 |
 | ---- | :--------------------------------------: | :--------------------------------------: |  :--------------------------------------: | 
+| 声明变量的各种方式 | [Golang](golang/easy/variable/variable.go) | no | no |
 | 代码运行时间（测速）| [Golang](golang/easy/speed/speed.go) | no | no |
 | 快速拼接字符串|[Golang](golang/easy/string/append_string.go) / [博客应用](https://coding3min.com/675.html)| no |  no |
 | json解析与编码   | [Golang](golang/easy/json/parse_json.go) | no |  no |
