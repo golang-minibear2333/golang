@@ -2,7 +2,7 @@
 * @Author: pzqu
 * @Date:   2020-03-17 00:29
 */
-package main
+package utils
 
 import (
 	"fmt"
