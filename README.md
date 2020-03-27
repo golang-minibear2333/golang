@@ -25,7 +25,7 @@
 | ---- | ---- | :--------------------------------------: | :--------------------------------------: |  :--------------------------------------: | 
 | 变量 | 声明【变量】的各种方式 | [Golang](golang/easy/variable/variable.go) |Todo|Todo|
 | |声明【常量】的各种方式 | [Golang](golang/easy/variable/const.go) |Todo|Todo|
-| 条件语句| switch和type switch | [Golang](golang/easy/ifelse_switch_select/switch.go) |Todo|Todo|
+| 条件语句| switch和type switch | [Golang](golang/easy/ifelse_switch/switch.go) |Todo|Todo|
 | 小工具 |代码运行时间（测速）| [Golang](golang/utils/speed.go) |Todo|Todo|
 | 字符串 |快速拼接字符串|[Golang](golang/easy/string/append_string.go) / [博客应用](https://coding3min.com/675.html)|Todo| Todo|
 |json |json解析与编码   | [Golang](golang/easy/json/parse_json.go) |Todo| Todo|
@@ -34,6 +34,10 @@
 | |解析url或者其中的域名 |Todo|Todo |  [Python2](python/network/py2_parse_url_hostname.py)  |
 
 
+##### `go`的并发特性
 
+|                  Title                   |                  Golang                  |    博客讲解|
+| ---- | :--------------------------------------: | :--------------------------------------: | 
+| 协程| [Golang](golang/medium/chan/goroutine.go)| Todo |
 
 
