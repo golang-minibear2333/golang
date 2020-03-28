@@ -38,6 +38,7 @@
 
 |                  Title                   |                  Golang                  |    博客讲解|
 | ---- | :--------------------------------------: | :--------------------------------------: | 
-| 协程| [Golang](golang/medium/chan/goroutine.go)| Todo |
+| 协程（goroutine）| [Golang](golang/medium/chan/goroutine.go)| Todo |
+| 通道（chan）的发送与接收 | [Golang](golang/medium/chan/chan.go) | Todo |
 
 
