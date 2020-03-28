@@ -12,13 +12,13 @@ import (
 func doWhat(){
 
 }
-func speedTime(handler func() , funcName string) {
+func SpeedTime(handler func() , funcName string) {
 	t := time.Now()
 	handler()
 	elapsed := time.Since(t)
 	fmt.Println(funcName+"spend time:", elapsed)
 }
 func main() {
-	speedTime(doWhat, "doWhat")
+	SpeedTime(doWhat, "doWhat")
 }
 
