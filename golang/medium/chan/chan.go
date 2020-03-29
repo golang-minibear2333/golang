@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+//本节需要先了解goroutine的知识, 示例代码：https://github.com/pzqu/how_to_code/blob/master/golang/medium/chan/goroutine.go
 var c chan int
 
 /*
@@ -57,3 +58,4 @@ func main() {
 		主线程休眠结束，强制结束了send
 	 */
 }
+
