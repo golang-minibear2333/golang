@@ -40,5 +40,6 @@
 | ---- | :--------------------------------------: | :--------------------------------------: | 
 | 协程（goroutine）| [Golang](golang/medium/chan/goroutine.go)| Todo |
 | 通道（chan）的发送与接收 | [Golang](golang/medium/chan/chan.go) | Todo |
+| select语法 | [Golang](golang/medium/chan/select.go) | Todo |
 
 
