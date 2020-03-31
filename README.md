@@ -12,7 +12,7 @@
 * 我用`golang`和`python`做 [算法的项目](https://github.com/pzqu/LeetCode)
 * 分享开发、运维、云技术等方面知识，编程三分钟公众号不加班的时候推送。欢迎您的关注~！
 
-<div align="center"><img border="0" src="https://coding3min.oss-accelerate.aliyuncs.com/coding3min/2020-03-06-115447.jpg" alt="Coder" title="gongzhonghao" with="200" height="200"></div>
+<div align="center"><img border="0" src="qrcode.jpg" alt="Coder" title="gongzhonghao" with="200" height="200"></div>
 
 
 ##### 语法与简单使用
