@@ -26,6 +26,7 @@
 | 变量 | 声明【变量】的各种方式 | [Golang](golang/easy/variable/variable.go) |Todo|Todo|
 | |声明【常量】的各种方式 | [Golang](golang/easy/variable/const.go) |Todo|Todo|
 | 函数|函数的简单使用| [Golang](golang/easy/function/main.go)| Todo | Todo|
+| | 值传递和引用传递| [Golang](golang/easy/function/more.go)|Todo|Todo|
 | 条件语句| switch和type switch | [Golang](golang/easy/ifelse_switch/switch.go) |Todo|Todo|
 | 小工具 |代码运行时间（测速）| [Golang](golang/utils/speed.go) |Todo|Todo|
 | 字符串 |快速拼接字符串|[Golang](golang/easy/string/append_string.go) / [博客应用](https://coding3min.com/675.html)|Todo| Todo|
