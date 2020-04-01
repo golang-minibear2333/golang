@@ -23,26 +23,26 @@
 
 | 单元 |                  Title                   |                  Golang                  |     Python3                |           Python2 |
 | ---- | ---- | :--------------------------------------: | :--------------------------------------: |  :--------------------------------------: | 
-| 变量 | 声明【变量】的各种方式 | [Golang](golang/easy/variable/variable.go) |Todo|Todo|
-| |声明【常量】的各种方式 | [Golang](golang/easy/variable/const.go) |Todo|Todo|
-| 函数|函数的简单使用| [Golang](golang/easy/function/main.go)| Todo | Todo|
-| | 值传递和引用传递| [Golang](golang/easy/function/more.go)|Todo|Todo|
-| | 函数当作变量使用，当做 参数传递|[Golang](golang/easy/function/functionValue.go)|Todo|Tod|
-| 条件语句| switch和type switch | [Golang](golang/easy/ifelse_switch/switch.go) |Todo|Todo|
-| 小工具 |代码运行时间（测速）| [Golang](golang/utils/speed.go) |Todo|Todo|
-| 字符串 |快速拼接字符串|[Golang](golang/easy/string/append_string.go) / [博客应用](https://coding3min.com/675.html)|Todo| Todo|
-|json |json解析与编码   | [Golang](golang/easy/json/parse_json.go) |Todo| Todo|
-| |灵活解析多版本字段类型稍微不同的json   | [Golang](golang/medium/json_interface/fixed_json.go) | - |  - |
-| 网络 | 解析域名得到ip |Todo| [Python3](python/network/pase_hostname.py) | 同Python3 |
-| |解析url或者其中的域名 |Todo|Todo |  [Python2](python/network/py2_parse_url_hostname.py)  |
+| 变量 | 声明【变量】的各种方式 | [Golang](golang/easy/variable/variable.go) |-|-|
+| |声明【常量】的各种方式 | [Golang](golang/easy/variable/const.go) |-|-|
+| 函数|函数的简单使用| [Golang](golang/easy/function/main.go)| - | -|
+| | 值传递和引用传递| [Golang](golang/easy/function/more.go)|-|-|
+| | 函数当作变量使用，当做 参数传递|[Golang](golang/easy/function/function_value.go) / [实战用法Demo(模拟迭代器)](golang/easy/function/function_value_good_demo.go)|-|-| 
+| 条件语句| switch和type switch | [Golang](golang/easy/ifelse_switch/switch.go) |-|-|
+| 小工具 |代码运行时间（测速）| [Golang](golang/utils/speed.go) |-|-|
+| 字符串 |快速拼接字符串|[Golang](golang/easy/string/append_string.go) / [博客应用](https://coding3min.com/675.html)|-| -|
+|json |json解析与编码   | [Golang](golang/easy/json/parse_json.go) |-| -|
+| |灵活解析多版本字段类型稍微不同的json   | [Golang](golang/medium/json_interface/fixed_json.go) | / |  / |
+| 网络 | 解析域名得到ip |-| [Python3](python/network/pase_hostname.py) | 同Python3 |
+| |解析url或者其中的域名 |-|- |  [Python2](python/network/py2_parse_url_hostname.py)  |
 
 
 ##### `go`的并发特性
 
 |                  Title                   |                  Golang                  |    博客讲解|
 | ---- | :--------------------------------------: | :--------------------------------------: | 
-| 协程（goroutine）| [Golang](golang/medium/chan/goroutine.go)| Todo |
-| 通道（chan）的发送与接收 | [Golang](golang/medium/chan/chan.go) | Todo |
-| select语法 | [Golang](golang/medium/chan/select.go) | Todo |
+| 协程（goroutine）| [Golang](golang/medium/chan/goroutine.go)| - |
+| 通道（chan）的发送与接收 | [Golang](golang/medium/chan/chan.go) | - |
+| select语法 | [Golang](golang/medium/chan/select.go) | - |
 
 
