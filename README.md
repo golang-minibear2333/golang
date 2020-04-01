@@ -1,12 +1,12 @@
 # how_to_code (go、python学习教程)
 
-如果对这个项目感兴趣，请点击一下 **Star**， 项目会 **持续更新**，感谢大家的支持。
+如果对这个项目感兴趣，请点击一下 **Star** :star2: :bow: :star2:， 项目会 **持续更新**，感谢大家的支持:kissing_heart:。
 
-记录小熊工作中一时想不起的语法，或者不加班的时候做的一些小练习，用来备忘，也希望能给学习`golang`、`python`的你一些帮助。
+记录小熊工作中一时想不起:thought_balloon:的语法，或者不加班的时候做的一些小练习，:metal:用来备忘，也希望能给学习`golang`、`python`的你一些帮助:revolving_hearts:。
 
 如果后续我用到其他语言，也有可能更新在这里。
 
-* 哪有那么多人生开挂，不过都是厚积薄发。
+* 哪有那么多人生开挂，不过都是厚积薄发:laughing:。
 * 我的博客：https://blog.csdn.net/BTnode
 * 我的个人网站: https://coding3min.com
 * 我用`golang`和`python`做 [算法的项目](https://github.com/pzqu/LeetCode)
@@ -14,8 +14,15 @@
 
 <div align="center"><img border="0" src="qrcode.jpg" alt="Coder" title="gongzhonghao" with="200" height="200"></div>
 
+### 开始
 
-##### 语法与简单使用
+* 如果你不会运行 golang 项目见：[让你的Golang项目在IDE里跑起来](https://coding3min.com/646.html)
+* 如果你想提高编程速度见：[Goland 快捷键](goland.md)
+* 如果你觉得想点击链接跳出新标签页：
+    * windows: "Ctrl"+鼠标左键，在新窗口打开
+    * mac: "Command" + 鼠标点击，在新窗口打开 
+
+### 语法与简单使用
 
 博客语法备忘快速查询：[Golang](https://coding3min.com/561.html)
 
@@ -25,10 +32,10 @@
 | ---- | ---- | :--------------------------------------: | :--------------------------------------: |  :--------------------------------------: | 
 | 变量 | 声明【变量】的各种方式 | [Golang](golang/easy/variable/variable.go) |-|-|
 | |声明【常量】的各种方式 | [Golang](golang/easy/variable/const.go) |-|-|
+| 条件语句| switch和type switch | [Golang](golang/easy/ifelse_switch/switch.go) |-|-|
 | 函数|函数的简单使用| [Golang](golang/easy/function/main.go)| - | -|
 | | 值传递和引用传递| [Golang](golang/easy/function/more.go)|-|-|
-| | 函数当作变量使用，当做 参数传递|[Golang](golang/easy/function/function_value.go) / [实战用法Demo(模拟迭代器)](golang/easy/function/function_value_good_demo.go)|-|-| 
-| 条件语句| switch和type switch | [Golang](golang/easy/ifelse_switch/switch.go) |-|-|
+| | 函数当作变量使用，当做 参数传递|[Golang](golang/easy/function/function_value.go) / [实用模拟迭代器](golang/easy/function/function_value_good_demo.go)|-|-| 
 | 小工具 |代码运行时间（测速）| [Golang](golang/utils/speed.go) |-|-|
 | 字符串 |快速拼接字符串|[Golang](golang/easy/string/append_string.go) / [博客应用](https://coding3min.com/675.html)|-| -|
 |json |json解析与编码   | [Golang](golang/easy/json/parse_json.go) |-| -|
@@ -37,7 +44,7 @@
 | |解析url或者其中的域名 |-|- |  [Python2](python/network/py2_parse_url_hostname.py)  |
 
 
-##### `go`的并发特性
+### `go`的并发特性
 
 |                  Title                   |                  Golang                  |    博客讲解|
 | ---- | :--------------------------------------: | :--------------------------------------: | 
