@@ -46,7 +46,7 @@
 | |灵活解析多版本字段类型稍微不同的json   | [Golang](golang/medium/json_interface/fixed_json.go) | / |  / |
 | 网络 | 解析域名得到ip |-| [Python3](python/network/pase_hostname.py) | 同Python3 |
 | |解析url或者其中的域名 |-|- |  [Python2](python/network/py2_parse_url_hostname.py)  |
-
+| | http 使用代理访问|[Golang](golang/medium/http_proxy/static_proxy.go)| - | - |
 
 ### `go`的并发特性
 
