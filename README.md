@@ -41,6 +41,7 @@
 | | 函数方法(go中定义一个类)|[Golang](golang/easy/function/go_class.go)| - | - |
 | 数组| 数组定义赋值与遍历|[Golang](golang/easy/arrray/array1.go)| - | - |
 |  | 多维数组 | [Golang](golang/easy/arrray/array2.go) | - | - |
+| | 向函数传递数组，引用传递还是值传递？| [Golang](src/how_to_code/golang/easy/arrray/array3.go)| - | - | 
 | 小工具 |代码运行时间（测速）| [Golang](golang/utils/speed.go) |-|-|
 | 字符串 |快速拼接字符串|[Golang](golang/easy/string/append_string.go) / [博客应用](https://coding3min.com/675.html)|-| -|
 |json |json解析与编码   | [Golang](golang/easy/json/parse_json.go) |-| -|
