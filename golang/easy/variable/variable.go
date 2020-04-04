@@ -1,7 +1,8 @@
 /*
-* @Title:  声明【变量】的各种方式
-* @Author: pzqu
-* @Date:   2020-03-23 20:02
+* @Title:   声明【变量】的各种方式
+* @Author:  pzqu
+* @Date:    2020-03-23 20:02
+* @url:     https://github.com/pzqu/how_to_code
 */
 package main
 

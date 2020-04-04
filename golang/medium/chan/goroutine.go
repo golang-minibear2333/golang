@@ -1,7 +1,8 @@
 /*
-* @Title:  协程（goroutine）
-* @Author: pzqu
-* @Date:   2020-03-27 21:05
+* @Title:   协程（goroutine）
+* @Author:  pzqu
+* @Date:    2020-03-27 21:05
+* @url:     https://github.com/pzqu/how_to_code
 */
 package main
 

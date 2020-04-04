@@ -1,7 +1,8 @@
 /*
-* @Title:  函数方法(go中定义一个类)
-* @Author: pzqu
-* @Date:   2020-04-02 00:27
+* @Title:   函数方法(go中定义一个类)
+* @Author:  pzqu
+* @Date:    2020-04-02 00:27
+* @url:     https://github.com/pzqu/how_to_code
 */
 package main
 
@@ -14,12 +15,12 @@ type people struct {
 
 func (p people) toString() {
 	fmt.Println(p.name)
-	fmt.Printf("p的地址 %p \n",&p)
+	fmt.Printf("p的地址 %p \n", &p)
 }
 
 func (p *people) sayHello() {
 	fmt.Printf("Hello! %v \n", p.name)
-	fmt.Printf("*p的地址 %p \n",p)
+	fmt.Printf("*p的地址 %p \n", p)
 }
 
 func main() {
@@ -30,7 +31,7 @@ func main() {
 	p2.toString()
 	p2.sayHello()
 	//所以用不用指针在使用上没有区别
-	fmt.Printf("p1的地址 %p \n",&p1)
-	fmt.Printf("p2的地址 %p \n",p2)
+	fmt.Printf("p1的地址 %p \n", &p1)
+	fmt.Printf("p2的地址 %p \n", p2)
 	//通过输出地址，你会发现，用指针不会传递额外的对象
 }

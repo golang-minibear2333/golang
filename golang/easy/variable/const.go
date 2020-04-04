@@ -1,7 +1,8 @@
 /*
-* @Title:  声明【常量】的各种方式
-* @Author: pzqu
-* @Date:   2020-03-24 22:09
+* @Title:   声明【常量】的各种方式
+* @Author:  pzqu
+* @Date:    2020-03-24 22:09
+* @url:     https://github.com/pzqu/how_to_code
 */
 package main
 

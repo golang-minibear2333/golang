@@ -1,0 +1,33 @@
+/*
+* @Title:   数组封装工具
+* @Author:  pzqu
+* @Date:    2020-04-03 10:52
+* @url:     https://github.com/pzqu/how_to_code
+*/
+package utils
+
+import "fmt"
+
+func PrintSlice(arr []float32){
+	for _,v :=  range arr{
+		fmt.Print(v)
+	}
+	fmt.Println()
+}
+
+func PrintMulti2Slice(arr [][]int){
+	// 注意遍历不定长切片，不可以用这种方式！
+	//for i := 0; i < len(arr); i++ {
+	//	for j := 0; j < len(arr[j]); j++ {
+	//		fmt.Printf("%v ", arr[i][j])
+	//	}
+	//	fmt.Println()
+	//}
+
+	for _,v1 :=  range arr{
+		for _,v2 := range v1{
+			fmt.Printf("%v ", v2)
+		}
+		fmt.Println()
+	}
+}

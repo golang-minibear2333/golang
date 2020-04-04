@@ -1,7 +1,8 @@
 /*
-* @Title: 通道（chan）的发送与接收
-* @Author: pzqu
-* @Date:   2020-03-27 20:44
+* @Title:   通道（chan）的发送与接收
+* @Author:  pzqu
+* @Date:    2020-03-27 20:44
+* @url:     https://github.com/pzqu/how_to_code
 */
 package main
 

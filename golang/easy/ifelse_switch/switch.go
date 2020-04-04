@@ -1,7 +1,8 @@
 /*
-* @Title:  switch和type switch
-* @Author: pzqu
-* @Date:   2020-03-26 09:02
+* @Title:   switch和type switch
+* @Author:  pzqu
+* @Date:    2020-03-26 09:02
+* @url:     https://github.com/pzqu/how_to_code
 */
 package main
 
