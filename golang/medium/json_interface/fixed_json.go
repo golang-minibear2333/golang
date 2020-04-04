@@ -1,3 +1,8 @@
+/*
+* @Title:  灵活解析多版本字段类型稍微不同的json
+* @Author: pzqu
+* @Date:   2020-04-03 19:16
+*/
 package main
 
 import (
