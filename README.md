@@ -19,8 +19,9 @@
 * 如果你不会运行 golang 项目见：[让你的Golang项目在IDE里跑起来](https://coding3min.com/646.html)
 * 如果你想提高编程速度见：[Goland 快捷键](goland.md)
 * 如果你觉得想点击链接跳出新标签页：
-    * windows: "Ctrl"+鼠标左键，在新窗口打开
-    * mac: "Command" + 鼠标点击，在新窗口打开 
+    * windows: `Ctrl`+鼠标左键，在新窗口打开
+    * mac: `Command` + 鼠标点击，在新窗口打开 
+* 如果你想参与贡献这个项目，可以参考：[如何给开源项目贡献代码](howToContribute.md)
 
 ### 语法与简单使用
 
