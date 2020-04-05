@@ -8,7 +8,7 @@ package main
 
 import "fmt"
 
-// 在go语言中定义类的 形式就 是 绑定在struct类型中
+// 在go语言中定义类的 形式就 是 绑定在struct类型中(关于struct可以参考how_to_code/golang/easy/struct/struct1.go)
 type people struct {
 	name string
 }
