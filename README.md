@@ -33,6 +33,7 @@
 | ---- | ---- | :--------------------------------------: | :--------------------------------------: |  :--------------------------------------: | 
 | 变量 | 声明【变量】的各种方式 | [Golang](golang/easy/variable/variable.go) |-|-|
 | |声明【常量】的各种方式 | [Golang](golang/easy/variable/const.go) |-|-|
+| |类型转换|[Golang](golang/easy/type/type1.go)|-|-|
 | 条件语句| switch和type switch | [Golang](golang/easy/ifelse_switch/switch.go) |-|-|
 | 循环语句 | 循环语句的多种形式、死循环、break/continue | [Golang](golang/easy/for_range/for.go) |-|-| 
 | range | range(范围) | [Golang](golang/easy/range/range1.go) | - | - |
