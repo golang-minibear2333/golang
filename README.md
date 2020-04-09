@@ -53,6 +53,8 @@
 | | 多维指针、指针作数组参数| [Golang](golang/easy/point/point2.go)| - | - |
 | 结构体| 结构体 | [Golang](golang/easy/struct/struct1.go) | -|-|
 | 接口 | interface 类型（接口）初识| [Golang](golang/medium/interface/interface1.go)|-|-|
+| | 不实现所有方法会不会报错？| [Golang](golang/medium/interface/interface2.go)|-|-|
+| | 多态| [Golang](golang/medium/interface_more/interface3.go)|-|-|
 | 小工具 |代码运行时间（测速）| [Golang](golang/utils/speed.go) |-|-|
 | 字符串 |快速拼接字符串|[Golang](golang/easy/string/append_string.go) / [博客应用](https://coding3min.com/675.html)|-| -|
 |json |json解析与编码   | [Golang](golang/easy/json/parse_json.go) |-| -|
