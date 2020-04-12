@@ -43,7 +43,7 @@ func printErrMessage(err error) {
 
 func main() {
 	//根据Golang的约定，每个可能导致错误的函数都将error其作为最后一个返回值，码农有责任在每一步都正确处理它
-	num,err := errorDemo()
+	_,err := errorDemo()
 	if err!=nil{
 		fmt.Println(err)
 		return
