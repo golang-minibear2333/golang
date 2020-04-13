@@ -31,7 +31,8 @@
 
 | 单元 |                  Title                   |                  Golang                  |     Python3                |           Python2 |
 | ---- | ---- | :--------------------------------------: | :--------------------------------------: |  :--------------------------------------: | 
-| 变量 | 声明【变量】的各种方式 | [Golang](golang/easy/variable/variable.go) |-|-|
+| HelloWord| 第一个程序 | [Golang](golang/easy/hello.go) / [博客讲解](https://coding3min.com/725.html)|-|-|
+| 变量 | 声明【变量】的各种方式 | [Golang](golang/easy/variable/variable.go) / [博客讲解](https://coding3min.com/727.html) |-|-|
 | |声明【常量】的各种方式 | [Golang](golang/easy/variable/const.go) |-|-|
 | |类型转换|[Golang](golang/easy/type/type1.go)|-|-|
 | 条件语句| switch和type switch | [Golang](golang/easy/ifelse_switch/switch.go) |-|-|
@@ -67,9 +68,13 @@
 ### `go`的并发特性
 
 |                  Title                   |                  Golang                  |    博客讲解|
-| ---- | :--------------------------------------: | :--------------------------------------: | 
+| ---- | :--------------------------------------: | :--------------------------------------: | :--------------------------------------: | 
 | 协程（goroutine）| [Golang](golang/medium/chan/goroutine.go)| - |
 | 通道（chan）的发送与接收 | [Golang](golang/medium/chan/chan.go) | - |
 | select语法 | [Golang](golang/medium/chan/select.go) | - |
 
+### `go` 语言之美
+|                  Title                   |                  Golang                  |    博客讲解|
+| ---- | :--------------------------------------: | :--------------------------------------: | :--------------------------------------: | 
+| 持续集成 | 打rpm包是如此的迅速（go语言之美） | - | [博客讲解](https://coding3min.com/716.html) |
 
