@@ -16,7 +16,7 @@ func constVariable() {
 
 	const C, D, E = 1, 1, 1
 
-	//枚举,一般枚举绑定到struct类型
+	//枚举
 	const (
 		Success = 0
 		UnKonw  = 1

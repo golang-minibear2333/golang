@@ -11,6 +11,17 @@ import (
 	"math"
 )
 
+func ifelse(){
+	if 20>0{
+		fmt.Println("yes")
+	}
+
+	if 20<0{
+
+	}else{
+		fmt.Println("no")
+	}
+}
 /*
 变量var1可以是任何类型
 val1和val2必须是同类型，可以是任意值，可以是常量、变量、表达式，但结果必须是同类型
@@ -57,10 +68,14 @@ func typeSwitchDemo(x interface{}) int {
 }
 
 func main() {
+	ifelse()
 	switchDemo("coding3min", 95)
 	switchDemo("coding3min", 20)
 	switchDemo("tom", 60)
 
+	var x interface{}
+	x = 1
+	fmt.Println(x)
 	fmt.Println(typeSwitchDemo(1.1))
 	fmt.Println(typeSwitchDemo(2))
 }
