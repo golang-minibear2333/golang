@@ -36,7 +36,7 @@
 | |声明【常量】的各种方式 | [Golang](golang/easy/variable/const.go) |-|-|
 | |类型转换|[Golang](golang/easy/type/type1.go) / [博客讲解](https://coding3min.com/729.html)|-|-|
 | 条件语句| switch和type switch | [Golang](golang/easy/ifelse_switch/switch.go) / [博客讲解](https://coding3min.com/731.html) |-|-|
-| 循环语句 | 循环语句的多种形式、死循环、break/continue | [Golang](golang/easy/for_range/for.go) |-|-| 
+| 循环语句 | 循环语句的多种形式、死循环、break/continue | [Golang](golang/easy/for_range/for.go) / [博客讲解](https://coding3min.com/735.html) |-|-| 
 | range | range(范围) | [Golang](golang/easy/range/range1.go) | - | - |
 | 函数|函数的简单使用| [Golang](golang/easy/function/main.go)| - | -|
 | | 值传递和引用传递| [Golang](golang/easy/function/more.go)|-|-|
@@ -56,7 +56,6 @@
 | 接口 | interface 类型（接口）初识| [Golang](golang/medium/interface/interface1.go)|-|-|
 | | 不实现所有方法会不会报错？| [Golang](golang/medium/interface/interface2.go)|-|-|
 | | 多态| [Golang](golang/medium/interface_more/interface3.go)|-|-|
-| 小工具 |代码运行时间（测速）| [Golang](golang/utils/speed.go) |-|-|
 | 字符串 |快速拼接字符串|[Golang](golang/easy/string/append_string.go) / [博客应用](https://coding3min.com/675.html)|-| -|
 | 错误处理 | 错误处理初识 | [Golang](golang/easy/errors/error1.go)|-|-|
 |json |json解析与编码   | [Golang](golang/easy/json/parse_json.go) |-| -|
@@ -77,4 +76,7 @@
 |                  Title                   |                  Golang                  |    博客讲解|
 | ---- | :--------------------------------------: | :--------------------------------------: | :--------------------------------------: | 
 | 持续集成 | 打rpm包是如此的迅速（go语言之美） | - | [博客讲解](https://coding3min.com/716.html) |
-
+| 小工具 |代码运行时间（测速）| [Golang](golang/utils/speed.go) |-|
+| 参数|go命令行读取参数|-|-|
+| 文件写入读取 |-|-|-|
+|配置文件|-|-|-|

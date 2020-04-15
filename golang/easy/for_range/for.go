@@ -38,7 +38,7 @@ func demo() {
 	for {
 		fmt.Printf("死循环测试 %v \n", i)
 		i++
-		if i > b {
+		if i > 5 {
 			fmt.Println("满足终止条件，退出")
 			break //直接跳出循环
 		}
