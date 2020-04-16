@@ -60,9 +60,7 @@
 | 错误处理 | 错误处理初识 | [Golang](golang/easy/errors/error1.go)|-|-|
 |json |json解析与编码   | [Golang](golang/easy/json/parse_json.go) |-| -|
 | |灵活解析多版本字段类型稍微不同的json   | [Golang](golang/medium/json_interface/fixed_json.go) | / |  / |
-| 网络 | 解析域名得到ip |-| [Python3](python/network/pase_hostname.py) | 同Python3 |
-| |解析url或者其中的域名 |-|- |  [Python2](python/network/py2_parse_url_hostname.py)  |
-| | http 使用代理访问|[Golang](golang/medium/http_proxy/static_proxy.go)| - | - |
+
 
 ### `go`的并发特性
 
@@ -80,3 +78,13 @@
 | 参数|go命令行读取参数|-|-|
 | 文件写入读取 |-|-|-|
 |配置文件|-|-|-|
+
+
+### web
+
+| 单元 |                  Title                   |                  Golang                  |     Python3                |           Python2 |
+| ---- | ---- | :--------------------------------------: | :--------------------------------------: |  :--------------------------------------: | 
+| 网络 | 解析域名得到ip |-| [Python3](python/network/pase_hostname.py) | 同Python3 |
+| |解析url或者其中的域名 |-|- |  [Python2](python/network/py2_parse_url_hostname.py)  |
+| | http 使用代理访问|[Golang](golang/medium/http_proxy/static_proxy.go)| - | - |
+| web框架 | gin |- |- |
