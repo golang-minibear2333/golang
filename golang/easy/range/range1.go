@@ -39,13 +39,31 @@ func rangeDemo1() {
 	ch <- 11
 	ch <- 12
 
-	close(ch) // 不用记得关掉,不关掉又没有另一个goroutine存在会死锁哦，可以注释掉这一句体验死锁
+	close(ch) // 不用的时候记得关掉,不关掉又没有另一个goroutine存在会死锁哦，可以注释掉这一句体验死锁
 
 	for x := range ch {
 		fmt.Println(x)
 	}
 
+	tmp := []struct{
+		a int
+		b string
+	}{
+		{1, "a"},
+		{2, "b"},
+	}
 
+	for k,v := range tmp{
+		fmt.Printf("k:%v, v:%v  \n",k,v)
+	}
+
+	for _,v := range tmp{
+		v.a = 2 //注意遍历中修改的是副本，原数据不会变化
+	}
+
+	for k,v := range tmp{
+		fmt.Printf("k:%v, v:%v  \n",k,v)
+	}
 }
 
 func main(){
