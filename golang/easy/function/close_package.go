@@ -11,6 +11,12 @@ import (
 	"time"
 )
 
+
+//函数作为值使用
+func functionValue2(a, b int, do func(int, int) int) {
+	fmt.Println(do(a, b))
+}
+
 /*
 	匿名函数和闭包
 	好处：可以减少全局变量防止变量污染
@@ -33,7 +39,12 @@ func closureSample() func() {
 		fmt.Printf("调用次数 %v \n", count)
 	}
 }
+
 func main() {
+	// 匿名函数的例子
+	functionValue2(1,2,func(a,b int) int{
+		return a+b })
+
 	noNameFunc()
 	// 声明了两个函数变量
 	c1, c2 := closureSample(), closureSample()
@@ -48,7 +59,7 @@ func main() {
 
 	//  闭包形式2，立即执行函数
 	func() {
-		c2()
+		// to do something
 	}()
 
 	// 闭包存在一个问题,如果函数内的闭包是延迟调用的，比较go创建了goroutine，或者defer
