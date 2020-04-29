@@ -57,6 +57,7 @@
 | | 匿名函数与闭包| [Golang](golang/easy/function/close_package.go) / [博客讲解](https://coding3min.com/769.html)| / | / |
 | | 函数方法(go中定义一个类)|[Golang](golang/easy/function/go_class.go)| - | - |
 | | 递归 | [Golang](golang/easy/function/recursive.go) |-|-|
+| | 可变参数| [Golang](golang/easy/function/varargs.go) |-|-|
 | 切片| 切片声明赋值与截取 | [Golang](golang/easy/slice/slice1.go)|-|-|
 | | 切片的长度与容量，len cap append copy |  [Golang](golang/easy/slice/slice2.go)|-|-|
 | 集合 | map | [Golang](golang/easy/map/map1.go)|-|-|
