@@ -55,7 +55,6 @@
 | | 值传递和引用传递| [Golang](golang/easy/function/more.go) / [博客讲解](https://coding3min.com/764.html) |-|-|
 | | 函数当作变量使用，当做 参数传递|[Golang](golang/easy/function/function_value.go) / [实用模拟迭代器](golang/easy/function/function_value_good_demo.go)|-|-| 
 | | 匿名函数与闭包| [Golang](golang/easy/function/close_package.go) / [博客讲解](https://coding3min.com/769.html)| / | / |
-| | 函数方法(go中定义一个类)|[Golang](golang/easy/function/go_class.go)| - | - |
 | | 递归 | [Golang](golang/easy/function/recursive.go) |-|-|
 | | 可变参数| [Golang](golang/easy/function/varargs.go) |-|-|
 | 切片| 切片声明赋值与截取 | [Golang](golang/easy/slice/slice1.go)|-|-|
@@ -70,6 +69,7 @@
 | 指针| 了解指针|[Golang](golang/easy/point/point1.go)| - | - |
 | | 多维指针、指针作数组参数| [Golang](golang/easy/point/point2.go)| - | - |
 | 结构体| 结构体 | [Golang](golang/easy/struct/struct1.go) | -|-|
+| | go中定义一个类|[Golang](golang/easy/function/go_class.go)| - | - |
 | 接口 | interface 类型（接口）初识| [Golang](golang/medium/interface/interface1.go)|-|-|
 | | 不实现所有方法会不会报错？| [Golang](golang/medium/interface/interface2.go)|-|-|
 | | 多态| [Golang](golang/medium/interface_more/interface3.go)|-|-|
