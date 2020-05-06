@@ -23,6 +23,10 @@ func sliceDemo1() {
 	slice1 := []int{1, 2}
 	fmt.Printf("输出切片：%v \n", slice1)
 
+	for _,v := range slice1{
+		fmt.Println(v)
+	}
+
 	// 用make声明，并指定长度
 	sliceLen := make([]float64, 5)
 

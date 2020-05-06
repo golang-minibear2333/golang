@@ -32,11 +32,12 @@ func sliceDemo2() {
 	slice1 = append(slice1, 4)
 	slice1 = append(slice1, 5)
 
+	// 长度不变，容量自动翻倍为 5*2
 	slice2 := make([]int, len(slice1), (cap(slice1))*2)
 
 	/* 拷贝 slice1 的内容到 slice2 */
 	copy(slice2, slice1) // 注意是后面的拷贝给前面
-	slice2 = append(slice2, 6) // 到这里长度超过了容量，容量自动翻倍为 5*2
+	slice2 = append(slice2, 6)
 	printSlice(slice2)
 }
 
