@@ -39,6 +39,14 @@ func sliceDemo2() {
 	copy(slice2, slice1) // 注意是后面的拷贝给前面
 	slice2 = append(slice2, 6)
 	printSlice(slice2)
+
+	slice3 := slice2[0:1]
+	printSlice(slice3)
+	slice3[0] = 1
+	slice2[0] = 2
+	printSlice(slice2)
+	printSlice(slice3)
+
 }
 
 func printSlice(x []int) {

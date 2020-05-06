@@ -59,7 +59,8 @@
 | | 可变参数| [Golang](golang/easy/function/varargs.go) / [博客讲解](https://coding3min.com/776.html)|-|-|
 | 切片| 切片声明赋值与截取 | [Golang](golang/easy/slice/slice1.go)|-|-|
 | | 切片的长度与容量，len cap append copy |  [Golang](golang/easy/slice/slice2.go) / [博客讲解](https://coding3min.com/780.html) |-|-|
-| 集合 | map | [Golang](golang/easy/map/map1.go)|-|-|
+| 集合 | map | [Golang](golang/easy/map/map1.go) / [博客讲解](https://coding3min.com/783.html) |-|-|
+| |  线程安全的map |[Golang](golang/easy/map/safemap.go)  | - | - |
 | 字符串 |快速拼接字符串|[Golang](golang/easy/string/append_string.go) / [博客应用](https://coding3min.com/675.html)|-| -|
 
 ### 四、学完这些能力更强
