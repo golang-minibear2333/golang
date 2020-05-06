@@ -40,13 +40,6 @@ func sliceDemo2() {
 	slice2 = append(slice2, 6)
 	printSlice(slice2)
 
-	slice3 := slice2[0:1]
-	printSlice(slice3)
-	slice3[0] = 1
-	slice2[0] = 2
-	printSlice(slice2)
-	printSlice(slice3)
-
 }
 
 func printSlice(x []int) {
