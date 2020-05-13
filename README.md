@@ -68,7 +68,7 @@
 
 | 单元 |                  Title                   |                  Golang                  |     Python3                |           Python2 |
 | ---- | ---- | :--------------------------------------: | :--------------------------------------: |  :--------------------------------------: | 
-| 指针| 了解指针|[Golang](golang/easy/point/point1.go)| - | - |
+| 指针| 了解指针|[Golang](golang/easy/point/point1.go) /  [博客讲解](https://coding3min.com/794.html) | - | - |
 | | 多维指针、指针作数组参数| [Golang](golang/easy/point/point2.go)| - | - |
 | 结构体| 结构体 | [Golang](golang/easy/struct/struct1.go) | -|-|
 | | go中定义一个类|[Golang](golang/easy/function/go_class.go)| - | - |
