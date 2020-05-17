@@ -47,7 +47,7 @@ func humanDoWhat(p humanInterface) {
 
 func main() {
 	w := woman{"lisa"}
-	m := man{"pzqu"}
+	m := man{"coding3min"}
 	// 多态的含义就是不需要修改函数，只需要修改外部实现
 	// 同一个接口有不同的表现
 	humanDoWhat(w)

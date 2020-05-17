@@ -72,7 +72,7 @@
 | | 多维指针、指针作数组参数| [Golang](golang/easy/point/point2.go)| - | - |
 | 结构体| 结构体 | [Golang](golang/easy/struct/struct1.go) / [博客讲解](https://coding3min.com/797.html) | -|-|
 | | go中定义一个类|[Golang](golang/easy/function/go_class.go)| - | - |
-| 接口 | interface 类型（接口）初识| [Golang](golang/medium/interface/interface1.go)|-|-|
+| 接口 | interface 类型（接口）初识| [Golang](golang/medium/interface/interface1.go) / [博客讲解](https://coding3min.com/799.html)|-|-|
 | | 不实现所有方法会不会报错？| [Golang](golang/medium/interface/interface2.go)|-|-|
 | | 多态| [Golang](golang/medium/interface_more/interface3.go)|-|-|
 | 错误处理 | 错误处理初识 | [Golang](golang/easy/errors/error1.go)|-|-|
