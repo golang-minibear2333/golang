@@ -75,7 +75,10 @@
 | 接口 | interface 类型（接口）初识| [Golang](golang/medium/interface/interface1.go) / [博客讲解](https://coding3min.com/799.html)|-|-|
 | | 不实现所有方法会不会报错？| [Golang](golang/medium/interface/interface2.go)|-|-|
 | | 多态| [Golang](golang/medium/interface_more/interface3.go)|-|-|
-| 错误处理 | 错误处理初识 | [Golang](golang/easy/errors/error1.go)|-|-|
+| 错误处理 | 错误处理初识 | [Golang](golang/easy/errors/error1.go) / [博客详解](https://coding3min.com/814.html)|-|-|
+|  | 详细的错误信息（实现errors接口） | [Golang](golang/easy/errors/error2.go)|-|-|
+|  | defer语句延迟调用 | [Golang](golang/easy/errors/defer.go)|-|-|
+|  | panic详解 | [Golang](golang/easy/errors/panic1.go)|-|-|
 |json |json解析与编码   | [Golang](golang/easy/json/parse_json.go) |-| -|
 | |灵活解析多版本字段类型稍微不同的json   | [Golang](golang/medium/json_interface/fixed_json.go) | / |  / |
 
