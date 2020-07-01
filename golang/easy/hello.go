@@ -1,8 +1,8 @@
 /*
 * @Title:   hello world
-* @Author:  pzqu
+* @Author:  minibear2333
 * @Date:    2020-04-13 19:03
-* @url:     https://github.com/pzqu/how_to_code
+* @url:     https://github.com/minibear2333/how_to_code
 */
 package main
 

@@ -1,8 +1,8 @@
 /*
 * @Title:   循环语句的多种形式、死循环、break/continue
-* @Author:  pzqu
+* @Author:  minibear2333
 * @Date:    2020-04-01 15:54
-* @url:     https://github.com/pzqu/how_to_code
+* @url:     https://github.com/minibear2333/how_to_code
 */
 package main
 

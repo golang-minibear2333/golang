@@ -9,7 +9,7 @@
 * 哪有那么多人生开挂，不过都是厚积薄发:laughing:。
 * 我的博客：https://blog.csdn.net/BTnode
 * 我的个人网站: https://coding3min.com
-* 我用`golang`和`python`做 [算法的项目](https://github.com/pzqu/LeetCode)
+* 我用`golang`和`python`做 [算法的项目](https://github.com/minibear2333/LeetCode)
 * 分享开发、运维、云技术等方面知识，编程三分钟公众号不加班的时候推送。欢迎您的关注~！
 
 <div align="center"><img border="0" src="qrcode.jpg" alt="Coder" title="gongzhonghao" with="200" height="200"></div>

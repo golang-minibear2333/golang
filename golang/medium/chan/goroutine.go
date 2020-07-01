@@ -1,22 +1,31 @@
 /*
 * @Title:   协程（goroutine）
-* @Author:  pzqu
+* @Author:  minibear2333
 * @Date:    2020-03-27 21:05
-* @url:     https://github.com/pzqu/how_to_code
+* @url:     https://github.com/minibear2333/how_to_code
 */
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func quickFun(){
 	fmt.Println("maybe you can's see me!")
 }
 
-//创建了一个goroutine（语言级别的协程）
-//然后协程和main主线程同时运行
-//main运行结束会暴力终止所有协程，有概率quickFun中的输出还没来得及执行
-//可以多跑一次看看效果
+
 func main(){
-	go quickFun()
+	go quickFun() //创建了一个goroutine（语言级别的协程）
+	//然后协程和main主线程同时运行
 	fmt.Println("hey")
+
+	go func() {
+		fmt.Println("hello ")
+	}()
+
+	time.Sleep(time.Second) //main运行结束会暴力终止所有协程，所以这里先等待1秒
+
+
 }

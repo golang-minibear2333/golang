@@ -1,8 +1,8 @@
 /*
 * @Title:   Map(集合)
-* @Author:  pzqu
+* @Author:  minibear2333
 * @Date:    2020-04-08 22:11
-* @url:     https://github.com/pzqu/how_to_code
+* @url:     https://github.com/minibear2333/how_to_code
 */
 package main
 

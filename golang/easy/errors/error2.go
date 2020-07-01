@@ -1,6 +1,6 @@
 /*
 * @Title:  详细的错误信息（实现errors接口）
-* @Author: pzqu
+* @Author: minibear2333
 * @Date:   2020-05-27 23:22
 */
 package main

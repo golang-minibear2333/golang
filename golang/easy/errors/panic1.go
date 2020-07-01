@@ -1,6 +1,6 @@
 /*
 * @Title:  panic详解
-* @Author: pzqu
+* @Author: minibear2333
 * @Date:   2020-05-28 13:24
 */
 package main

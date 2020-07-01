@@ -1,8 +1,8 @@
 /*
 * @Title:   指针
-* @Author:  pzqu
+* @Author:  minibear2333
 * @Date:    2020-04-05 21:01
-* @url:     https://github.com/pzqu/how_to_code
+* @url:     https://github.com/minibear2333/how_to_code
 */
 package main
 
@@ -12,7 +12,7 @@ import "fmt"
 // how_to_code/golang/easy/function/go_class.go
 
 func main() {
-	// 和c++中的指针用法一样(看不懂可以给我提issue: https://github.com/pzqu/how_to_code/issues)
+	// 和c++中的指针用法一样(看不懂可以给我提issue: https://github.com/minibear2333/how_to_code/issues)
 	var a int
 	fmt.Printf("a 的地址是：%p \n", &a)
 	//声明 变量名 + 指针类型 , 命令规则以ptr结尾

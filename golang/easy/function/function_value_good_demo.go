@@ -1,8 +1,8 @@
 /*
 * @Title:   函数当作变量使用，当做 参数传递的分页实践
-* @Author:  pzqu
+* @Author:  minibear2333
 * @Date:    2020-04-01 19:21
-* @url:     https://github.com/pzqu/how_to_code
+* @url:     https://github.com/minibear2333/how_to_code
 */
 package main
 

@@ -1,8 +1,8 @@
 /*
 * @Title:   指针扩展知识
-* @Author:  pzqu
+* @Author:  minibear2333
 * @Date:    2020-04-05 21:19
-* @url:     https://github.com/pzqu/how_to_code
+* @url:     https://github.com/minibear2333/how_to_code
 */
 package main
 

@@ -1,8 +1,8 @@
 /*
 * @Title:   函数方法(go中定义一个类)
-* @Author:  pzqu
+* @Author:  minibear2333
 * @Date:    2020-04-02 00:27
-* @url:     https://github.com/pzqu/how_to_code
+* @url:     https://github.com/minibear2333/how_to_code
 */
 package main
 

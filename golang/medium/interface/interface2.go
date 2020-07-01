@@ -1,8 +1,8 @@
 /*
 * @Title:   这不是接口
-* @Author:  pzqu
+* @Author:  minibear2333
 * @Date:    2020-04-09 12:59
-* @url:     https://github.com/pzqu/how_to_code
+* @url:     https://github.com/minibear2333/how_to_code
 */
 package main
 

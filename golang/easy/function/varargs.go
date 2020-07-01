@@ -1,6 +1,6 @@
 /*
 * @Title:  可变参数
-* @Author: pzqu
+* @Author: minibear2333
 * @Date:   2020-04-29 23:13
 */
 package main

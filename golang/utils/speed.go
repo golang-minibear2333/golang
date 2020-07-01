@@ -1,8 +1,8 @@
 /*
 * @Title:   测速
-* @Author:  pzqu
+* @Author:  minibear2333
 * @Date:    2020-03-17 00:29
-* @url:     https://github.com/pzqu/how_to_code
+* @url:     https://github.com/minibear2333/how_to_code
 */
 package utils
 
