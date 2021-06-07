@@ -4,7 +4,7 @@
 
 -------
 
-电子书见 [go语言精进之路](http://golang.coding3min.com/)
+电子书见 -> [go语言精进之路-在线电子书](http://golang.coding3min.com/)
 
 --------
 
