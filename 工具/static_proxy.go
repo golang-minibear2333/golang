@@ -3,8 +3,8 @@
 * @Author:  minibear2333
 * @Date:    2020-04-03 15:16
 * @url:     https://github.com/minibear2333/how_to_code
-*/
-package main
+ */
+package 工具
 
 /*
 http代理测试 代码片段来自：https://gist.github.com/leafney/ecb4eaf5e418f37ad82578d5e2bafc72
@@ -12,17 +12,17 @@ http代理测试 代码片段来自：https://gist.github.com/leafney/ecb4eaf5e4
 * [Go http访问使用代理](http://www.cnblogs.com/damir/archive/2012/05/06/2486663.html)
 * [GO HTTP client客户端使用 - 海运的博客](https://www.haiyun.me/archives/1051.html)
 * [Making Tor HTTP Requests with Go | DevDungeon](http://www.devdungeon.com/content/making-tor-http-requests-go)
-* [go - golang: How to do a https request with proxy - Stack Overflow](https://stackoverflow.com/questions/42662369/golang-how-to-do-a-https-request-with-proxy)
+* [go - go语言基础: How to do a https request with proxy - Stack Overflow](https://stackoverflow.com/questions/42662369/golang-how-to-do-a-https-request-with-proxy)
 * [go - Set UserAgent in http request - Stack Overflow](https://stackoverflow.com/questions/13263492/set-useragent-in-http-request)
 */
 
 import (
-"crypto/tls"
-"fmt"
-"io/ioutil"
-"net/http"
-"net/url"
-"time"
+	"crypto/tls"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"time"
 )
 
 func First() {

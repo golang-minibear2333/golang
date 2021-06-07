@@ -9,7 +9,7 @@ import (
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "hello world")
 	log.WithFields(log.Fields{
-		"asd":"asd",
+		"asd": "asd",
 	}).Info("qewr")
 }
 func main() {

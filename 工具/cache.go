@@ -1,10 +1,4 @@
-/*
-* @Title:   缓存工具
-* @Author:  minibear2333
-* @Date:    2020/7/28 9:37 下午
-* @url:     https://github.com/minibear2333/how_to_code
- */
-package utils
+package 工具
 
 import "time"
 
@@ -23,7 +17,7 @@ func init() {
 }
 
 /*
-	ep: utils.SetCache("DepotsResult", r, 60*10)
+	ep: 工具.SetCache("DepotsResult", r, 60*10)
 */
 func SetCache(key string, value interface{}, d int64) {
 	Cache[key] = struct {
@@ -35,7 +29,7 @@ func SetCache(key string, value interface{}, d int64) {
 
 /*
 	ep:
-	if v := utils.GetCache("DepotsResult"); v != nil {
+	if v := 工具.GetCache("DepotsResult"); v != nil {
 		if r, ok := v.(DepotsResult); ok {
 			return r
 		}
