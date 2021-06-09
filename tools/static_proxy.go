@@ -4,7 +4,7 @@
 * @Date:    2020-04-03 15:16
 * @url:     https://github.com/minibear2333/how_to_code
  */
-package 工具
+package tools
 
 /*
 http代理测试 代码片段来自：https://gist.github.com/leafney/ecb4eaf5e418f37ad82578d5e2bafc72

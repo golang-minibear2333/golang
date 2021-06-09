@@ -41,5 +41,5 @@
     * [Golang打镜像Dockerfile的写法](go语言基础/番外、常用操作/Golang打镜像Dockerfile的写法.md)
     * [等待goroutine完成任务，循环中使用goroutine](go语言基础/番外、常用操作/等待goroutine完成任务，循环中使用goroutine.md)
     * [kinping.flag包读取命令行配置](go语言基础/番外、常用操作/kinping.flag包读取命令行配置.md)
-* [2.小工具](工具/README.md)
+* [2.小工具](tools/README.md)
 

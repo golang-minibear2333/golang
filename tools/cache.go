@@ -1,4 +1,4 @@
-package 工具
+package tools
 
 import "time"
 
@@ -17,7 +17,7 @@ func init() {
 }
 
 /*
-	ep: 工具.SetCache("DepotsResult", r, 60*10)
+	ep: tools.SetCache("DepotsResult", r, 60*10)
 */
 func SetCache(key string, value interface{}, d int64) {
 	Cache[key] = struct {
@@ -29,7 +29,7 @@ func SetCache(key string, value interface{}, d int64) {
 
 /*
 	ep:
-	if v := 工具.GetCache("DepotsResult"); v != nil {
+	if v := tools.GetCache("DepotsResult"); v != nil {
 		if r, ok := v.(DepotsResult); ok {
 			return r
 		}
