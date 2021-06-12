@@ -2,7 +2,7 @@
 * @Title:   声明【变量】的各种方式
 * @Author:  minibear2333
 * @Date:    2020-03-23 20:02
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 

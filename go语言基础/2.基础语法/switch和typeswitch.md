@@ -1,4 +1,4 @@
-> go语言github项目：https://github.com/minibear2333/how_to_code
+> go语言github项目：https://github.com/golang-minibear2333/golang
 ![](https://coding3min.oss-accelerate.aliyuncs.com/coding3min/2020-04-14-125225.jpg)
 
 [TOC]
@@ -109,6 +109,6 @@ func typeSwitchDemo(x interface{}) int {
 
 感兴趣可以 跑到这里看看，我是怎么使用这个武器的。
 
-https://github.com/minibear2333/how_to_code/blob/master/golang/medium/json_interface/fixed_json.go
+https://github.com/golang-minibear2333/golang/blob/master/golang/medium/json_interface/fixed_json.go
 
 

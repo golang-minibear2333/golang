@@ -2,7 +2,7 @@
 * @Title:   函数当作变量使用，当做 参数传递
 * @Author:  minibear2333
 * @Date:    2020-04-01 00:52
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 
@@ -27,7 +27,7 @@ func main() {
 		return i1 * i2
 	})
 	// 实际的使用
-	// 你可以参考函数测速例子：https://github.com/minibear2333/how_to_code/blob/master/golang/easy/string/append_string.go
+	// 你可以参考函数测速例子：https://github.com/golang-minibear2333/golang/blob/master/golang/easy/string/append_string.go
 	// 还有你可以传filter函数做过滤，mapping做映射等实际的用法
 	// 有时候也可以作为排序递增，递减的依据
 

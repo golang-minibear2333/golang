@@ -2,7 +2,7 @@
 * @Title:   通道（chan）的发送与接收
 * @Author:  minibear2333
 * @Date:    2020-03-27 20:44
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 
@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-//本节需要先了解goroutine的知识, 示例代码：https://github.com/minibear2333/how_to_code/blob/master/golang/medium/chan/goroutine.go
+//本节需要先了解goroutine的知识, 示例代码：https://github.com/golang-minibear2333/golang/blob/master/golang/medium/chan/goroutine.go
 var c chan int
 
 /*

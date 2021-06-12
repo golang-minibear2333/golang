@@ -2,7 +2,7 @@
 * @Title:   切片的长度与容量，len cap append copy
 * @Author:  minibear2333
 * @Date:    2020-04-06 00:45
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 

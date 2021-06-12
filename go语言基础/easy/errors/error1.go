@@ -2,7 +2,7 @@
 * @Title:   错误处理初识
 * @Author:  minibear2333
 * @Date:    2020-04-11 21:46
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 

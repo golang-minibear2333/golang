@@ -39,7 +39,7 @@ $ git push
 
 可以定期使用项目仓库内容更新自己仓库内容。
 ```bash
-$ git remote add upstream https://github.com/minibear2333/how_to_code
+$ git remote add upstream https://github.com/golang-minibear2333/golang
 
 $ git fetch upstream
 

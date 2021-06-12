@@ -2,7 +2,7 @@
 * @Title:   range（范围）
 * @Author:  minibear2333
 * @Date:    2020-04-07 20:31
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 

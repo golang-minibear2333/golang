@@ -2,7 +2,7 @@
 * @Title:   Map(集合)
 * @Author:  minibear2333
 * @Date:    2020-04-08 22:11
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 

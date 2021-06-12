@@ -2,7 +2,7 @@
 * @Title:   http 使用代理访问
 * @Author:  minibear2333
 * @Date:    2020-04-03 15:16
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
  */
 package tools
 

@@ -1,6 +1,6 @@
 
 ### range（范围）
-> go语言github项目：https://github.com/minibear2333/how_to_code
+> go语言github项目：https://github.com/golang-minibear2333/golang
 
 [TOC]
 

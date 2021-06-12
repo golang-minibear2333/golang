@@ -2,7 +2,7 @@
 * @Title:   灵活解析多版本字段类型稍微不同的json
 * @Author:  minibear2333
 * @Date:    2020-04-03 19:16
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 

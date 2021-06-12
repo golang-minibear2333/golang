@@ -2,7 +2,7 @@
 * @Title:   切片
 * @Author:  minibear2333
 * @Date:    2020-04-05 23:54
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 

@@ -2,7 +2,7 @@
 * @Title:   函数的简单使用
 * @Author:  minibear2333
 * @Date:    2020-03-31 21:19
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 

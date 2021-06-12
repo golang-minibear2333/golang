@@ -2,7 +2,7 @@
 * @Title:   select语法
 * @Author:  minibear2333
 * @Date:    2020-03-27 20:23
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 
@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-//本节需要先了解chan的知识, 示例代码：https://github.com/minibear2333/how_to_code/blob/master/golang/medium/chan/chan.go
+//本节需要先了解chan的知识, 示例代码：https://github.com/golang-minibear2333/golang/blob/master/golang/medium/chan/chan.go
 var c2 chan int
 
 func init() {
@@ -29,7 +29,7 @@ func sendDemo() {
 	fmt.Println("send end")
 }
 
-// 要学习select就要先了解chan的知识，示例代码：https://github.com/minibear2333/how_to_code/blob/master/golang/medium/chan/chan.go
+// 要学习select就要先了解chan的知识，示例代码：https://github.com/golang-minibear2333/golang/blob/master/golang/medium/chan/chan.go
 func selectDemo() {
 	go sendDemo()
 

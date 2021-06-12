@@ -2,7 +2,7 @@
 * @Title:   switch和type switch
 * @Author:  minibear2333
 * @Date:    2020-03-26 09:02
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 
@@ -56,7 +56,7 @@ func switchDemo(name string, number int) {
 }
 
 //type-switch 用来判断某个interface变量中实际存储的变量类型
-//被用于不同版本接口返回json中，属性名一样但是类型有差异,实战：https://github.com/minibear2333/how_to_code/blob/master/golang/medium/json_interface/fixed_json.go
+//被用于不同版本接口返回json中，属性名一样但是类型有差异,实战：https://github.com/golang-minibear2333/golang/blob/master/golang/medium/json_interface/fixed_json.go
 func typeSwitchDemo(x interface{}) int {
 	switch t := x.(type) {
 	case int:

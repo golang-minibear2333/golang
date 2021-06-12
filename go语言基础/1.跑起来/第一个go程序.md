@@ -1,7 +1,7 @@
 ### 第一个 go 程序
 
 带着目标学东西往往是最有成效的，**为什么学**以及**环境安装**可以参考前面的文章。
-> go语言github项目：https://github.com/minibear2333/how_to_code
+> go语言github项目：https://github.com/golang-minibear2333/golang
 
 
 let's go go go !

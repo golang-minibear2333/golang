@@ -2,7 +2,7 @@
 * @Title:   数组定义赋值与遍历
 * @Author:  minibear2333
 * @Date:    2020-04-03 19:42
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 

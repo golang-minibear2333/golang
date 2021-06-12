@@ -2,7 +2,7 @@
 * @Title:   指针扩展知识
 * @Author:  minibear2333
 * @Date:    2020-04-05 21:19
-* @url:     https://github.com/minibear2333/how_to_code
+* @url:     https://github.com/golang-minibear2333/golang
 */
 package main
 
