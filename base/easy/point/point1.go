@@ -9,7 +9,7 @@ package main
 import "fmt"
 
 // 其实我们在go语言中的类，这一节已经稍微带了一下指针了
-// how_to_code/go语言基础/easy/function/go_class.go
+// how_to_code/base/easy/function/go_class.go
 
 func main() {
 	// 和c++中的指针用法一样(看不懂可以给我提issue: https://github.com/golang-minibear2333/golang/issues)

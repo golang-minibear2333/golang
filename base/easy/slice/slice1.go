@@ -8,7 +8,7 @@ package main
 
 import (
 	"fmt"
-	"how_to_code/golang/utils"
+	"github.com/golang-minibear2333/golang/tools"
 )
 
 func sliceDemo1() {

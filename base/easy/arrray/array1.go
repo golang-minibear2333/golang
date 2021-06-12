@@ -8,7 +8,7 @@ package main
 
 import (
 	"fmt"
-	"how_to_code/golang/utils"
+	"github.com/golang-minibear2333/golang/tools"
 )
 
 func arrayDefine() {
@@ -31,12 +31,12 @@ func arrayDefine() {
 	}
 
 	//忽略未使用错误
-	utils.IgnoreUnused(a1)
-	utils.IgnoreUnused(a2)
-	utils.IgnoreUnused(b1)
-	utils.IgnoreUnused(b2)
+	tools.IgnoreUnused(a1)
+	tools.IgnoreUnused(a2)
+	tools.IgnoreUnused(b1)
+	tools.IgnoreUnused(b2)
 }
 
 func main(){
-	arrayDefine()
+
 }

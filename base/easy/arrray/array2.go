@@ -8,7 +8,7 @@ package main
 
 import (
 	"fmt"
-	"how_to_code/golang/utils"
+	"github.com/golang-minibear2333/golang/tools"
 )
 
 func multiArray() {
@@ -35,10 +35,7 @@ func multiArray() {
 	// 不定长数组，但是在go里面被称为切片，不属于数组，这种先提一下，后面的章节会展开
 	arr2 := [][]int{{1, 2}, {1, 2, 3}, {1, 2, 3, 4}}
 	fmt.Println("输出多维切片")
-	utils.PrintMulti2Slice(arr2)
+	tools.PrintMulti2Slice(arr2)
 
 }
 
-func main() {
-	multiArray()
-}
