@@ -31,7 +31,11 @@
     * [channel](1.base/5.并发和并行/channel.md)
     * [select](1.base/5.并发和并行/select.md)
     * [设置超时](1.base/5.并发和并行/timeout.md)
-  
+
+### 时间处理与定时任务
+
+* [设置可热更新的定时器](a.timer/reset/README.md)
+
 ### 常用操作
 
 * [1.其他常用操作](1.base/番外、常用操作.md)
