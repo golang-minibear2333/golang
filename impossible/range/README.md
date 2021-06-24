@@ -69,7 +69,7 @@ for range是值拷贝出来的副本
 ```
 
 ### for range 原理
-通过查看https://github.com/golang/gofrontend源代码，我们可以发现for range的实现是：
+通过查看https://github.com/golang/gofrontend 源代码，我们可以发现for range的实现是：
 
 ```go
 # statements.cc:6419 (441f3f1 on 4 Oct)
