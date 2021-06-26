@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tools on go语言精进之路</title>
+    <link>https://golang.coding3min.com/tools/</link>
+    <description>Recent content in Tools on go语言精进之路</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://golang.coding3min.com/tools/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/tools/readme/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/tools/readme/</guid>
+      <description>golang小工具 #     作用 位置 备注     代码测速 speed.go    可超时缓存 cache.go 任意类型变量缓存，可设置超时时间   线程安全的缓存 map.go 任意类型变量缓存，线程安全   配置proxy static_proxy.go 简单配置http proxy   捕获panic defer_panic.go    重试函数 func.go 可传入函数和重试次数，自动重试，要求返回是否成功   参数 go命令行读取参数 -   文件写入读取 - -   配置文件 - -    </description>
+    </item>
+    
+  </channel>
+</rss>

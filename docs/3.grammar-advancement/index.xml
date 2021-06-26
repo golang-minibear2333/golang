@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>3.grammar-advancements on go语言精进之路</title>
+    <link>https://golang.coding3min.com/3.grammar-advancement/</link>
+    <description>Recent content in 3.grammar-advancements on go语言精进之路</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://golang.coding3min.com/3.grammar-advancement/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/3.grammar-advancement/3-1-point/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/3.grammar-advancement/3-1-point/</guid>
+      <description>3.1 指针讨论 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/3.1-point
+ 3.1.1 指针 #  c 中有指针的概念，在 go 中也有，但是实际上用的比较少，因为指针容易出错，而且不易阅读。
+每个变量都有他的地址
+var a int fmt.Printf(&amp;#34;a 的地址是：%p \n&amp;#34;, &amp;amp;a) 输出
+a 的地址是：0xc0000b2008 指针用来存地址
+//声明 变量名 + 指针类型 , 命令规则以ptr结尾 var ptr *int /* 指向整型*/ // var fp *float32 /* 指向浮点型 */ ptr = &amp;amp;a // 变量内部存的值是普通类型，指针内部存的值是地址 fmt.Printf(&amp;#34;ptr 存的值是：%p \n&amp;#34;, ptr) 输出，可以看到 ptr 存的值就是 a 的地址。
+ptr 存的值是：0xc0000b2008 存的就是 a 的地址，ptr 的指向*ptr 肯定就是 a 本身了。
+if a == *ptr { fmt.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/3.grammar-advancement/3-2-struct/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/3.grammar-advancement/3-2-struct/</guid>
+      <description>3.2 结构体 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/3.2-struct
+ 3.2.1 go 语言中的结构体 #  和 c++ 的结构体类似，如下定义一个结构体类型。
+type Body struct { name string age int } 像这样就可以使用
+var body Body body.name = &amp;#34;coding3min&amp;#34; body.age = 12 fmt.Println(body) 输出
+{coding3min 12} 3.2.2 go 中的类 #  结构体在 go 中是最常用的一种语法，有没有想过为什么？
+这是因为我们学过一些面向对象的语言，其中有一个叫类的概念，但是 go 里面没有。
+go 用一种特殊的方式，把结构体本身看作一个类。
+一个成熟的类，具备成员变量和成员函数，结构体本身就有成员变量，再给他绑定上成员函数，是不是就可以了！
+type people struct { name string } func (p people) toString() { fmt.Println(p.name) fmt.Printf(&amp;#34;p的地址 %p \n&amp;#34;, &amp;amp;p) } 上面给 people 结构体绑定了一个函数, 调用下看看</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/</guid>
+      <description>3.3 接口与多态 #  今天和大家聊聊 golang 的接口（ interface ）
+ 本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/3.3-interface
+ 3.3.1 接口 #  接口同 java 一样，可以把一堆有共性的方法定义在里面，但是比 java 灵活的是，不需要显式实现接口，你可以自己控制实现哪些方法。
+不需要显式实现的意思是，不需要像 java 那样 implements interface 写出来，别急，看完下面的例子就知道了。
+定义一个接口。
+type humanInterface interface { eat() string play() string } 定义一个结构体（类）
+type man struct { name string } 实现接口，语法和 给结构体添加方法 一样，完全看不出来 接口 的身影。
+func (p man) eat() string { return &amp;#34;eat banana&amp;#34; } func (p man) play() string { return &amp;#34;play game&amp;#34; } 上面的代码给结构体添加了和接口一样的方法，只要完全实现接口中的方式，默认这就实现接口（隐式）。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</guid>
+      <description>3.4 异常处理 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/3.4-errors
+ 3.4.1 异常处理思想 #  在 go 语言里是没有 try catch 的概念的，因为 try catch 会消耗更多资源，而且不管从 try 里面哪个地方跳出来，都是对代码正常结构的一种破坏。
+所以 go 语言的设计思想中主张
+ 如果一个函数可能出现异常，那么应该把异常作为返回值，没有异常就返回 nil 每次调用可能出现异常的函数时，都应该主动进行检查，并做出反应，这种 if 语句术语叫卫述语句  所以异常应该总是掌握在我们的手上，保证每次操作产生的影响达到最小，保证程序即使部分地方出现问题，也不会影响整个程序的运行，及时的处理异常，这样就可以减轻上层处理异常的压力。
+同时也不要让未知的异常使你的程序崩溃。
+3.4.2 异常的形式 #  我们应该让异常以这样的形式出现
+func Demo() (int, error) 我们应该让异常以这样的形式处理（卫述语句）
+_,err := errorDemo() if err!=nil{ fmt.Println(err) return } 3.4.3 自定义异常 #  比如程序有一个功能为除法的函数，除数不能为 0 ，否则程序为出现异常，我们就要提前判断除数，如果为 0 返回一个异常。那他应该这么写。
+func divisionInt(a, b int) (int, error) { if b == 0 { return -1, errors.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Impossibles on go语言精进之路</title>
+    <link>https://golang.coding3min.com/impossible/</link>
+    <description>Recent content in Impossibles on go语言精进之路</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://golang.coding3min.com/impossible/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/impossible/range/readme/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/impossible/range/readme/</guid>
+      <description>for range的一个坑 #  for range是值拷贝出来的副本
+在使用for range的时候，要注意的是，不管是slice还是map，循环的值都是被range值拷贝出来的副本值。 举个简单的例了
+对于list
+var t []Test t = append(t, Test{Index: 1, Num: 1}) t = append(t, Test{Index: 2, Num: 2}) // 实际上没有成功修改t.Num，因为是副本复制 	for _, v := range t { v.Num += 100 } for _, v := range t { // 输出 	// 1 1 	// 2 2 	fmt.Println(v.Index, v.Num) } 对于 map, 也不能这么搞，实际上都是复制
+m := make(map[int]Test) m[0] = Test{Index: 1, Num: 1} m[1] = Test{Index: 2, Num: 2} for _, v := range m { v.</description>
+    </item>
+    
+  </channel>
+</rss>

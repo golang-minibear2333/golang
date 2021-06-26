@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="2.5 数组和切片 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.5-arrray https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.5-slice
+ 2.5.1 Golang中的数组 #  其实在 循环 那一节用到过数组，我快速介绍一下。
+ 数组中是固定长度的连续空间（内存区域） 数组中所有元素的类型是一样的  var a1 [10]int //初始化数组 	var b1 = [5]float32{1000.0, 2.0, 3.4, 7.0, 50.0} 多维数组
+//声明二维数组，只要 任意加中括号，可以声明更多维，相应占用空间指数上指 	var arr [3][3]int //赋值 	arr = [3][3]int{ {1, 2, 3}, {2, 3, 4}, {3, 4, 5}, } 2.5.2 何谓切片？ #  类比c语言，一个int型数组int a[10],a的类型是int*，也就是整型指针，而c语言中可以使用malloc()动态的分配一段内存区域，c&#43;&#43;中可以用new()函数。例如：
+int* a = (int *)malloc(10); int* b = new int(4); 此时，a和b的类型也是int*，a和b此时分配内存的方式类似于go语言中的切片。">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
+<meta property="og:description" content="2.5 数组和切片 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.5-arrray https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.5-slice
+ 2.5.1 Golang中的数组 #  其实在 循环 那一节用到过数组，我快速介绍一下。
+ 数组中是固定长度的连续空间（内存区域） 数组中所有元素的类型是一样的  var a1 [10]int //初始化数组 	var b1 = [5]float32{1000.0, 2.0, 3.4, 7.0, 50.0} 多维数组
+//声明二维数组，只要 任意加中括号，可以声明更多维，相应占用空间指数上指 	var arr [3][3]int //赋值 	arr = [3][3]int{ {1, 2, 3}, {2, 3, 4}, {3, 4, 5}, } 2.5.2 何谓切片？ #  类比c语言，一个int型数组int a[10],a的类型是int*，也就是整型指针，而c语言中可以使用malloc()动态的分配一段内存区域，c&#43;&#43;中可以用new()函数。例如：
+int* a = (int *)malloc(10); int* b = new int(4); 此时，a和b的类型也是int*，a和b此时分配内存的方式类似于go语言中的切片。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://golang.coding3min.com/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/" /><meta property="article:section" content="2.func-containers" />
+
+
+
+<title>2 5 数组和切片 | go语言精进之路</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ea6717a4caf675b694ef8b9e3f2065b6c1b46d43c0f34b83e7b487f27fee9430.js" integrity="sha256-6mcXpMr2dbaU74uePyBltsG0bUPA80uD57SH8n/ulDA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="https://coding3min.com">机智的程序员小熊</a></li>
+<li>
+  <a href="https://github.com/minibear2333/">GitHub</a></li>
+<li>
+  <a href="/qrcode/">微信公众号</a></li>
+<li><strong>帮助与提示</strong>
+<ul>
+<li>
+  <a href="/howtocontribute/">0.0 如何参与贡献</a></li>
+<li>
+  <a href="/books-share/">0.1 书籍推荐</a></li>
+</ul>
+</li>
+<li><strong>第一章、Go基础</strong>
+<ul>
+<li>
+  <a href="/1.base/1-1-install-download/">1.1 安装与下载</a></li>
+<li>
+  <a href="/1.base/1-2-hello-world/">1.2 跑起来</a></li>
+<li>
+  <a href="/1.base/1-3-go-mod/">1.3 go mod最佳实践</a></li>
+<li>
+  <a href="/1.base/1-4-variables/">1.4 变量与常量</a></li>
+<li>
+  <a href="/1.base/1-5-switch%E5%92%8Ctypeswitch/">1.5 switch和type switch</a></li>
+<li>
+  <a href="/1.base/1-6-for-range/">1.6 循环</a></li>
+<li>
+  <a href="/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">1.7 range深度解析</a></li>
+</ul>
+</li>
+<li><strong>第二章、函数和容器</strong>
+<ul>
+<li>
+  <a href="/2.func-containers/2-1-func/">2.1 函数简单使用和基本知识解析</a></li>
+<li>
+  <a href="/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">2.2 匿名函数和闭包</a></li>
+<li>
+  <a href="/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/">2.3 可变参数</a></li>
+<li>
+  <a href="/2.func-containers/2-4-map/">2.4 集合（map）</a></li>
+<li>
+  <a href="/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/"class=active>2.5 数组和切片</a></li>
+</ul>
+</li>
+<li><strong>第三章、语法进阶</strong>
+<ul>
+<li>
+  <a href="/3.grammar-advancement/3-1-point/">3.1 指针讨论</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-2-struct/">3.2 结构体</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/">3.3 接口与多态</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">3.4 异常处理</a></li>
+</ul>
+</li>
+<li><strong>第四章、并发和并行</strong>
+<ul>
+<li>
+  <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
+<li>
+  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+<li>
+  <a href="/4.concurrent/select/">4.3 select</a></li>
+<li>
+  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+</ul>
+</li>
+<li><strong>时间处理与定时任务</strong>
+<ul>
+<li>
+  <a href="/a.timer/reset/readme/">设置可热更新的定时器</a></li>
+</ul>
+</li>
+<li><strong>常用操作</strong>
+<ul>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/">1.1 Go文件操作大全</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">1.2 Go代码基本标准规范</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/">1.3 切片排序sort包的使用</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/">1.4 Go与Dockerfile</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">1.5 goroutine等待</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/">1.6 命令行操作</a></li>
+<li>
+  <a href="/tools/readme/">2. 小工具</a></li>
+</ul>
+</li>
+<li><strong>go陷阱与缺陷</strong>
+<ul>
+<li>
+  <a href="/impossible/range/readme/">range的第二个值实际上是值拷贝</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>2 5 数组和切片</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#251-golang中的数组">2.5.1 Golang中的数组</a></li>
+    <li><a href="#252-何谓切片">2.5.2 何谓切片？</a></li>
+    <li><a href="#253-有何不同">2.5.3 有何不同？</a></li>
+    <li><a href="#254-怎么动态增加">2.5.4 怎么动态增加？</a></li>
+    <li><a href="#255-切片的长度与容量len-cap-append-copy">2.5.5 切片的长度与容量，len cap append copy</a></li>
+    <li><a href="#256-切片的复制">2.5.6 切片的复制</a></li>
+    <li><a href="#257-截取部分元素">2.5.7 截取部分元素</a></li>
+    <li><a href="#258-工具函数补充">2.5.8 工具函数补充</a></li>
+    <li><a href="#259-小结">2.5.9 小结</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="25-数组和切片">
+  2.5 数组和切片
+  <a class="anchor" href="#25-%e6%95%b0%e7%bb%84%e5%92%8c%e5%88%87%e7%89%87">#</a>
+</h1>
+<blockquote>
+<p>本节源码位置
+<a href="https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.5-arrray">https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.5-arrray</a>
+<a href="https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.5-slice">https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.5-slice</a></p>
+</blockquote>
+<h2 id="251-golang中的数组">
+  2.5.1 Golang中的数组
+  <a class="anchor" href="#251-golang%e4%b8%ad%e7%9a%84%e6%95%b0%e7%bb%84">#</a>
+</h2>
+<p>其实在 
+  <a href="https://mp.weixin.qq.com/s?__biz=MzAxOTc1OTY4NA==&amp;mid=2650856000&amp;idx=3&amp;sn=1a6cdbf89fcfa4cd7fa0d66a7d1de2e2&amp;chksm=80366d6bb741e47d96d1706713198ce6840a87576bb97ffd5b3c3cecbf964509b607950b0d23&amp;scene=21#wechat_redirect">循环</a> 那一节用到过数组，我快速介绍一下。</p>
+<ul>
+<li>数组中是固定长度的连续空间（内存区域）</li>
+<li>数组中所有元素的类型是一样的</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a1</span> [<span style="color:#ae81ff">10</span>]<span style="color:#66d9ef">int</span>
+  
+	<span style="color:#75715e">//初始化数组
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">b1</span> = [<span style="color:#ae81ff">5</span>]<span style="color:#66d9ef">float32</span>{<span style="color:#ae81ff">1000.0</span>, <span style="color:#ae81ff">2.0</span>, <span style="color:#ae81ff">3.4</span>, <span style="color:#ae81ff">7.0</span>, <span style="color:#ae81ff">50.0</span>}
+</code></pre></div><p><strong>多维数组</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">//声明二维数组，只要 任意加中括号，可以声明更多维，相应占用空间指数上指
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">arr</span> [<span style="color:#ae81ff">3</span>][<span style="color:#ae81ff">3</span>]<span style="color:#66d9ef">int</span>
+	<span style="color:#75715e">//赋值
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">arr</span> = [<span style="color:#ae81ff">3</span>][<span style="color:#ae81ff">3</span>]<span style="color:#66d9ef">int</span>{
+		{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>},
+		{<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>},
+		{<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>},
+	}
+</code></pre></div><h2 id="252-何谓切片">
+  2.5.2 何谓切片？
+  <a class="anchor" href="#252-%e4%bd%95%e8%b0%93%e5%88%87%e7%89%87">#</a>
+</h2>
+<p>类比<code>c</code>语言，一个<code>int</code>型数组<code>int  a[10]</code>,<code>a</code>的类型是<code>int*</code>，也就是整型指针，而<code>c</code>语言中可以使用<code>malloc()</code>动态的分配一段内存区域，<code>c++</code>中可以用<code>new()</code>函数。例如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> <span style="color:#a6e22e">a</span> = (<span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>)<span style="color:#a6e22e">malloc</span>(<span style="color:#ae81ff">10</span>);
+<span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> <span style="color:#a6e22e">b</span> = <span style="color:#a6e22e">new</span> int(<span style="color:#ae81ff">4</span>);
+</code></pre></div><p>此时，<code>a</code>和<code>b</code>的类型也是<code>int*</code>，<code>a</code>和<code>b</code>此时分配内存的方式类似于<code>go</code>语言中的切片。</p>
+<p><code>Go</code>的数组和切片都是从<code>c</code>语言中延续过来的设计。</p>
+<h2 id="253-有何不同">
+  2.5.3 有何不同？
+  <a class="anchor" href="#253-%e6%9c%89%e4%bd%95%e4%b8%8d%e5%90%8c">#</a>
+</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sliceTmp</span> []<span style="color:#66d9ef">int</span>
+</code></pre></div><p>可以看到和<code>c</code>不同的是，<code>go</code>可以声明一个空切片（默认值为<code>nil</code>），然后再增加值的过程中动态的改变切片值大小。</p>
+<h2 id="254-怎么动态增加">
+  2.5.4 怎么动态增加？
+  <a class="anchor" href="#254-%e6%80%8e%e4%b9%88%e5%8a%a8%e6%80%81%e5%a2%9e%e5%8a%a0">#</a>
+</h2>
+<p>增加的方式只有一种，使用<code>append</code>函数追加。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">sliceTmp</span> = append(<span style="color:#a6e22e">sliceTmp</span>, <span style="color:#ae81ff">4</span>)
+<span style="color:#a6e22e">sliceTmp</span> = append(<span style="color:#a6e22e">sliceTmp</span>, <span style="color:#ae81ff">5</span>)
+</code></pre></div><p>每个切片有长度<code>len</code>和容量<code>cap</code>两个概念，长度是我们最熟知的，和数组长度相同，可以直接用来遍历。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>,<span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">slice1</span>{
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">v</span>)
+	}
+</code></pre></div><p>用切糕来对比</p>
+<p>
+  <img src="https://coding3min.oss-accelerate.aliyuncs.com/coding3min/2020-05-05-080617.jpg" alt="" /></p>
+<p>每个切片，在声明或扩建时会分配一段连续的空间，称为容量<code>cap</code>，是不可见的；真正在使用的只有一部分连续的空间，称为长度<code>len</code>，是可见的。</p>
+<p>每次<code>append</code>时，如果发现<code>cap</code>已经不足以给<code>len</code>使用，就会重新分配原<code>cap</code>两倍的容量，把原切片里已有内容全部迁移过去。</p>
+<p>新分配的空间也是连续的，不过不一定直接在原切片内存地址处扩容，也有可能是新的内存地址。</p>
+<h2 id="255-切片的长度与容量len-cap-append-copy">
+  2.5.5 切片的长度与容量，len cap append copy
+  <a class="anchor" href="#255-%e5%88%87%e7%89%87%e7%9a%84%e9%95%bf%e5%ba%a6%e4%b8%8e%e5%ae%b9%e9%87%8flen-cap-append-copy">#</a>
+</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">slice1</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}
+</code></pre></div><p>普通切片的声明方式，长度和容量是一致的。</p>
+<pre><code>len=3 cap=3 slice=[1 2 3]
+</code></pre><p>当然，控制权在我们手上,我们可以自己控制长度和容量，</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#a6e22e">slice1</span> = make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">5</span>) <span style="color:#75715e">// 3 是长度 5 是容量
+</span></code></pre></div><p>输出</p>
+<pre><code>len=3 cap=5 slice=[0 0 0]
+</code></pre><p>尝试使用一般的方式扩容</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">slice1</span>[len(<span style="color:#a6e22e">slice1</span>)] = <span style="color:#ae81ff">4</span> 
+<span style="color:#75715e">//报错 panic: runtime error:
+</span><span style="color:#75715e">//index out of range [3] with length 3
+</span></code></pre></div><p>这种方式是会报错的，虽然容量是 5 ，但是数组长度是3，这里是以长度为准，而不是容量，<code>append</code>内部如果超过容量相当于创建了一个新数组，每个新数组都是定长的，只不过外部是切片。</p>
+<p>尝试扩容</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">slice1</span> = append(<span style="color:#a6e22e">slice1</span>, <span style="color:#ae81ff">4</span>)
+</code></pre></div><p>输出，可以发现<code>len</code>扩容了！</p>
+<pre><code>len=4 cap=5 slice=[0 0 0 4]
+</code></pre><p>让我们连续扩容，让容量超过<code>5</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">slice1</span> = append(<span style="color:#a6e22e">slice1</span>, <span style="color:#ae81ff">5</span>)
+<span style="color:#a6e22e">slice1</span> = append(<span style="color:#a6e22e">slice1</span>, <span style="color:#ae81ff">6</span>) <span style="color:#75715e">// 到这里长度超过了容量，容量自动翻倍为 5*2
+</span></code></pre></div><p>输出</p>
+<pre><code>len=6 cap=10 slice=[0 0 0 4 5 6]
+</code></pre><p>上面的过程，我 用自己的代码模拟一遍</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 上面容量自动翻倍的过程可以看作和下面一致
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">slice1</span> = make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">5</span>) <span style="color:#75715e">// 3 是长度 5 是容量
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">slice1</span> = append(<span style="color:#a6e22e">slice1</span>, <span style="color:#ae81ff">4</span>)
+	<span style="color:#a6e22e">slice1</span> = append(<span style="color:#a6e22e">slice1</span>, <span style="color:#ae81ff">5</span>)
+
+<span style="color:#75715e">// 长度不变，容量自动翻倍为 5*2
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">slice2</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, len(<span style="color:#a6e22e">slice1</span>), 
+          (cap(<span style="color:#a6e22e">slice1</span>))<span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>)
+
+	<span style="color:#75715e">// 拷贝 slice1 的内容到 slice2 
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">// 注意是后面的拷贝给前面
+</span><span style="color:#75715e"></span>	copy(<span style="color:#a6e22e">slice2</span>, <span style="color:#a6e22e">slice1</span>) 
+  
+	<span style="color:#a6e22e">slice2</span> = append(<span style="color:#a6e22e">slice2</span>, <span style="color:#ae81ff">6</span>) 
+</code></pre></div><p><strong>你理解容量，长度的概念了吗？</strong></p>
+<h2 id="256-切片的复制">
+  2.5.6 切片的复制
+  <a class="anchor" href="#256-%e5%88%87%e7%89%87%e7%9a%84%e5%a4%8d%e5%88%b6">#</a>
+</h2>
+<p>切片的复制，回顾一下，我们原来是用<code>copy</code>函数</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#a6e22e">slice2</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">int</span>, len(<span style="color:#a6e22e">slice1</span>), cap(<span style="color:#a6e22e">slice1</span>))
+	<span style="color:#75715e">/* 拷贝 slice1 的内容到 slice2 */</span>
+	copy(<span style="color:#a6e22e">slice2</span>, <span style="color:#a6e22e">slice1</span>) <span style="color:#75715e">// 注意是后面的拷贝给前面
+</span></code></pre></div><p>切片还有一种方式复制方式，比较快速</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#a6e22e">slice3</span> <span style="color:#f92672">:=</span>  <span style="color:#a6e22e">slice2</span>[:]
+</code></pre></div><p>但是有一种致命的缺点，这是浅拷贝，<code>slice3</code>和<code>slice2</code>是同一个切片，无论改动哪个，另一个都会产生变化。</p>
+<h2 id="257-截取部分元素">
+  2.5.7 截取部分元素
+  <a class="anchor" href="#257-%e6%88%aa%e5%8f%96%e9%83%a8%e5%88%86%e5%85%83%e7%b4%a0">#</a>
+</h2>
+<p>切片之所以为切片，就是可以把部分元素截取出来</p>
+<p><code>slice2</code>的值是<code>[0 0 0 4 5 6]</code>，现在有一个需求，要截取第2个元素出来</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">slice3</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">slice2</span>[<span style="color:#ae81ff">0</span>:<span style="color:#ae81ff">1</span>]
+</code></pre></div><p>输出</p>
+<pre><code>len=1 cap=10 slice=[0]
+</code></pre><p>我们分别修改<code>slice3</code>和<code>slice2</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">slice3</span>[<span style="color:#ae81ff">0</span>] = <span style="color:#ae81ff">1</span>
+<span style="color:#a6e22e">slice2</span>[<span style="color:#ae81ff">0</span>] = <span style="color:#ae81ff">2</span>
+<span style="color:#a6e22e">printSlice</span>(<span style="color:#a6e22e">slice2</span>)
+<span style="color:#a6e22e">printSlice</span>(<span style="color:#a6e22e">slice3</span>)
+</code></pre></div><p>发现输出</p>
+<pre><code>len=6 cap=10 slice=[2 0 0 4 5 6]
+len=1 cap=10 slice=[2]
+</code></pre><p>说明，截取出现的元素依然是同一块内存（切片是引用类型的）。</p>
+<p>所以截取部分元素之后，还是得用copy来复制一遍，如下。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">slice2</span> = []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}
+	<span style="color:#a6e22e">slice3</span> = make([]<span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)
+	copy(<span style="color:#a6e22e">slice3</span>, <span style="color:#a6e22e">slice2</span>[<span style="color:#ae81ff">0</span>:<span style="color:#ae81ff">1</span>])
+</code></pre></div><h2 id="258-工具函数补充">
+  2.5.8 工具函数补充
+  <a class="anchor" href="#258-%e5%b7%a5%e5%85%b7%e5%87%bd%e6%95%b0%e8%a1%a5%e5%85%85">#</a>
+</h2>
+<p>排序工具函数</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">slice2</span> = []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">0</span>}
+	<span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">Ints</span>(<span style="color:#a6e22e">slice2</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">slice2</span>)
+</code></pre></div><p>输出</p>
+<pre><code>[0 0 0 1 2 3]
+</code></pre><p>其他知识参考 
+  <a href="https://coding3min.com/785.html">排序用户自定义数据集</a></p>
+<h2 id="259-小结">
+  2.5.9 小结
+  <a class="anchor" href="#259-%e5%b0%8f%e7%bb%93">#</a>
+</h2>
+<p>本节介绍了切片与数组的区别，动态增加，容量和长度的概念，以及len cap append copy 函数的使用，还介绍了切片的复制和截取。</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/minibear2333/golang/edit/master/content/2.func-containers/2-5-%e6%95%b0%e7%bb%84%e5%92%8c%e5%88%87%e7%89%87.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#251-golang中的数组">2.5.1 Golang中的数组</a></li>
+    <li><a href="#252-何谓切片">2.5.2 何谓切片？</a></li>
+    <li><a href="#253-有何不同">2.5.3 有何不同？</a></li>
+    <li><a href="#254-怎么动态增加">2.5.4 怎么动态增加？</a></li>
+    <li><a href="#255-切片的长度与容量len-cap-append-copy">2.5.5 切片的长度与容量，len cap append copy</a></li>
+    <li><a href="#256-切片的复制">2.5.6 切片的复制</a></li>
+    <li><a href="#257-截取部分元素">2.5.7 截取部分元素</a></li>
+    <li><a href="#258-工具函数补充">2.5.8 工具函数补充</a></li>
+    <li><a href="#259-小结">2.5.9 小结</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

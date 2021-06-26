@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="3.4 异常处理 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/3.4-errors
+ 3.4.1 异常处理思想 #  在 go 语言里是没有 try catch 的概念的，因为 try catch 会消耗更多资源，而且不管从 try 里面哪个地方跳出来，都是对代码正常结构的一种破坏。
+所以 go 语言的设计思想中主张
+ 如果一个函数可能出现异常，那么应该把异常作为返回值，没有异常就返回 nil 每次调用可能出现异常的函数时，都应该主动进行检查，并做出反应，这种 if 语句术语叫卫述语句  所以异常应该总是掌握在我们的手上，保证每次操作产生的影响达到最小，保证程序即使部分地方出现问题，也不会影响整个程序的运行，及时的处理异常，这样就可以减轻上层处理异常的压力。
+同时也不要让未知的异常使你的程序崩溃。
+3.4.2 异常的形式 #  我们应该让异常以这样的形式出现
+func Demo() (int, error) 我们应该让异常以这样的形式处理（卫述语句）
+_,err := errorDemo() if err!=nil{ fmt.Println(err) return } 3.4.3 自定义异常 #  比如程序有一个功能为除法的函数，除数不能为 0 ，否则程序为出现异常，我们就要提前判断除数，如果为 0 返回一个异常。那他应该这么写。
+func divisionInt(a, b int) (int, error) { if b == 0 { return -1, errors.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
+<meta property="og:description" content="3.4 异常处理 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/3.4-errors
+ 3.4.1 异常处理思想 #  在 go 语言里是没有 try catch 的概念的，因为 try catch 会消耗更多资源，而且不管从 try 里面哪个地方跳出来，都是对代码正常结构的一种破坏。
+所以 go 语言的设计思想中主张
+ 如果一个函数可能出现异常，那么应该把异常作为返回值，没有异常就返回 nil 每次调用可能出现异常的函数时，都应该主动进行检查，并做出反应，这种 if 语句术语叫卫述语句  所以异常应该总是掌握在我们的手上，保证每次操作产生的影响达到最小，保证程序即使部分地方出现问题，也不会影响整个程序的运行，及时的处理异常，这样就可以减轻上层处理异常的压力。
+同时也不要让未知的异常使你的程序崩溃。
+3.4.2 异常的形式 #  我们应该让异常以这样的形式出现
+func Demo() (int, error) 我们应该让异常以这样的形式处理（卫述语句）
+_,err := errorDemo() if err!=nil{ fmt.Println(err) return } 3.4.3 自定义异常 #  比如程序有一个功能为除法的函数，除数不能为 0 ，否则程序为出现异常，我们就要提前判断除数，如果为 0 返回一个异常。那他应该这么写。
+func divisionInt(a, b int) (int, error) { if b == 0 { return -1, errors." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://golang.coding3min.com/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/" /><meta property="article:section" content="3.grammar-advancement" />
+
+
+
+<title>3 4 异常处理 | go语言精进之路</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ea6717a4caf675b694ef8b9e3f2065b6c1b46d43c0f34b83e7b487f27fee9430.js" integrity="sha256-6mcXpMr2dbaU74uePyBltsG0bUPA80uD57SH8n/ulDA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="https://coding3min.com">机智的程序员小熊</a></li>
+<li>
+  <a href="https://github.com/minibear2333/">GitHub</a></li>
+<li>
+  <a href="/qrcode/">微信公众号</a></li>
+<li><strong>帮助与提示</strong>
+<ul>
+<li>
+  <a href="/howtocontribute/">0.0 如何参与贡献</a></li>
+<li>
+  <a href="/books-share/">0.1 书籍推荐</a></li>
+</ul>
+</li>
+<li><strong>第一章、Go基础</strong>
+<ul>
+<li>
+  <a href="/1.base/1-1-install-download/">1.1 安装与下载</a></li>
+<li>
+  <a href="/1.base/1-2-hello-world/">1.2 跑起来</a></li>
+<li>
+  <a href="/1.base/1-3-go-mod/">1.3 go mod最佳实践</a></li>
+<li>
+  <a href="/1.base/1-4-variables/">1.4 变量与常量</a></li>
+<li>
+  <a href="/1.base/1-5-switch%E5%92%8Ctypeswitch/">1.5 switch和type switch</a></li>
+<li>
+  <a href="/1.base/1-6-for-range/">1.6 循环</a></li>
+<li>
+  <a href="/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">1.7 range深度解析</a></li>
+</ul>
+</li>
+<li><strong>第二章、函数和容器</strong>
+<ul>
+<li>
+  <a href="/2.func-containers/2-1-func/">2.1 函数简单使用和基本知识解析</a></li>
+<li>
+  <a href="/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">2.2 匿名函数和闭包</a></li>
+<li>
+  <a href="/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/">2.3 可变参数</a></li>
+<li>
+  <a href="/2.func-containers/2-4-map/">2.4 集合（map）</a></li>
+<li>
+  <a href="/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/">2.5 数组和切片</a></li>
+</ul>
+</li>
+<li><strong>第三章、语法进阶</strong>
+<ul>
+<li>
+  <a href="/3.grammar-advancement/3-1-point/">3.1 指针讨论</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-2-struct/">3.2 结构体</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/">3.3 接口与多态</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/"class=active>3.4 异常处理</a></li>
+</ul>
+</li>
+<li><strong>第四章、并发和并行</strong>
+<ul>
+<li>
+  <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
+<li>
+  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+<li>
+  <a href="/4.concurrent/select/">4.3 select</a></li>
+<li>
+  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+</ul>
+</li>
+<li><strong>时间处理与定时任务</strong>
+<ul>
+<li>
+  <a href="/a.timer/reset/readme/">设置可热更新的定时器</a></li>
+</ul>
+</li>
+<li><strong>常用操作</strong>
+<ul>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/">1.1 Go文件操作大全</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">1.2 Go代码基本标准规范</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/">1.3 切片排序sort包的使用</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/">1.4 Go与Dockerfile</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">1.5 goroutine等待</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/">1.6 命令行操作</a></li>
+<li>
+  <a href="/tools/readme/">2. 小工具</a></li>
+</ul>
+</li>
+<li><strong>go陷阱与缺陷</strong>
+<ul>
+<li>
+  <a href="/impossible/range/readme/">range的第二个值实际上是值拷贝</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>3 4 异常处理</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#341-异常处理思想">3.4.1 异常处理思想</a></li>
+    <li><a href="#342-异常的形式">3.4.2 异常的形式</a></li>
+    <li><a href="#343-自定义异常">3.4.3 自定义异常</a></li>
+    <li><a href="#344-详细的异常信息">3.4.4 详细的异常信息</a></li>
+    <li><a href="#345-defer">3.4.5 defer</a></li>
+    <li><a href="#346-panic">3.4.6 panic</a></li>
+    <li><a href="#347-panic-recover">3.4.7 panic recover</a></li>
+    <li><a href="#348-小结">3.4.8 小结</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="34-异常处理">
+  3.4 异常处理
+  <a class="anchor" href="#34-%e5%bc%82%e5%b8%b8%e5%a4%84%e7%90%86">#</a>
+</h1>
+<blockquote>
+<p>本节源码位置 <a href="https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/3.4-errors">https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/3.4-errors</a></p>
+</blockquote>
+<h2 id="341-异常处理思想">
+  3.4.1 异常处理思想
+  <a class="anchor" href="#341-%e5%bc%82%e5%b8%b8%e5%a4%84%e7%90%86%e6%80%9d%e6%83%b3">#</a>
+</h2>
+<p>在 <code>go</code> 语言里是没有 <code>try catch</code> 的概念的，因为 <code>try catch</code> 会消耗更多资源，而且不管从 <code>try</code> 里面哪个地方跳出来，都是对代码正常结构的一种破坏。</p>
+<p>所以 <code>go</code> 语言的设计思想中主张</p>
+<ul>
+<li>如果一个函数可能出现异常，那么应该把异常作为返回值，没有异常就返回 <code>nil</code></li>
+<li>每次调用可能出现异常的函数时，都应该主动进行检查，并做出反应，这种 <code>if</code> 语句术语叫<strong>卫述语句</strong></li>
+</ul>
+<p>所以异常应该总是掌握在我们的手上，保证每次操作产生的影响达到最小，保证程序即使部分地方出现问题，也不会影响整个程序的运行，及时的处理异常，这样就可以减轻上层处理异常的压力。</p>
+<p>同时也不要让未知的异常使你的程序崩溃。</p>
+<h2 id="342-异常的形式">
+  3.4.2 异常的形式
+  <a class="anchor" href="#342-%e5%bc%82%e5%b8%b8%e7%9a%84%e5%bd%a2%e5%bc%8f">#</a>
+</h2>
+<p>我们应该让异常以这样的形式出现</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Demo</span>() (<span style="color:#66d9ef">int</span>, <span style="color:#66d9ef">error</span>)
+</code></pre></div><p>我们应该让异常以这样的形式处理（卫述语句）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#a6e22e">_</span>,<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">errorDemo</span>()
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span><span style="color:#f92672">!=</span><span style="color:#66d9ef">nil</span>{
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+		<span style="color:#66d9ef">return</span>
+	}
+</code></pre></div><h2 id="343-自定义异常">
+  3.4.3 自定义异常
+  <a class="anchor" href="#343-%e8%87%aa%e5%ae%9a%e4%b9%89%e5%bc%82%e5%b8%b8">#</a>
+</h2>
+<p>比如程序有一个功能为除法的函数，除数不能为 <code>0</code> ，否则程序为出现异常，我们就要提前判断除数，如果为 <code>0</code> 返回一个异常。那他应该这么写。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">divisionInt</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>) (<span style="color:#66d9ef">int</span>, <span style="color:#66d9ef">error</span>) {
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">errors</span>.<span style="color:#a6e22e">New</span>(<span style="color:#e6db74">&#34;除数不能为0&#34;</span>)
+	}
+
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">b</span>, <span style="color:#66d9ef">nil</span>
+}
+</code></pre></div><p>这个函数应该被这么调用</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">0</span>
+<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">divisionInt</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>)
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+	<span style="color:#66d9ef">return</span>
+}
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>, <span style="color:#e6db74">&#34;除以&#34;</span>, <span style="color:#a6e22e">b</span>, <span style="color:#e6db74">&#34;的结果是 &#34;</span>, <span style="color:#a6e22e">res</span>)
+</code></pre></div><p>可以注意到上面的两个知识点</p>
+<ul>
+<li>创建一个异常 <code>errors.New(&quot;字符串&quot;)</code></li>
+<li>打印异常信息 <code>err.Error()</code></li>
+</ul>
+<p>只要记得这些，你就掌握了自定义异常的基本方法。</p>
+<p>但是 <code>errors.New(&quot;字符串&quot;)</code> 的形式我不建议使用，因为他不支持字符串格式化功能，所以我一般使用 <code>fmt.Errorf</code> 来做这样的事情。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;产生了一个 %v 异常&#34;</span>, <span style="color:#e6db74">&#34;喝太多&#34;</span>)
+</code></pre></div><h2 id="344-详细的异常信息">
+  3.4.4 详细的异常信息
+  <a class="anchor" href="#344-%e8%af%a6%e7%bb%86%e7%9a%84%e5%bc%82%e5%b8%b8%e4%bf%a1%e6%81%af">#</a>
+</h2>
+<p>上面的异常信息只是简单的返回了一个字符串而已，想在报错的时候保留现场，得到更多的异常内容怎么办呢？这就要看看 <code>errors</code> 的内部实现了。其实相当简单。</p>
+<p><code>errors</code> 实现了一个叫 <code>error</code> 的接口，这个接口里就一个 <code>Error</code> 方法且返回一个 <code>string</code> ，如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">type</span> <span style="color:#66d9ef">error</span> <span style="color:#66d9ef">interface</span> {
+	<span style="color:#a6e22e">Error</span>() <span style="color:#66d9ef">string</span>
+}
+</code></pre></div><p>只要结构体实现了这个方法就行，源码的实现方式如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">errorString</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>
+}
+
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">e</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">errorString</span>) <span style="color:#a6e22e">Error</span>() <span style="color:#66d9ef">string</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">s</span>
+}
+
+<span style="color:#75715e">// 多一个函数当作构造函数
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">New</span>(<span style="color:#a6e22e">text</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">errorString</span>{<span style="color:#a6e22e">text</span>}
+}
+</code></pre></div><p>所以我们只要扩充下自定义 <code>error</code> 的结构体字段就行了。</p>
+<p>这个自定义异常可以在报错的时候存储一些信息，供外部程序使用</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">FileError</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">Op</span>   <span style="color:#66d9ef">string</span>
+	<span style="color:#a6e22e">Name</span> <span style="color:#66d9ef">string</span>
+	<span style="color:#a6e22e">Path</span> <span style="color:#66d9ef">string</span>
+}
+<span style="color:#75715e">// 初始化函数
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewFileError</span>(<span style="color:#a6e22e">op</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">path</span> <span style="color:#66d9ef">string</span>) <span style="color:#f92672">*</span><span style="color:#a6e22e">FileError</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">FileError</span>{<span style="color:#a6e22e">Op</span>: <span style="color:#a6e22e">op</span>, <span style="color:#a6e22e">Name</span>: <span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">Path</span>: <span style="color:#a6e22e">path</span>}
+}
+<span style="color:#75715e">// 实现接口
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">f</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">FileError</span>) <span style="color:#a6e22e">Error</span>() <span style="color:#66d9ef">string</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;路径为 %v 的文件 %v，在 %v 操作时出错&#34;</span>, <span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Path</span>, <span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Name</span>, <span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Op</span>)
+}
+</code></pre></div><p>调用</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#a6e22e">f</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">NewFileError</span>(<span style="color:#e6db74">&#34;读&#34;</span>, <span style="color:#e6db74">&#34;README.md&#34;</span>, <span style="color:#e6db74">&#34;/home/how_to_code/README.md&#34;</span>)
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">f</span>.<span style="color:#a6e22e">Error</span>())
+</code></pre></div><p>输出</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#a6e22e">路径为</span> <span style="color:#f92672">/</span><span style="color:#a6e22e">home</span><span style="color:#f92672">/</span><span style="color:#a6e22e">how_to_code</span><span style="color:#f92672">/</span><span style="color:#a6e22e">README</span>.<span style="color:#a6e22e">md</span> <span style="color:#a6e22e">的文件</span> <span style="color:#a6e22e">README</span>.<span style="color:#a6e22e">md</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#a6e22e">在</span> <span style="color:#a6e22e">读</span> <span style="color:#a6e22e">操作时出错</span>
+</code></pre></div><h2 id="345-defer">
+  3.4.5 defer
+  <a class="anchor" href="#345-defer">#</a>
+</h2>
+<p>上面说的内容很简单，在工作里也是最常用的，下面说一些拓展知识。</p>
+<p><code>Go</code> 中有一种延迟调用语句叫 <code>defer</code> 语句，它在函数返回时才会被调用，如果有多个 <code>defer</code> 语句那么它会被逆序执行。</p>
+<p>比如下面的例子是在一个函数内的三条语句，他是这么怎么执行的呢？</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;see you next time!&#34;</span>)
+<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;close all connect&#34;</span>)
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;hei boy&#34;</span>)
+</code></pre></div><p>输出如下, 可以看到两个 <code>defer</code> 在程序的最后才执行，而且是逆序。</p>
+<pre><code>hei boy
+close all connect
+see you next time!
+</code></pre><p>这一节叫异常处理详解，终归是围绕异常处理来讲述知识点， <code>defer</code> 延迟调用语句的用处是在程序执行结束，甚至是崩溃后，仍然会被调用的语句，通常会用来执行一些告别操作，比如关闭连接，释放资源（类似于 <code>c++</code> 中的析构函数）等操作。</p>
+<p>涉及到 <code>defer</code> 的操作</p>
+<ul>
+<li>并发时释放共享资源锁</li>
+<li>延迟释放文件句柄</li>
+<li>延迟关闭 <code>tcp</code> 连接</li>
+<li>延迟关闭数据库连接</li>
+</ul>
+<p>这些操作也是非常容易被人忘记的操作，为了保证不会忘记，建议在函数的一开始就放置 <code>defer</code> 语句。</p>
+<h2 id="346-panic">
+  3.4.6 panic
+  <a class="anchor" href="#346-panic">#</a>
+</h2>
+<p>刚刚有说到 <code>defer</code> 是崩溃后，仍然会被调用的语句，那程序在什么情况下会崩溃呢？</p>
+<p><code>Go</code> 的类型系统会在编译时捕获很多异常，但有些异常只能在运行时检查，如数组访问越界、空指针引用等。这些运行时异常会引起 <code>painc</code> 异常（程序直接崩溃退出）。然后在退出的时候调用当前 <code>goroutine</code> 的 <code>defer</code> 延迟调用语句。</p>
+<p>有时候在程序运行缺乏必要的资源的时候应该手动触发宕机（比如配置文件解析出错、依赖某种独有库但该操作系统没有的时候）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;关闭文件句柄&#34;</span>)
+
+panic(<span style="color:#e6db74">&#34;人工创建的运行时异常&#34;</span>)
+</code></pre></div><p>报错如下</p>
+<p>
+  <img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9jb2RpbmczbWluLm9zcy1hY2NlbGVyYXRlLmFsaXl1bmNzLmNvbS8yMDIwLzA1LzI4L0JsNHl1eDIwNTEucG5n?x-oss-process=image/format,png" alt="报错示例" /></p>
+<h2 id="347-panic-recover">
+  3.4.7 panic recover
+  <a class="anchor" href="#347-panic-recover">#</a>
+</h2>
+<p>出现 <code>panic</code> 以后程序会终止运行，所以我们应该在测试阶段发现这些问题，然后进行规避，但是如果在程序中产生不可预料的异常（比如在线的web或者rpc服务一般框架层），即使出现问题（一般是遇到不可预料的异常数据）也不应该直接崩溃，应该打印异常日志，关闭资源，跳过异常数据部分，然后继续运行下去，不然线上容易出现大面积血崩。</p>
+<p>然后再借助运维监控系统对日志的监控，发送告警给运维、开发人员，进行紧急修复。</p>
+<p>语法如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">divisionIntRecover</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>) (<span style="color:#a6e22e">ret</span> <span style="color:#66d9ef">int</span>) {
+	<span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> recover(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			<span style="color:#75715e">// 打印异常，关闭资源，退出此函数
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+			<span style="color:#a6e22e">ret</span> = <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+		}
+	}()
+
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">b</span>
+}
+</code></pre></div><p>调用</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">res</span> <span style="color:#66d9ef">int</span>
+	<span style="color:#a6e22e">datas</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">struct</span> {
+		<span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int</span>
+		<span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>
+	}{
+		{<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">0</span>},
+		{<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>},
+	}
+
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">datas</span> {
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">res</span> = <span style="color:#a6e22e">divisionIntRecover</span>(<span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">b</span>); <span style="color:#a6e22e">res</span> <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> {
+			<span style="color:#66d9ef">continue</span>
+		}
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">a</span>, <span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">b</span>, <span style="color:#e6db74">&#34;计算结果为：&#34;</span>, <span style="color:#a6e22e">res</span>)
+	}
+</code></pre></div><p>输出结果</p>
+<pre><code>runtime error: integer divide by zero
+2 / 2 计算结果为： 1
+</code></pre><ul>
+<li>调用 <code>panic</code> 后，当前函数从调用点直接退出</li>
+<li><code>recover</code> 函数只有在 <code>defer</code> 代码块中才会有效果</li>
+<li><code>recover</code> 可以放在最外层函数，做统一异常处理。</li>
+</ul>
+<h2 id="348-小结">
+  3.4.8 小结
+  <a class="anchor" href="#348-%e5%b0%8f%e7%bb%93">#</a>
+</h2>
+<p><code>defer</code>和<code>panic</code>是面试的高频题，因为在工作中非常常用。</p>
+<p>自定义错误的语法在正规项目中最为常用，可以和我一起实战一定能体验到了。</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/minibear2333/golang/edit/master/content/3.grammar-advancement/3-4-%e5%bc%82%e5%b8%b8%e5%a4%84%e7%90%86.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#341-异常处理思想">3.4.1 异常处理思想</a></li>
+    <li><a href="#342-异常的形式">3.4.2 异常的形式</a></li>
+    <li><a href="#343-自定义异常">3.4.3 自定义异常</a></li>
+    <li><a href="#344-详细的异常信息">3.4.4 详细的异常信息</a></li>
+    <li><a href="#345-defer">3.4.5 defer</a></li>
+    <li><a href="#346-panic">3.4.6 panic</a></li>
+    <li><a href="#347-panic-recover">3.4.7 panic recover</a></li>
+    <li><a href="#348-小结">3.4.8 小结</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

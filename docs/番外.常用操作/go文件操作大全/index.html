@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Go 官方库的文件操作分散在多个包中，比如os、ioutil包，我本来想写一篇总结性的 Go 文件操作的文章，却发现已经有人 2015 年已经写了一篇这样的文章，写的非常好，所以我翻译成了中文，强烈推荐你阅读一下。
+原文: Working with Files in Go, 作者: NanoDano
+介绍 #  万物皆文件 #  UNIX 的一个基础设计就是&quot;万物皆文件&quot;(everything is a file)。我们不必知道一个文件到底映射成什么，操作系统的设备驱动抽象成文件。操作系统为设备提供了文件格式的接口。
+Go 语言中的 reader 和 writer 接口也类似。我们只需简单的读写字节，不必知道 reader 的数据来自哪里，也不必知道 writer 将数据发送到哪里。
+你可以在/dev下查看可用的设备，有些可能需要较高的权限才能访问。
+基本操作 #  创建空文件 #  package main import ( &#34;log&#34; &#34;os&#34; ) var ( newFile *os.File err error ) func main() { newFile, err = os.Create(&#34;test.txt&#34;) if err != nil { log.Fatal(err) } log.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
+<meta property="og:description" content="Go 官方库的文件操作分散在多个包中，比如os、ioutil包，我本来想写一篇总结性的 Go 文件操作的文章，却发现已经有人 2015 年已经写了一篇这样的文章，写的非常好，所以我翻译成了中文，强烈推荐你阅读一下。
+原文: Working with Files in Go, 作者: NanoDano
+介绍 #  万物皆文件 #  UNIX 的一个基础设计就是&quot;万物皆文件&quot;(everything is a file)。我们不必知道一个文件到底映射成什么，操作系统的设备驱动抽象成文件。操作系统为设备提供了文件格式的接口。
+Go 语言中的 reader 和 writer 接口也类似。我们只需简单的读写字节，不必知道 reader 的数据来自哪里，也不必知道 writer 将数据发送到哪里。
+你可以在/dev下查看可用的设备，有些可能需要较高的权限才能访问。
+基本操作 #  创建空文件 #  package main import ( &#34;log&#34; &#34;os&#34; ) var ( newFile *os.File err error ) func main() { newFile, err = os.Create(&#34;test.txt&#34;) if err != nil { log.Fatal(err) } log." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/" /><meta property="article:section" content="番外.常用操作" />
+
+
+
+<title>Go文件操作大全 | go语言精进之路</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ea6717a4caf675b694ef8b9e3f2065b6c1b46d43c0f34b83e7b487f27fee9430.js" integrity="sha256-6mcXpMr2dbaU74uePyBltsG0bUPA80uD57SH8n/ulDA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="https://coding3min.com">机智的程序员小熊</a></li>
+<li>
+  <a href="https://github.com/minibear2333/">GitHub</a></li>
+<li>
+  <a href="/qrcode/">微信公众号</a></li>
+<li><strong>帮助与提示</strong>
+<ul>
+<li>
+  <a href="/howtocontribute/">0.0 如何参与贡献</a></li>
+<li>
+  <a href="/books-share/">0.1 书籍推荐</a></li>
+</ul>
+</li>
+<li><strong>第一章、Go基础</strong>
+<ul>
+<li>
+  <a href="/1.base/1-1-install-download/">1.1 安装与下载</a></li>
+<li>
+  <a href="/1.base/1-2-hello-world/">1.2 跑起来</a></li>
+<li>
+  <a href="/1.base/1-3-go-mod/">1.3 go mod最佳实践</a></li>
+<li>
+  <a href="/1.base/1-4-variables/">1.4 变量与常量</a></li>
+<li>
+  <a href="/1.base/1-5-switch%E5%92%8Ctypeswitch/">1.5 switch和type switch</a></li>
+<li>
+  <a href="/1.base/1-6-for-range/">1.6 循环</a></li>
+<li>
+  <a href="/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">1.7 range深度解析</a></li>
+</ul>
+</li>
+<li><strong>第二章、函数和容器</strong>
+<ul>
+<li>
+  <a href="/2.func-containers/2-1-func/">2.1 函数简单使用和基本知识解析</a></li>
+<li>
+  <a href="/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">2.2 匿名函数和闭包</a></li>
+<li>
+  <a href="/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/">2.3 可变参数</a></li>
+<li>
+  <a href="/2.func-containers/2-4-map/">2.4 集合（map）</a></li>
+<li>
+  <a href="/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/">2.5 数组和切片</a></li>
+</ul>
+</li>
+<li><strong>第三章、语法进阶</strong>
+<ul>
+<li>
+  <a href="/3.grammar-advancement/3-1-point/">3.1 指针讨论</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-2-struct/">3.2 结构体</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/">3.3 接口与多态</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">3.4 异常处理</a></li>
+</ul>
+</li>
+<li><strong>第四章、并发和并行</strong>
+<ul>
+<li>
+  <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
+<li>
+  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+<li>
+  <a href="/4.concurrent/select/">4.3 select</a></li>
+<li>
+  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+</ul>
+</li>
+<li><strong>时间处理与定时任务</strong>
+<ul>
+<li>
+  <a href="/a.timer/reset/readme/">设置可热更新的定时器</a></li>
+</ul>
+</li>
+<li><strong>常用操作</strong>
+<ul>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/"class=active>1.1 Go文件操作大全</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">1.2 Go代码基本标准规范</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/">1.3 切片排序sort包的使用</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/">1.4 Go与Dockerfile</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">1.5 goroutine等待</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/">1.6 命令行操作</a></li>
+<li>
+  <a href="/tools/readme/">2. 小工具</a></li>
+</ul>
+</li>
+<li><strong>go陷阱与缺陷</strong>
+<ul>
+<li>
+  <a href="/impossible/range/readme/">range的第二个值实际上是值拷贝</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Go文件操作大全</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#介绍">介绍</a>
+      <ul>
+        <li><a href="#万物皆文件">万物皆文件</a></li>
+      </ul>
+    </li>
+    <li><a href="#基本操作">基本操作</a>
+      <ul>
+        <li><a href="#创建空文件">创建空文件</a></li>
+        <li><a href="#truncate-文件">Truncate 文件</a></li>
+        <li><a href="#得到文件信息">得到文件信息</a></li>
+        <li><a href="#重命名和移动">重命名和移动</a></li>
+        <li><a href="#删除文件">删除文件</a></li>
+        <li><a href="#打开和关闭文件">打开和关闭文件</a></li>
+        <li><a href="#检查文件是否存在">检查文件是否存在</a></li>
+        <li><a href="#检查读写权限">检查读写权限</a></li>
+        <li><a href="#改变权限拥有者时间戳">改变权限、拥有者、时间戳</a></li>
+        <li><a href="#硬链接和软链接">硬链接和软链接</a></li>
+      </ul>
+    </li>
+    <li><a href="#读写">读写</a>
+      <ul>
+        <li><a href="#复制文件">复制文件</a></li>
+        <li><a href="#跳转到文件指定位置seek">跳转到文件指定位置(Seek)</a></li>
+        <li><a href="#压缩">压缩</a></li>
+        <li><a href="#其它">其它</a></li>
+        <li><a href="#参考">参考</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><p>Go 官方库的文件操作分散在多个包中，比如<code>os</code>、<code>ioutil</code>包，我本来想写一篇总结性的 Go 文件操作的文章，却发现已经有人 2015 年已经写了一篇这样的文章，写的非常好，所以我翻译成了中文，强烈推荐你阅读一下。</p>
+<p>原文: 
+  <a href="http://www.devdungeon.com/content/working-files-go#write_bytes">Working with Files in Go</a>, 作者: 
+  <a href="http://www.devdungeon.com/blogs/nanodano">NanoDano</a></p>
+<h2 id="介绍">
+  介绍
+  <a class="anchor" href="#%e4%bb%8b%e7%bb%8d">#</a>
+</h2>
+<h3 id="万物皆文件">
+  万物皆文件
+  <a class="anchor" href="#%e4%b8%87%e7%89%a9%e7%9a%86%e6%96%87%e4%bb%b6">#</a>
+</h3>
+<p>UNIX 的一个基础设计就是&quot;万物皆文件&quot;(everything is a file)。我们不必知道一个文件到底映射成什么，操作系统的设备驱动抽象成文件。操作系统为设备提供了文件格式的接口。</p>
+<p>Go 语言中的 reader 和 writer 接口也类似。我们只需简单的读写字节，不必知道 reader 的数据来自哪里，也不必知道 writer 将数据发送到哪里。<br>
+你可以在<code>/dev</code>下查看可用的设备，有些可能需要较高的权限才能访问。</p>
+<h2 id="基本操作">
+  基本操作
+  <a class="anchor" href="#%e5%9f%ba%e6%9c%ac%e6%93%8d%e4%bd%9c">#</a>
+</h2>
+<h3 id="创建空文件">
+  创建空文件
+  <a class="anchor" href="#%e5%88%9b%e5%bb%ba%e7%a9%ba%e6%96%87%e4%bb%b6">#</a>
+</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+)
+
+<span style="color:#66d9ef">var</span> (
+
+    <span style="color:#a6e22e">newFile</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">File</span>
+
+    <span style="color:#a6e22e">err</span>     <span style="color:#66d9ef">error</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#a6e22e">newFile</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Create</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">newFile</span>)
+
+    <span style="color:#a6e22e">newFile</span>.<span style="color:#a6e22e">Close</span>()
+
+}
+</code></pre></div><h3 id="truncate-文件">
+  Truncate 文件
+  <a class="anchor" href="#truncate-%e6%96%87%e4%bb%b6">#</a>
+</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 裁剪一个文件到100个字节。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 如果文件本来就少于100个字节，则文件中原始内容得以保留，剩余的字节以null字节填充。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 如果文件本来超过100个字节，则超过的字节会被抛弃。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 这样我们总是得到精确的100个字节的文件。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 传入0则会清空文件。
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Truncate</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>, <span style="color:#ae81ff">100</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+}
+</code></pre></div><h3 id="得到文件信息">
+  得到文件信息
+  <a class="anchor" href="#%e5%be%97%e5%88%b0%e6%96%87%e4%bb%b6%e4%bf%a1%e6%81%af">#</a>
+</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+)
+
+<span style="color:#66d9ef">var</span> (
+
+    <span style="color:#a6e22e">fileInfo</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">FileInfo</span>
+
+    <span style="color:#a6e22e">err</span>      <span style="color:#66d9ef">error</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 如果文件不存在，则返回错误
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">fileInfo</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stat</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;File name:&#34;</span>, <span style="color:#a6e22e">fileInfo</span>.<span style="color:#a6e22e">Name</span>())
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Size in bytes:&#34;</span>, <span style="color:#a6e22e">fileInfo</span>.<span style="color:#a6e22e">Size</span>())
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Permissions:&#34;</span>, <span style="color:#a6e22e">fileInfo</span>.<span style="color:#a6e22e">Mode</span>())
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Last modified:&#34;</span>, <span style="color:#a6e22e">fileInfo</span>.<span style="color:#a6e22e">ModTime</span>())
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Is Directory: &#34;</span>, <span style="color:#a6e22e">fileInfo</span>.<span style="color:#a6e22e">IsDir</span>())
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;System interface type: %T\\n&#34;</span>, <span style="color:#a6e22e">fileInfo</span>.<span style="color:#a6e22e">Sys</span>())
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;System info: %+v\\n\\n&#34;</span>, <span style="color:#a6e22e">fileInfo</span>.<span style="color:#a6e22e">Sys</span>())
+
+}
+</code></pre></div><h3 id="重命名和移动">
+  重命名和移动
+  <a class="anchor" href="#%e9%87%8d%e5%91%bd%e5%90%8d%e5%92%8c%e7%a7%bb%e5%8a%a8">#</a>
+</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#a6e22e">originalPath</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;test.txt&#34;</span>
+
+    <span style="color:#a6e22e">newPath</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;test2.txt&#34;</span>
+
+    <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Rename</span>(<span style="color:#a6e22e">originalPath</span>, <span style="color:#a6e22e">newPath</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+}
+</code></pre></div><blockquote>
+<p>译者按： rename 和 move 原理一样</p>
+</blockquote>
+<h3 id="删除文件">
+  删除文件
+  <a class="anchor" href="#%e5%88%a0%e9%99%a4%e6%96%87%e4%bb%b6">#</a>
+</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Remove</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+}
+</code></pre></div><h3 id="打开和关闭文件">
+  打开和关闭文件
+  <a class="anchor" href="#%e6%89%93%e5%bc%80%e5%92%8c%e5%85%b3%e9%97%ad%e6%96%87%e4%bb%b6">#</a>
+</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 简单地以只读的方式打开。下面的例子会介绍读写的例子。
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// OpenFile提供更多的选项。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 最后一个参数是权限模式permission mode
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 第二个是打开时的属性
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">OpenFile</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>, <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">O_APPEND</span>, <span style="color:#ae81ff">0666</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// 下面的属性可以单独使用，也可以组合使用。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 组合使用时可以使用 OR 操作设置 OpenFile的第二个参数，例如：
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// os.O\_CREATE|os.O\_APPEND
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 或者 os.O\_CREATE|os.O\_TRUNC|os.O_WRONLY
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// os.O_RDONLY // 只读
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// os.O_WRONLY // 只写
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// os.O_RDWR // 读写
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// os.O_APPEND // 往文件中添建（Append）
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// os.O_CREATE // 如果文件不存在则先创建
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// os.O_TRUNC // 文件打开时裁剪文件
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// os.O\_EXCL // 和O\_CREATE一起使用，文件不能存在
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// os.O_SYNC // 以同步I/O的方式打开
+</span><span style="color:#75715e"></span>
+}
+</code></pre></div><blockquote>
+<p>译者按：熟悉 Linux 的读者应该很熟悉权限模式，通过 Linux 命令<code>chmod</code>可以更改文件的权限<br>
+
+  <a href="https://www.linux.com/learn/understanding-linux-file-permissions">https://www.linux.com/learn/understanding-linux-file-permissions</a></p>
+<p>补充了原文未介绍的 flag</p>
+</blockquote>
+<h3 id="检查文件是否存在">
+  检查文件是否存在
+  <a class="anchor" href="#%e6%a3%80%e6%9f%a5%e6%96%87%e4%bb%b6%e6%98%af%e5%90%a6%e5%ad%98%e5%9c%a8">#</a>
+</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+)
+
+<span style="color:#66d9ef">var</span> (
+
+    <span style="color:#a6e22e">fileInfo</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">FileInfo</span>
+
+    <span style="color:#a6e22e">err</span>      <span style="color:#66d9ef">error</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 文件不存在则返回error
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">fileInfo</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Stat</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">IsNotExist</span>(<span style="color:#a6e22e">err</span>) {
+
+            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#e6db74">&#34;File does not exist.&#34;</span>)
+
+        }
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;File does exist. File information:&#34;</span>)
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">fileInfo</span>)
+
+}
+</code></pre></div><h3 id="检查读写权限">
+  检查读写权限
+  <a class="anchor" href="#%e6%a3%80%e6%9f%a5%e8%af%bb%e5%86%99%e6%9d%83%e9%99%90">#</a>
+</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 这个例子测试写权限，如果没有写权限则返回error。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 注意文件不存在也会返回error，需要检查error的信息来获取到底是哪个错误导致。
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">OpenFile</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>, <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">O_WRONLY</span>, <span style="color:#ae81ff">0666</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">IsPermission</span>(<span style="color:#a6e22e">err</span>) {
+
+            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Error: Write permission denied.&#34;</span>)
+
+        }
+
+    }
+
+    <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// 测试读权限
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">OpenFile</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>, <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">O_RDONLY</span>, <span style="color:#ae81ff">0666</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">IsPermission</span>(<span style="color:#a6e22e">err</span>) {
+
+            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Error: Read permission denied.&#34;</span>)
+
+        }
+
+    }
+
+    <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Close</span>()
+
+}
+</code></pre></div><h3 id="改变权限拥有者时间戳">
+  改变权限、拥有者、时间戳
+  <a class="anchor" href="#%e6%94%b9%e5%8f%98%e6%9d%83%e9%99%90%e6%8b%a5%e6%9c%89%e8%80%85%e6%97%b6%e9%97%b4%e6%88%b3">#</a>
+</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;time&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 使用Linux风格改变文件权限
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Chmod</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>, <span style="color:#ae81ff">0777</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#75715e">// 改变文件所有者
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Chown</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>, <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getuid</span>(), <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getgid</span>())
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#75715e">// 改变时间戳
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">twoDaysFromNow</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">48</span> <span style="color:#960050;background-color:#1e0010">\</span><span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Hour</span>)
+
+    <span style="color:#a6e22e">lastAccessTime</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">twoDaysFromNow</span>
+
+    <span style="color:#a6e22e">lastModifyTime</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">twoDaysFromNow</span>
+
+    <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Chtimes</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>, <span style="color:#a6e22e">lastAccessTime</span>, <span style="color:#a6e22e">lastModifyTime</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+}
+</code></pre></div><h3 id="硬链接和软链接">
+  硬链接和软链接
+  <a class="anchor" href="#%e7%a1%ac%e9%93%be%e6%8e%a5%e5%92%8c%e8%bd%af%e9%93%be%e6%8e%a5">#</a>
+</h3>
+<p>一个普通的文件是一个指向硬盘的 inode 的地方。<br>
+硬链接创建一个新的指针指向同一个地方。只有所有的链接被删除后文件才会被删除。硬链接只在相同的文件系统中才工作。你可以认为一个硬链接是一个正常的链接。</p>
+<p>symbolic link，又叫软连接，和硬链接有点不一样，它不直接指向硬盘中的相同的地方，而是通过名字引用其它文件。他们可以指向不同的文件系统中的不同文件。并不是所有的操作系统都支持软链接。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 创建一个硬链接。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 创建后同一个文件内容会有两个文件名，改变一个文件的内容会影响另一个。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 删除和重命名不会影响另一个。
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Link</span>(<span style="color:#e6db74">&#34;original.txt&#34;</span>, <span style="color:#e6db74">&#34;original_also.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;creating sym&#34;</span>)
+
+    <span style="color:#75715e">// Create a symlink
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Symlink</span>(<span style="color:#e6db74">&#34;original.txt&#34;</span>, <span style="color:#e6db74">&#34;original_sym.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#75715e">// Lstat返回一个文件的信息，但是当文件是一个软链接时，它返回软链接的信息，而不是引用的文件的信息。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// Symlink在Windows中不工作。
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">fileInfo</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Lstat</span>(<span style="color:#e6db74">&#34;original_sym.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Link info: %+v&#34;</span>, <span style="color:#a6e22e">fileInfo</span>)
+
+    <span style="color:#75715e">//改变软链接的拥有者不会影响原始文件。
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Lchown</span>(<span style="color:#e6db74">&#34;original_sym.txt&#34;</span>, <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getuid</span>(), <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Getgid</span>())
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+}
+</code></pre></div><h2 id="读写">
+  读写
+  <a class="anchor" href="#%e8%af%bb%e5%86%99">#</a>
+</h2>
+<h3 id="复制文件">
+  复制文件
+  <a class="anchor" href="#%e5%a4%8d%e5%88%b6%e6%96%87%e4%bb%b6">#</a>
+</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;io&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 打开原始文件
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">originalFile</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">originalFile</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// 创建新的文件作为目标文件
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">newFile</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Create</span>(<span style="color:#e6db74">&#34;test_copy.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">newFile</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// 从源中复制字节到目标文件
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">bytesWritten</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Copy</span>(<span style="color:#a6e22e">newFile</span>, <span style="color:#a6e22e">originalFile</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Copied %d bytes.&#34;</span>, <span style="color:#a6e22e">bytesWritten</span>)
+
+    <span style="color:#75715e">// 将文件内容flush到硬盘中
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">newFile</span>.<span style="color:#a6e22e">Sync</span>()
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+}
+</code></pre></div><h3 id="跳转到文件指定位置seek">
+  跳转到文件指定位置(Seek)
+  <a class="anchor" href="#%e8%b7%b3%e8%bd%ac%e5%88%b0%e6%96%87%e4%bb%b6%e6%8c%87%e5%ae%9a%e4%bd%8d%e7%bd%aeseek">#</a>
+</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// 偏离位置，可以是正数也可以是负数
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">offset</span> <span style="color:#66d9ef">int64</span> = <span style="color:#ae81ff">5</span>
+
+    <span style="color:#75715e">// 用来计算offset的初始位置
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 0 = 文件开始位置
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 1 = 当前位置
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 2 = 文件结尾处
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">whence</span> <span style="color:#66d9ef">int</span> = <span style="color:#ae81ff">0</span>
+
+    <span style="color:#a6e22e">newPosition</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Seek</span>(<span style="color:#a6e22e">offset</span>, <span style="color:#a6e22e">whence</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Just moved to 5:&#34;</span>, <span style="color:#a6e22e">newPosition</span>)
+
+    <span style="color:#75715e">// 从当前位置回退两个字节
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">newPosition</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Seek</span>(<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Just moved back two:&#34;</span>, <span style="color:#a6e22e">newPosition</span>)
+
+    <span style="color:#75715e">// 使用下面的技巧得到当前的位置
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">currentPosition</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Seek</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>)
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Current position:&#34;</span>, <span style="color:#a6e22e">currentPosition</span>)
+
+    <span style="color:#75715e">// 转到文件开始处
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">newPosition</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Seek</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Position after seeking 0,0:&#34;</span>, <span style="color:#a6e22e">newPosition</span>)
+
+}
+</code></pre></div><h4 id="写文件">
+  写文件
+  <a class="anchor" href="#%e5%86%99%e6%96%87%e4%bb%b6">#</a>
+</h4>
+<p>可以使用<code>os</code>包写入一个打开的文件。<br>
+因为 Go 可执行包是静态链接的可执行文件，你 import 的每一个包都会增加你的可执行文件的大小。其它的包如<code>io</code>、｀ ioutil ｀、｀ bufio ｀提供了一些方法，但是它们不是必须的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 可写方式打开文件
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">OpenFile</span>(
+
+        <span style="color:#e6db74">&#34;test.txt&#34;</span>,
+
+        <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">O</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">_WRONLY</span>|<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">O</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">_TRUNC</span>|<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">O_CREATE</span>,
+
+        <span style="color:#ae81ff">0666</span>,
+
+    )
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// 写字节到文件中
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">byteSlice</span> <span style="color:#f92672">:=</span> <span style="color:#960050;background-color:#1e0010">\</span>[<span style="color:#960050;background-color:#1e0010">\</span>]byte(<span style="color:#e6db74">&#34;Bytes!\\n&#34;</span>)
+
+    <span style="color:#a6e22e">bytesWritten</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">byteSlice</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Wrote %d bytes.\\n&#34;</span>, <span style="color:#a6e22e">bytesWritten</span>)
+
+}
+</code></pre></div><h4 id="快写文件">
+  快写文件
+  <a class="anchor" href="#%e5%bf%ab%e5%86%99%e6%96%87%e4%bb%b6">#</a>
+</h4>
+<p><code>ioutil</code>包有一个非常有用的方法<code>WriteFile()</code>可以处理创建／打开文件、写字节 slice 和关闭文件一系列的操作。如果你需要简洁快速地写字节 slice 到文件中，你可以使用它。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">WriteFile</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>, <span style="color:#960050;background-color:#1e0010">\</span>[<span style="color:#960050;background-color:#1e0010">\</span>]byte(<span style="color:#e6db74">&#34;Hi\\n&#34;</span>), <span style="color:#ae81ff">0666</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+}
+</code></pre></div><h4 id="使用缓存写">
+  使用缓存写
+  <a class="anchor" href="#%e4%bd%bf%e7%94%a8%e7%bc%93%e5%ad%98%e5%86%99">#</a>
+</h4>
+<p><code>bufio</code>包提供了带缓存功能的 writer，所以你可以在写字节到硬盘前使用内存缓存。当你处理很多的数据很有用，因为它可以节省操作硬盘 I/O 的时间。在其它一些情况下它也很有用，比如你每次写一个字节，把它们攒在内存缓存中，然后一次写入到硬盘中，减少硬盘的磨损以及提升性能。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;bufio&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 打开文件，只写
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">OpenFile</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>, <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">O_WRONLY</span>, <span style="color:#ae81ff">0666</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// 为这个文件创建buffered writer
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">bufferedWriter</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">bufio</span>.<span style="color:#a6e22e">NewWriter</span>(<span style="color:#a6e22e">file</span>)
+
+    <span style="color:#75715e">// 写字节到buffer
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">bytesWritten</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">bufferedWriter</span>.<span style="color:#a6e22e">Write</span>(
+
+        <span style="color:#960050;background-color:#1e0010">\</span>[<span style="color:#960050;background-color:#1e0010">\</span>]<span style="color:#66d9ef">byte</span>{<span style="color:#ae81ff">65</span>, <span style="color:#ae81ff">66</span>, <span style="color:#ae81ff">67</span>},
+
+    )
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Bytes written: %d\\n&#34;</span>, <span style="color:#a6e22e">bytesWritten</span>)
+
+    <span style="color:#75715e">// 写字符串到buffer
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 也可以使用 WriteRune() 和 WriteByte()
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">bytesWritten</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">bufferedWriter</span>.<span style="color:#a6e22e">WriteString</span>(
+
+        <span style="color:#e6db74">&#34;Buffered string\\n&#34;</span>,
+
+    )
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Bytes written: %d\\n&#34;</span>, <span style="color:#a6e22e">bytesWritten</span>)
+
+    <span style="color:#75715e">// 检查缓存中的字节数
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">unflushedBufferSize</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">bufferedWriter</span>.<span style="color:#a6e22e">Buffered</span>()
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Bytes buffered: %d\\n&#34;</span>, <span style="color:#a6e22e">unflushedBufferSize</span>)
+
+    <span style="color:#75715e">// 还有多少字节可用（未使用的缓存大小）
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">bytesAvailable</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">bufferedWriter</span>.<span style="color:#a6e22e">Available</span>()
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Available buffer: %d\\n&#34;</span>, <span style="color:#a6e22e">bytesAvailable</span>)
+
+    <span style="color:#75715e">// 写内存buffer到硬盘
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">bufferedWriter</span>.<span style="color:#a6e22e">Flush</span>()
+
+    <span style="color:#75715e">// 丢弃还没有flush的缓存的内容，清除错误并把它的输出传给参数中的writer
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 当你想将缓存传给另外一个writer时有用
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">bufferedWriter</span>.<span style="color:#a6e22e">Reset</span>(<span style="color:#a6e22e">bufferedWriter</span>)
+
+    <span style="color:#a6e22e">bytesAvailable</span> = <span style="color:#a6e22e">bufferedWriter</span>.<span style="color:#a6e22e">Available</span>()
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Available buffer: %d\\n&#34;</span>, <span style="color:#a6e22e">bytesAvailable</span>)
+
+    <span style="color:#75715e">// 重新设置缓存的大小。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 第一个参数是缓存应该输出到哪里，这个例子中我们使用相同的writer。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 如果我们设置的新的大小小于第一个参数writer的缓存大小， 比如10，我们不会得到一个10字节大小的缓存，
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 而是writer的原始大小的缓存，默认是4096。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 它的功能主要还是为了扩容。
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">bufferedWriter</span> = <span style="color:#a6e22e">bufio</span>.<span style="color:#a6e22e">NewWriterSize</span>(
+
+        <span style="color:#a6e22e">bufferedWriter</span>,
+
+        <span style="color:#ae81ff">8000</span>,
+
+    )
+
+    <span style="color:#75715e">// resize后检查缓存的大小
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">bytesAvailable</span> = <span style="color:#a6e22e">bufferedWriter</span>.<span style="color:#a6e22e">Available</span>()
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Available buffer: %d\\n&#34;</span>, <span style="color:#a6e22e">bytesAvailable</span>)
+
+}
+</code></pre></div><h4 id="读取最多-n-个字节">
+  读取最多 N 个字节
+  <a class="anchor" href="#%e8%af%bb%e5%8f%96%e6%9c%80%e5%a4%9a-n-%e4%b8%aa%e5%ad%97%e8%8a%82">#</a>
+</h4>
+<p><code>os.File</code>提供了文件操作的基本功能， 而<code>io</code>、<code>ioutil</code>、<code>bufio</code>提供了额外的辅助函数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 打开文件，只读
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// 从文件中读取len(b)字节的文件。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 返回0字节意味着读取到文件尾了
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 读取到文件会返回io.EOF的error
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">byteSlice</span> <span style="color:#f92672">:=</span> make(<span style="color:#960050;background-color:#1e0010">\</span>[<span style="color:#960050;background-color:#1e0010">\</span>]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">16</span>)
+
+    <span style="color:#a6e22e">bytesRead</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">byteSlice</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Number of bytes read: %d\\n&#34;</span>, <span style="color:#a6e22e">bytesRead</span>)
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Data read: %s\\n&#34;</span>, <span style="color:#a6e22e">byteSlice</span>)
+
+}
+</code></pre></div><h4 id="读取正好-n-个字节">
+  读取正好 N 个字节
+  <a class="anchor" href="#%e8%af%bb%e5%8f%96%e6%ad%a3%e5%a5%bd-n-%e4%b8%aa%e5%ad%97%e8%8a%82">#</a>
+</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;io&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// Open file for reading
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#75715e">// file.Read()可以读取一个小文件到大的byte slice中，
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 但是io.ReadFull()在文件的字节数小于byte slice字节数的时候会返回错误
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">byteSlice</span> <span style="color:#f92672">:=</span> make(<span style="color:#960050;background-color:#1e0010">\</span>[<span style="color:#960050;background-color:#1e0010">\</span>]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">2</span>)
+
+    <span style="color:#a6e22e">numBytesRead</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">ReadFull</span>(<span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">byteSlice</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Number of bytes read: %d\\n&#34;</span>, <span style="color:#a6e22e">numBytesRead</span>)
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Data read: %s\\n&#34;</span>, <span style="color:#a6e22e">byteSlice</span>)
+
+}
+</code></pre></div><h4 id="读取至少-n-个字节">
+  读取至少 N 个字节
+  <a class="anchor" href="#%e8%af%bb%e5%8f%96%e8%87%b3%e5%b0%91-n-%e4%b8%aa%e5%ad%97%e8%8a%82">#</a>
+</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;io&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 打开文件，只读
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">byteSlice</span> <span style="color:#f92672">:=</span> make(<span style="color:#960050;background-color:#1e0010">\</span>[<span style="color:#960050;background-color:#1e0010">\</span>]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">512</span>)
+
+    <span style="color:#a6e22e">minBytes</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">8</span>
+
+    <span style="color:#75715e">// io.ReadAtLeast()在不能得到最小的字节的时候会返回错误，但会把已读的文件保留
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">numBytesRead</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">ReadAtLeast</span>(<span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">byteSlice</span>, <span style="color:#a6e22e">minBytes</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Number of bytes read: %d\\n&#34;</span>, <span style="color:#a6e22e">numBytesRead</span>)
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Data read: %s\\n&#34;</span>, <span style="color:#a6e22e">byteSlice</span>)
+
+}
+</code></pre></div><h4 id="读取全部字节">
+  读取全部字节
+  <a class="anchor" href="#%e8%af%bb%e5%8f%96%e5%85%a8%e9%83%a8%e5%ad%97%e8%8a%82">#</a>
+</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+    <span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#75715e">// os.File.Read(), io.ReadFull() 和
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// io.ReadAtLeast() 在读取之前都需要一个固定大小的byte slice。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 但ioutil.ReadAll()会读取reader(这个例子中是file)的每一个字节，然后把字节slice返回。
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadAll</span>(<span style="color:#a6e22e">file</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Data as hex: %x\\n&#34;</span>, <span style="color:#a6e22e">data</span>)
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Data as string: %s\\n&#34;</span>, <span style="color:#a6e22e">data</span>)
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Number of bytes read:&#34;</span>, len(<span style="color:#a6e22e">data</span>))
+
+}
+</code></pre></div><h4 id="快读到内存">
+  快读到内存
+  <a class="anchor" href="#%e5%bf%ab%e8%af%bb%e5%88%b0%e5%86%85%e5%ad%98">#</a>
+</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
+<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 读取文件到byte slice中
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadFile</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Data read: %s\\n&#34;</span>, <span style="color:#a6e22e">data</span>)
+
+}
+</code></pre></div><h4 id="使用缓存读">
+  使用缓存读
+  <a class="anchor" href="#%e4%bd%bf%e7%94%a8%e7%bc%93%e5%ad%98%e8%af%bb">#</a>
+</h4>
+<p>有缓存写也有缓存读。<br>
+缓存 reader 会把一些内容缓存在内存中。它会提供比<code>os.File</code>和<code>io.Reader</code>更多的函数,缺省的缓存大小是 4096，最小缓存是 16。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;bufio&#34;</span>
+
+    <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 打开文件，创建buffered reader
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">bufferedReader</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">bufio</span>.<span style="color:#a6e22e">NewReader</span>(<span style="color:#a6e22e">file</span>)
+
+    <span style="color:#75715e">// 得到字节，当前指针不变
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">byteSlice</span> <span style="color:#f92672">:=</span> make(<span style="color:#960050;background-color:#1e0010">\</span>[<span style="color:#960050;background-color:#1e0010">\</span>]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">5</span>)
+
+    <span style="color:#a6e22e">byteSlice</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">bufferedReader</span>.<span style="color:#a6e22e">Peek</span>(<span style="color:#ae81ff">5</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Peeked at 5 bytes: %s\\n&#34;</span>, <span style="color:#a6e22e">byteSlice</span>)
+
+    <span style="color:#75715e">// 读取，指针同时移动
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">numBytesRead</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">bufferedReader</span>.<span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">byteSlice</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Read %d bytes: %s\\n&#34;</span>, <span style="color:#a6e22e">numBytesRead</span>, <span style="color:#a6e22e">byteSlice</span>)
+
+    <span style="color:#75715e">// 读取一个字节, 如果读取不成功会返回Error
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">myByte</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">bufferedReader</span>.<span style="color:#a6e22e">ReadByte</span>()
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Read 1 byte: %c\\n&#34;</span>, <span style="color:#a6e22e">myByte</span>)
+
+    <span style="color:#75715e">// 读取到分隔符，包含分隔符，返回byte slice
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">dataBytes</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">bufferedReader</span>.<span style="color:#a6e22e">ReadBytes</span>(<span style="color:#960050;background-color:#1e0010">&#39;\\</span><span style="color:#a6e22e">n</span><span style="color:#960050;background-color:#1e0010">&#39;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Read bytes: %s\\n&#34;</span>, <span style="color:#a6e22e">dataBytes</span>)
+
+    <span style="color:#75715e">// 读取到分隔符，包含分隔符，返回字符串
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">dataString</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">bufferedReader</span>.<span style="color:#a6e22e">ReadString</span>(<span style="color:#960050;background-color:#1e0010">&#39;\\</span><span style="color:#a6e22e">n</span><span style="color:#960050;background-color:#1e0010">&#39;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Read string: %s\\n&#34;</span>, <span style="color:#a6e22e">dataString</span>)
+
+    <span style="color:#75715e">//这个例子读取了很多行，所以test.txt应该包含多行文本才不至于出错
+</span><span style="color:#75715e"></span>
+}
+</code></pre></div><h4 id="使用-scanner">
+  使用 scanner
+  <a class="anchor" href="#%e4%bd%bf%e7%94%a8-scanner">#</a>
+</h4>
+<p><code>Scanner</code>是<code>bufio</code>包下的类型,在处理文件中以分隔符分隔的文本时很有用。<br>
+通常我们使用换行符作为分隔符将文件内容分成多行。在 CSV 文件中，逗号一般作为分隔符。<br>
+<code>os.File</code>文件可以被包装成<code>bufio.Scanner</code>，它就像一个缓存 reader。<br>
+我们会调用<code>Scan()</code>方法去读取下一个分隔符，使用<code>Text()</code>或者<code>Bytes()</code>获取读取的数据。</p>
+<p>分隔符可以不是一个简单的字节或者字符，有一个特殊的方法可以实现分隔符的功能，以及将指针移动多少，返回什么数据。<br>
+如果没有定制的<code>SplitFunc</code>提供，缺省的<code>ScanLines</code>会使用<code>newline</code>字符作为分隔符，其它的分隔函数还包括<code>ScanRunes</code>和<code>ScanWords</code>,皆在<code>bufio</code>包中。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// To define your own split function, match this fingerprint
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">SplitFunc</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">data</span> <span style="color:#960050;background-color:#1e0010">\</span>[<span style="color:#960050;background-color:#1e0010">\</span>]<span style="color:#66d9ef">byte</span>, <span style="color:#a6e22e">atEOF</span> <span style="color:#66d9ef">bool</span>) (<span style="color:#a6e22e">advance</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">token</span> <span style="color:#960050;background-color:#1e0010">\</span>[<span style="color:#960050;background-color:#1e0010">\</span>]<span style="color:#66d9ef">byte</span>, <span style="color:#a6e22e">err</span> <span style="color:#66d9ef">error</span>)
+
+<span style="color:#75715e">// Returning (0, nil, nil) will tell the scanner
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// to scan again, but with a bigger buffer because
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// it wasn&#39;t enough data to reach the delimiter
+</span></code></pre></div><p>下面的例子中，为一个文件创建了<code>bufio.Scanner</code>，并按照单词逐个读取：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+    <span style="color:#e6db74">&#34;bufio&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">scanner</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">bufio</span>.<span style="color:#a6e22e">NewScanner</span>(<span style="color:#a6e22e">file</span>)
+
+    <span style="color:#75715e">// 缺省的分隔函数是bufio.ScanLines,我们这里使用ScanWords。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 也可以定制一个SplitFunc类型的分隔函数
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">scanner</span>.<span style="color:#a6e22e">Split</span>(<span style="color:#a6e22e">bufio</span>.<span style="color:#a6e22e">ScanWords</span>)
+
+    <span style="color:#75715e">// scan下一个token.
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">success</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">scanner</span>.<span style="color:#a6e22e">Scan</span>()
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">success</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">false</span> {
+
+        <span style="color:#75715e">// 出现错误或者EOF是返回Error
+</span><span style="color:#75715e"></span>
+        <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">scanner</span>.<span style="color:#a6e22e">Err</span>()
+
+        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+
+            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Scan completed and reached EOF&#34;</span>)
+
+        } <span style="color:#66d9ef">else</span> {
+
+            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+        }
+
+    }
+
+    <span style="color:#75715e">// 得到数据，Bytes() 或者 Text()
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;First word found:&#34;</span>, <span style="color:#a6e22e">scanner</span>.<span style="color:#a6e22e">Text</span>())
+
+    <span style="color:#75715e">// 再次调用scanner.Scan()发现下一个token
+</span><span style="color:#75715e"></span>
+}
+</code></pre></div><h3 id="压缩">
+  压缩
+  <a class="anchor" href="#%e5%8e%8b%e7%bc%a9">#</a>
+</h3>
+<h4 id="打包zip-文件">
+  打包(zip) 文件
+  <a class="anchor" href="#%e6%89%93%e5%8c%85zip-%e6%96%87%e4%bb%b6">#</a>
+</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// This example uses zip but standard library
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// also supports tar archives
+</span><span style="color:#75715e"></span>
+<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;archive/zip&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 创建一个打包文件
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">outFile</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Create</span>(<span style="color:#e6db74">&#34;test.zip&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">outFile</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// 创建zip writer
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">zipWriter</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">zip</span>.<span style="color:#a6e22e">NewWriter</span>(<span style="color:#a6e22e">outFile</span>)
+
+    <span style="color:#75715e">// 往打包文件中写文件。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 这里我们使用硬编码的内容，你可以遍历一个文件夹，把文件夹下的文件以及它们的内容写入到这个打包文件中。
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">filesToArchive</span> = <span style="color:#960050;background-color:#1e0010">\</span>[<span style="color:#960050;background-color:#1e0010">\</span>]<span style="color:#66d9ef">struct</span> {
+
+        <span style="color:#a6e22e">Name</span>, <span style="color:#a6e22e">Body</span> <span style="color:#66d9ef">string</span>
+
+    } {
+
+        {<span style="color:#e6db74">&#34;test.txt&#34;</span>, <span style="color:#e6db74">&#34;String contents of file&#34;</span>},
+
+        {<span style="color:#e6db74">&#34;test2.txt&#34;</span>, <span style="color:#e6db74">&#34;\\x61\\x62\\x63\\n&#34;</span>},
+
+    }
+
+    <span style="color:#75715e">// 下面将要打包的内容写入到打包文件中，依次写入。
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">file</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">filesToArchive</span> {
+
+            <span style="color:#a6e22e">fileWriter</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">zipWriter</span>.<span style="color:#a6e22e">Create</span>(<span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Name</span>)
+
+            <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+                    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+            }
+
+            <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">fileWriter</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#960050;background-color:#1e0010">\</span>[<span style="color:#960050;background-color:#1e0010">\</span>]byte(<span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Body</span>))
+
+            <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+                    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+            }
+
+    }
+
+    <span style="color:#75715e">// 清理
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">zipWriter</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+}
+</code></pre></div><h4 id="抽取unzip-文件">
+  抽取(unzip) 文件
+  <a class="anchor" href="#%e6%8a%bd%e5%8f%96unzip-%e6%96%87%e4%bb%b6">#</a>
+</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
+<span style="color:#75715e">// This example uses zip but standard library
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// also supports tar archives
+</span><span style="color:#75715e"></span>
+<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;archive/zip&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;io&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;path/filepath&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#a6e22e">zipReader</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">zip</span>.<span style="color:#a6e22e">OpenReader</span>(<span style="color:#e6db74">&#34;test.zip&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">zipReader</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// 遍历打包文件中的每一文件/文件夹
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">file</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">zipReader</span>.<span style="color:#a6e22e">Reader</span>.<span style="color:#a6e22e">File</span> {
+
+        <span style="color:#75715e">// 打包文件中的文件就像普通的一个文件对象一样
+</span><span style="color:#75715e"></span>
+        <span style="color:#a6e22e">zippedFile</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Open</span>()
+
+        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+        }
+
+        <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">zippedFile</span>.<span style="color:#a6e22e">Close</span>()
+
+        <span style="color:#75715e">// 指定抽取的文件名。
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// 你可以指定全路径名或者一个前缀，这样可以把它们放在不同的文件夹中。
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// 我们这个例子使用打包文件中相同的文件名。
+</span><span style="color:#75715e"></span>
+        <span style="color:#a6e22e">targetDir</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;./&#34;</span>
+
+        <span style="color:#a6e22e">extractedFilePath</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">filepath</span>.<span style="color:#a6e22e">Join</span>(
+
+            <span style="color:#a6e22e">targetDir</span>,
+
+            <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Name</span>,
+
+        )
+
+        <span style="color:#75715e">// 抽取项目或者创建文件夹
+</span><span style="color:#75715e"></span>
+        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">FileInfo</span>().<span style="color:#a6e22e">IsDir</span>() {
+
+            <span style="color:#75715e">// 创建文件夹并设置同样的权限
+</span><span style="color:#75715e"></span>
+            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Creating directory:&#34;</span>, <span style="color:#a6e22e">extractedFilePath</span>)
+
+            <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">MkdirAll</span>(<span style="color:#a6e22e">extractedFilePath</span>, <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Mode</span>())
+
+        } <span style="color:#66d9ef">else</span> {
+
+            <span style="color:#75715e">//抽取正常的文件
+</span><span style="color:#75715e"></span>
+            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Extracting file:&#34;</span>, <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Name</span>)
+
+            <span style="color:#a6e22e">outputFile</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">OpenFile</span>(
+
+                <span style="color:#a6e22e">extractedFilePath</span>,
+
+                <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">O</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">_WRONLY</span>|<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">O</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#a6e22e">_CREATE</span>|<span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">O_TRUNC</span>,
+
+                <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Mode</span>(),
+
+            )
+
+            <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+                <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+            }
+
+            <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">outputFile</span>.<span style="color:#a6e22e">Close</span>()
+
+            <span style="color:#75715e">// 通过io.Copy简洁地复制文件内容
+</span><span style="color:#75715e"></span>
+            <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Copy</span>(<span style="color:#a6e22e">outputFile</span>, <span style="color:#a6e22e">zippedFile</span>)
+
+            <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+                <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+            }
+
+        }
+
+    }
+
+}
+</code></pre></div><h4 id="压缩文件">
+  压缩文件
+  <a class="anchor" href="#%e5%8e%8b%e7%bc%a9%e6%96%87%e4%bb%b6">#</a>
+</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 这个例子中使用gzip压缩格式，标准库还支持zlib, bz2, flate, lzw
+</span><span style="color:#75715e"></span>
+<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+    <span style="color:#e6db74">&#34;compress/gzip&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#a6e22e">outputFile</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Create</span>(<span style="color:#e6db74">&#34;test.txt.gz&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">gzipWriter</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gzip</span>.<span style="color:#a6e22e">NewWriter</span>(<span style="color:#a6e22e">outputFile</span>)
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">gzipWriter</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// 当我们写如到gizp writer数据时，它会依次压缩数据并写入到底层的文件中。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 我们不必关心它是如何压缩的，还是像普通的writer一样操作即可。
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">gzipWriter</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#960050;background-color:#1e0010">\</span>[<span style="color:#960050;background-color:#1e0010">\</span>]byte(<span style="color:#e6db74">&#34;Gophers rule!\\n&#34;</span>))
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Compressed data written to file.&#34;</span>)
+
+}
+</code></pre></div><h4 id="解压缩文件">
+  解压缩文件
+  <a class="anchor" href="#%e8%a7%a3%e5%8e%8b%e7%bc%a9%e6%96%87%e4%bb%b6">#</a>
+</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 这个例子中使用gzip压缩格式，标准库还支持zlib, bz2, flate, lzw
+</span><span style="color:#75715e"></span>
+<span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;compress/gzip&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;io&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 打开一个gzip文件。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 文件是一个reader,但是我们可以使用各种数据源，比如web服务器返回的gzipped内容，
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 它的内容不是一个文件，而是一个内存流
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">gzipFile</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#e6db74">&#34;test.txt.gz&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#a6e22e">gzipReader</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gzip</span>.<span style="color:#a6e22e">NewReader</span>(<span style="color:#a6e22e">gzipFile</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">gzipReader</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// 解压缩到一个writer,它是一个file writer
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">outfileWriter</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Create</span>(<span style="color:#e6db74">&#34;unzipped.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">outfileWriter</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">// 复制内容
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Copy</span>(<span style="color:#a6e22e">outfileWriter</span>, <span style="color:#a6e22e">gzipReader</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+}
+</code></pre></div><h3 id="其它">
+  其它
+  <a class="anchor" href="#%e5%85%b6%e5%ae%83">#</a>
+</h3>
+<h4 id="临时文件和目录">
+  临时文件和目录
+  <a class="anchor" href="#%e4%b8%b4%e6%97%b6%e6%96%87%e4%bb%b6%e5%92%8c%e7%9b%ae%e5%bd%95">#</a>
+</h4>
+<p><code>ioutil</code>提供了两个函数: <code>TempDir()</code> 和 <code>TempFile()</code>。<br>
+使用完毕后，调用者负责删除这些临时文件和文件夹。<br>
+有一点好处就是当你传递一个空字符串作为文件夹名的时候，它会在操作系统的临时文件夹中创建这些项目（/tmp on Linux）。<br>
+<code>os.TempDir()</code>返回当前操作系统的临时文件夹。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+     <span style="color:#e6db74">&#34;os&#34;</span>
+
+     <span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+
+     <span style="color:#e6db74">&#34;log&#34;</span>
+
+     <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+     <span style="color:#75715e">// 在系统临时文件夹中创建一个临时文件夹
+</span><span style="color:#75715e"></span>
+     <span style="color:#a6e22e">tempDirPath</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">TempDir</span>(<span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#e6db74">&#34;myTempDir&#34;</span>)
+
+     <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+          <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+     }
+
+     <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Temp dir created:&#34;</span>, <span style="color:#a6e22e">tempDirPath</span>)
+
+     <span style="color:#75715e">// 在临时文件夹中创建临时文件
+</span><span style="color:#75715e"></span>
+     <span style="color:#a6e22e">tempFile</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">TempFile</span>(<span style="color:#a6e22e">tempDirPath</span>, <span style="color:#e6db74">&#34;myTempFile.txt&#34;</span>)
+
+     <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+          <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+     }
+
+     <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Temp file created:&#34;</span>, <span style="color:#a6e22e">tempFile</span>.<span style="color:#a6e22e">Name</span>())
+
+     <span style="color:#75715e">// ... 做一些操作 ...
+</span><span style="color:#75715e"></span>
+     <span style="color:#75715e">// 关闭文件
+</span><span style="color:#75715e"></span>
+     <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">tempFile</span>.<span style="color:#a6e22e">Close</span>()
+
+     <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#75715e">// 删除我们创建的资源
+</span><span style="color:#75715e"></span>
+     <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Remove</span>(<span style="color:#a6e22e">tempFile</span>.<span style="color:#a6e22e">Name</span>())
+
+     <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+     <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Remove</span>(<span style="color:#a6e22e">tempDirPath</span>)
+
+     <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+}
+</code></pre></div><h4 id="通过-http-下载文件">
+  通过 HTTP 下载文件
+  <a class="anchor" href="#%e9%80%9a%e8%bf%87-http-%e4%b8%8b%e8%bd%bd%e6%96%87%e4%bb%b6">#</a>
+</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+     <span style="color:#e6db74">&#34;os&#34;</span>
+
+     <span style="color:#e6db74">&#34;io&#34;</span>
+
+     <span style="color:#e6db74">&#34;log&#34;</span>
+
+     <span style="color:#e6db74">&#34;net/http&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+     <span style="color:#a6e22e">newFile</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Create</span>(<span style="color:#e6db74">&#34;devdungeon.html&#34;</span>)
+
+     <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+          <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+     }
+
+     <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">newFile</span>.<span style="color:#a6e22e">Close</span>()
+
+     <span style="color:#a6e22e">url</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;http://www.devdungeon.com/archive&#34;</span>
+
+     <span style="color:#a6e22e">response</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">url</span>)
+
+     <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">response</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
+
+     <span style="color:#75715e">// 将HTTP response Body中的内容写入到文件
+</span><span style="color:#75715e"></span>
+     <span style="color:#75715e">// Body满足reader接口，因此我们可以使用ioutil.Copy
+</span><span style="color:#75715e"></span>
+     <span style="color:#a6e22e">numBytesWritten</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Copy</span>(<span style="color:#a6e22e">newFile</span>, <span style="color:#a6e22e">response</span>.<span style="color:#a6e22e">Body</span>)
+
+     <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+          <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+     }
+
+     <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Downloaded %d byte file.\\n&#34;</span>, <span style="color:#a6e22e">numBytesWritten</span>)
+
+}
+</code></pre></div><h4 id="哈希和摘要">
+  哈希和摘要
+  <a class="anchor" href="#%e5%93%88%e5%b8%8c%e5%92%8c%e6%91%98%e8%a6%81">#</a>
+</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;crypto/md5&#34;</span>
+
+    <span style="color:#e6db74">&#34;crypto/sha1&#34;</span>
+
+    <span style="color:#e6db74">&#34;crypto/sha256&#34;</span>
+
+    <span style="color:#e6db74">&#34;crypto/sha512&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+    <span style="color:#e6db74">&#34;io/ioutil&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#75715e">// 得到文件内容
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ioutil</span>.<span style="color:#a6e22e">ReadFile</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#75715e">// 计算Hash
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Md5: %x\\n\\n&#34;</span>, <span style="color:#a6e22e">md5</span>.<span style="color:#a6e22e">Sum</span>(<span style="color:#a6e22e">data</span>))
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Sha1: %x\\n\\n&#34;</span>, <span style="color:#a6e22e">sha1</span>.<span style="color:#a6e22e">Sum</span>(<span style="color:#a6e22e">data</span>))
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Sha256: %x\\n\\n&#34;</span>, <span style="color:#a6e22e">sha256</span>.<span style="color:#a6e22e">Sum256</span>(<span style="color:#a6e22e">data</span>))
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Sha512: %x\\n\\n&#34;</span>, <span style="color:#a6e22e">sha512</span>.<span style="color:#a6e22e">Sum512</span>(<span style="color:#a6e22e">data</span>))
+
+}
+</code></pre></div><p>上面的例子复制整个文件内容到内存中，传递给 hash 函数。<br>
+另一个方式是创建一个 hash writer, 使用<code>Write</code>、<code>WriteString</code>、<code>Copy</code>将数据传给它。<br>
+下面的例子使用 md5 hash,但你可以使用其它的 Writer。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+
+    <span style="color:#e6db74">&#34;crypto/md5&#34;</span>
+
+    <span style="color:#e6db74">&#34;log&#34;</span>
+
+    <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+    <span style="color:#e6db74">&#34;io&#34;</span>
+
+    <span style="color:#e6db74">&#34;os&#34;</span>
+
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+
+    <span style="color:#a6e22e">file</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Open</span>(<span style="color:#e6db74">&#34;test.txt&#34;</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">file</span>.<span style="color:#a6e22e">Close</span>()
+
+    <span style="color:#75715e">//创建一个新的hasher,满足writer接口
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">hasher</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">md5</span>.<span style="color:#a6e22e">New</span>()
+
+    <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> = <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Copy</span>(<span style="color:#a6e22e">hasher</span>, <span style="color:#a6e22e">file</span>)
+
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatal</span>(<span style="color:#a6e22e">err</span>)
+
+    }
+
+    <span style="color:#75715e">// 计算hash并打印结果。
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// 传递 nil 作为参数，因为我们不通参数传递数据，而是通过writer接口。
+</span><span style="color:#75715e"></span>
+    <span style="color:#a6e22e">sum</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">hasher</span>.<span style="color:#a6e22e">Sum</span>(<span style="color:#66d9ef">nil</span>)
+
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;Md5 checksum: %x\\n&#34;</span>, <span style="color:#a6e22e">sum</span>)
+
+}
+</code></pre></div><h3 id="参考">
+  参考
+  <a class="anchor" href="#%e5%8f%82%e8%80%83">#</a>
+</h3>
+<p>
+  <a href="https://golang.org/pkg">Go Standard Library Documentation</a></p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/minibear2333/golang/edit/master/content/%e7%95%aa%e5%a4%96.%e5%b8%b8%e7%94%a8%e6%93%8d%e4%bd%9c/Go%e6%96%87%e4%bb%b6%e6%93%8d%e4%bd%9c%e5%a4%a7%e5%85%a8.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#介绍">介绍</a>
+      <ul>
+        <li><a href="#万物皆文件">万物皆文件</a></li>
+      </ul>
+    </li>
+    <li><a href="#基本操作">基本操作</a>
+      <ul>
+        <li><a href="#创建空文件">创建空文件</a></li>
+        <li><a href="#truncate-文件">Truncate 文件</a></li>
+        <li><a href="#得到文件信息">得到文件信息</a></li>
+        <li><a href="#重命名和移动">重命名和移动</a></li>
+        <li><a href="#删除文件">删除文件</a></li>
+        <li><a href="#打开和关闭文件">打开和关闭文件</a></li>
+        <li><a href="#检查文件是否存在">检查文件是否存在</a></li>
+        <li><a href="#检查读写权限">检查读写权限</a></li>
+        <li><a href="#改变权限拥有者时间戳">改变权限、拥有者、时间戳</a></li>
+        <li><a href="#硬链接和软链接">硬链接和软链接</a></li>
+      </ul>
+    </li>
+    <li><a href="#读写">读写</a>
+      <ul>
+        <li><a href="#复制文件">复制文件</a></li>
+        <li><a href="#跳转到文件指定位置seek">跳转到文件指定位置(Seek)</a></li>
+        <li><a href="#压缩">压缩</a></li>
+        <li><a href="#其它">其它</a></li>
+        <li><a href="#参考">参考</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

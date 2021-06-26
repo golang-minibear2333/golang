@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="引言 #  对于dockerfile而言，何为完美? 我认为应该满足以下三点：
+ 体积小 构建快 够安全  PS: 注意！从 Docker 17.05 版本起， Docker 才开始支持容器镜像的多阶段构建(multi-stage build)，所以本文所使用 docker 版本必须高于 17.05 （多阶段构建的意思就是把编译的过程也放同一个 Dockerfile 里，不用在自己的开发机或服务器上编译，再把编译出的二进制程序打入镜像）
+可联网的环境 #   根据官方的说法，从 Go 1.13 开始，模块管理模式将是 Go 语言开发的默认模式。
+ 我们使用go mod 做包管理，就不需要有任何额外配置
+FROMgolang:1.13.5-alpine3.10 AS builderWORKDIR/buildRUN adduser -u 10001 -D app-runnerENV GOPROXY https://goproxy.cnCOPY go.mod .COPY go.sum .RUN go mod downloadCOPY . .RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a -o your-application .FROMalpine:3.10 AS finalWORKDIR/appCOPY --from=builder /build/your-application /app/#COPY --from=builder /build/config /app/configCOPY --from=builder /etc/passwd /etc/passwdCOPY --from=builder /etc/ssl/certs/ca-certificates.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
+<meta property="og:description" content="引言 #  对于dockerfile而言，何为完美? 我认为应该满足以下三点：
+ 体积小 构建快 够安全  PS: 注意！从 Docker 17.05 版本起， Docker 才开始支持容器镜像的多阶段构建(multi-stage build)，所以本文所使用 docker 版本必须高于 17.05 （多阶段构建的意思就是把编译的过程也放同一个 Dockerfile 里，不用在自己的开发机或服务器上编译，再把编译出的二进制程序打入镜像）
+可联网的环境 #   根据官方的说法，从 Go 1.13 开始，模块管理模式将是 Go 语言开发的默认模式。
+ 我们使用go mod 做包管理，就不需要有任何额外配置
+FROMgolang:1.13.5-alpine3.10 AS builderWORKDIR/buildRUN adduser -u 10001 -D app-runnerENV GOPROXY https://goproxy.cnCOPY go.mod .COPY go.sum .RUN go mod downloadCOPY . .RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a -o your-application .FROMalpine:3.10 AS finalWORKDIR/appCOPY --from=builder /build/your-application /app/#COPY --from=builder /build/config /app/configCOPY --from=builder /etc/passwd /etc/passwdCOPY --from=builder /etc/ssl/certs/ca-certificates." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/" /><meta property="article:section" content="番外.常用操作" />
+
+
+
+<title>Golang打镜像 Dockerfile的写法 | go语言精进之路</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ea6717a4caf675b694ef8b9e3f2065b6c1b46d43c0f34b83e7b487f27fee9430.js" integrity="sha256-6mcXpMr2dbaU74uePyBltsG0bUPA80uD57SH8n/ulDA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="https://coding3min.com">机智的程序员小熊</a></li>
+<li>
+  <a href="https://github.com/minibear2333/">GitHub</a></li>
+<li>
+  <a href="/qrcode/">微信公众号</a></li>
+<li><strong>帮助与提示</strong>
+<ul>
+<li>
+  <a href="/howtocontribute/">0.0 如何参与贡献</a></li>
+<li>
+  <a href="/books-share/">0.1 书籍推荐</a></li>
+</ul>
+</li>
+<li><strong>第一章、Go基础</strong>
+<ul>
+<li>
+  <a href="/1.base/1-1-install-download/">1.1 安装与下载</a></li>
+<li>
+  <a href="/1.base/1-2-hello-world/">1.2 跑起来</a></li>
+<li>
+  <a href="/1.base/1-3-go-mod/">1.3 go mod最佳实践</a></li>
+<li>
+  <a href="/1.base/1-4-variables/">1.4 变量与常量</a></li>
+<li>
+  <a href="/1.base/1-5-switch%E5%92%8Ctypeswitch/">1.5 switch和type switch</a></li>
+<li>
+  <a href="/1.base/1-6-for-range/">1.6 循环</a></li>
+<li>
+  <a href="/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">1.7 range深度解析</a></li>
+</ul>
+</li>
+<li><strong>第二章、函数和容器</strong>
+<ul>
+<li>
+  <a href="/2.func-containers/2-1-func/">2.1 函数简单使用和基本知识解析</a></li>
+<li>
+  <a href="/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">2.2 匿名函数和闭包</a></li>
+<li>
+  <a href="/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/">2.3 可变参数</a></li>
+<li>
+  <a href="/2.func-containers/2-4-map/">2.4 集合（map）</a></li>
+<li>
+  <a href="/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/">2.5 数组和切片</a></li>
+</ul>
+</li>
+<li><strong>第三章、语法进阶</strong>
+<ul>
+<li>
+  <a href="/3.grammar-advancement/3-1-point/">3.1 指针讨论</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-2-struct/">3.2 结构体</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/">3.3 接口与多态</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">3.4 异常处理</a></li>
+</ul>
+</li>
+<li><strong>第四章、并发和并行</strong>
+<ul>
+<li>
+  <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
+<li>
+  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+<li>
+  <a href="/4.concurrent/select/">4.3 select</a></li>
+<li>
+  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+</ul>
+</li>
+<li><strong>时间处理与定时任务</strong>
+<ul>
+<li>
+  <a href="/a.timer/reset/readme/">设置可热更新的定时器</a></li>
+</ul>
+</li>
+<li><strong>常用操作</strong>
+<ul>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/">1.1 Go文件操作大全</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">1.2 Go代码基本标准规范</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/">1.3 切片排序sort包的使用</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/"class=active>1.4 Go与Dockerfile</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">1.5 goroutine等待</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/">1.6 命令行操作</a></li>
+<li>
+  <a href="/tools/readme/">2. 小工具</a></li>
+</ul>
+</li>
+<li><strong>go陷阱与缺陷</strong>
+<ul>
+<li>
+  <a href="/impossible/range/readme/">range的第二个值实际上是值拷贝</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Golang打镜像 Dockerfile的写法</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#可联网的环境">可联网的环境</a></li>
+    <li><a href="#离线打包">离线打包</a></li>
+    <li><a href="#有可能会遇到的问题">有可能会遇到的问题</a>
+      <ul>
+        <li><a href="#docker镜像源速度慢">docker镜像源速度慢</a></li>
+        <li><a href="#更新docker的yum源">更新docker的yum源</a></li>
+      </ul>
+    </li>
+    <li><a href="#引用">引用</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h2 id="引言">
+  引言
+  <a class="anchor" href="#%e5%bc%95%e8%a8%80">#</a>
+</h2>
+<p>对于dockerfile而言，何为完美? 我认为应该满足以下三点：</p>
+<ul>
+<li>体积小</li>
+<li>构建快</li>
+<li>够安全</li>
+</ul>
+<p>PS: 注意！从 <code>Docker 17.05</code> 版本起， <code>Docker</code> 才开始支持容器镜像的多阶段构建(multi-stage build)，所以本文所使用 <code>docker</code> 版本必须高于 <code>17.05</code> （多阶段构建的意思就是把编译的过程也放同一个 <code>Dockerfile</code> 里，不用在自己的开发机或服务器上编译，再把编译出的二进制程序打入镜像）</p>
+<h2 id="可联网的环境">
+  可联网的环境
+  <a class="anchor" href="#%e5%8f%af%e8%81%94%e7%bd%91%e7%9a%84%e7%8e%af%e5%a2%83">#</a>
+</h2>
+<blockquote>
+<p>根据官方的说法，从 <code>Go 1.13</code> 开始，模块管理模式将是 Go 语言开发的<strong>默认模式</strong>。</p>
+</blockquote>
+<p>我们使用go mod 做包管理，就不需要有任何额外配置</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> golang:1.13.5-alpine3.10 AS builder</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /build</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> adduser -u <span style="color:#ae81ff">10001</span> -D app-runner<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENV</span> GOPROXY https://goproxy.cn<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> go.mod .<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> go.sum .<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> go mod download<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> . .<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> CGO_ENABLED<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> GOARCH<span style="color:#f92672">=</span>amd64 GOOS<span style="color:#f92672">=</span>linux go build -a -o your-application .<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> alpine:3.10 AS final</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> --from<span style="color:#f92672">=</span>builder /build/your-application /app/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">#COPY --from=builder /build/config /app/config</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> --from<span style="color:#f92672">=</span>builder /etc/passwd /etc/passwd<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> --from<span style="color:#f92672">=</span>builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">USER</span><span style="color:#e6db74"> app-runner</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENTRYPOINT</span> [<span style="color:#e6db74">&#34;/app/your-application&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p><strong>逐行拆解</strong>
+这里的拆解完全引用 
+  <a href="https://studygolang.com/articles/26823">手把手教你写一个完美的Golang Dockerfile</a></p>
+<p>首先，这个dockerfile分为builder和final两部分。</p>
+<p><strong>builder</strong> 选择了 <code>golang:1.13.5-alpine3.10</code> 作为编译的基础镜像，相比于 <code>golang:1.13</code> , 一方面是因为它体积更小，另一方面是我发现 <code>golang:1.13</code> 的编译结果，在 <code>alpine:3.10</code> 中会报 <code>not found</code> 的错误，虽说有人提供了其它的解决方案，但是能直接避免，为啥不避免呢。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#66d9ef">RUN</span> adduser -u <span style="color:#ae81ff">10001</span> -D app-runner<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>接着是创建了一个 <code>app-runner</code> 的用户, <code>-D</code> 表示无密码。</p>
+<p>此用户的信息是是需要拷到 <code>final</code> 中，作为应用程序的启动用户。这是为了避免使用 <code>container</code> 中的默认用户 <code>root</code> ，那可是有安全漏洞的，详细解释，可以参考这篇 <code>medium</code> 上的文章
+  <a href="https://medium.com/@mccode/processes-in-containers-should-not-run-as-root-2feae3f0df3b">Processes In Containers Should Not Run As Root</a></p>
+<p>再下面的四行，</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#66d9ef">ENV</span> GOPROXY https://goproxy.cn<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> go.mod .<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> go.sum .<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> go mod download<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>是配置了国内的代理，安装依赖包了。这里用 <code>go mod download</code> 的好处是下次构建镜像文件时，当go.mod和go.sum没有改变时，它是有缓存的，可以避免重复下载依赖包，加快构建。</p>
+<p>builder的最后，就是把当前目录的文件拷过去，编译代码了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#66d9ef">COPY</span> . .<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> CGO_ENABLED<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> GOARCH<span style="color:#f92672">=</span>amd64 GOOS<span style="color:#f92672">=</span>linux go build -a -o your-application .<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p><code>final</code> 选择了 <code>alpine:3.10</code> ,一方面是体积小，只有 <code>5m</code> ；另一方面也是和构建镜像的 <code>alpine</code> 版本保持一致。</p>
+<p>接下来几行没啥说的，就是把构建结果、配置文件（有的话）和用户的相关文件拷过去。</p>
+<p>下面的这步一定不要忘记了，</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#66d9ef">USER</span><span style="color:#e6db74"> app-runner</span><span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>没有它， <code>container</code> 启动时就是用 <code>root</code> 用户启动了!!! 如果被攻击了，那黑客可是就有 <code>root</code> 权限了（不要问我为啥会被攻击）。</p>
+<p>最后，设置一个 <code>ENTRYPOINT</code> ，完事!</p>
+<p>如果你程序的启动过程比较复杂，或者是要在启动时根据环境变量的值做不同的操作，那还是写个 <code>shell</code> 文件吧。</p>
+<h2 id="离线打包">
+  离线打包
+  <a class="anchor" href="#%e7%a6%bb%e7%ba%bf%e6%89%93%e5%8c%85">#</a>
+</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#75715e"># Building stage</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> golang:1.13.5-alpine3.10 AS builder</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /build/src/your-application</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> adduser -u <span style="color:#ae81ff">10001</span> -D app-runner<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENV</span> GO111MODULE off<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENV</span> GOPATH /build<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> . .<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> CGO_ENABLED<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>amd64 go build -a -o your-application  main.go<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">#RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o your-application main.go</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># Production stage</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> alpine:3.10 AS final</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> --from<span style="color:#f92672">=</span>builder /build/src/your-application/example/linux /app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> --from<span style="color:#f92672">=</span>builder /build/src/your-application/your-application /app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">#COPY --from=builder /build/src/your-application/conf /app/conf</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> adduser -u <span style="color:#ae81ff">10001</span> -D app-runner<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> chmod -R <span style="color:#ae81ff">755</span> /app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENTRYPOINT</span> [<span style="color:#e6db74">&#34;/app/your-application&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>如果你的环境是内网，不能连接外网（不能联网），要从外部导入一个 <code>go mod</code> 项目，并运行的时候，肯定会 <code>timeout</code> 在下载项目依赖的包的阶段，实际上依赖包已经放到目录文件，不用下载也能正常运行。为了解决这一问题，我们只需要设置参数 <code>GO111MODULE=off</code> ，然后设置正确的 <code>GOPATH</code> 即可</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#66d9ef">ENV</span> GO111MODULE off<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENV</span> GOPATH /build<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>在代码库中需要提前把代码包的中 <code>vendor</code> 更新，在本地执行以下命令，并提交到代码库</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-BASH" data-lang="BASH">go mod init your-application
+go mod vendor
+
+</code></pre></div><p>这样就会有离线的 <code>vendor</code> 代码库</p>
+<pre><code>
+|——vendor
+
+    └──github.com
+    └──golang.org
+    └──gopkg.in
+    └──modules.txt
+
+</code></pre><ul>
+<li><code>GO111MODULE=off</code> 无 <code>mod</code> 支持， <code>go</code> 会从 <code>GOPATH</code> 和 <code>vendor</code> 文件夹寻找包。</li>
+<li><code>GO111MODULE=on</code> 模块支持，go 会忽略 <code>GOPATH</code> 和 <code>vendor</code> 文件夹，只根据 <code>go.mod</code> 下载依赖。</li>
+<li><code>GO111MODULE=auto</code> 在 <code>$GOPATH/src</code> 外面且根目录有 <code>go.mod</code> 文件时，开启模块支持。</li>
+</ul>
+<h2 id="有可能会遇到的问题">
+  有可能会遇到的问题
+  <a class="anchor" href="#%e6%9c%89%e5%8f%af%e8%83%bd%e4%bc%9a%e9%81%87%e5%88%b0%e7%9a%84%e9%97%ae%e9%a2%98">#</a>
+</h2>
+<h3 id="docker镜像源速度慢">
+  docker镜像源速度慢
+  <a class="anchor" href="#docker%e9%95%9c%e5%83%8f%e6%ba%90%e9%80%9f%e5%ba%a6%e6%85%a2">#</a>
+</h3>
+<p>如果docker镜像拉取速度太慢，或者拉取不到，可以试试改为国内镜像源地址，参考
+  <a href="https://coding3min.com/1229.html">这里</a></p>
+<h3 id="更新docker的yum源">
+  更新docker的yum源
+  <a class="anchor" href="#%e6%9b%b4%e6%96%b0docker%e7%9a%84yum%e6%ba%90">#</a>
+</h3>
+<p>如果你发现自己的<code>docker</code>版本低，但是自己的源里面又没有想要的版本，那就需要更新官方的源
+参考
+  <a href="https://coding3min.com/1227.html">这里</a></p>
+<h2 id="引用">
+  引用
+  <a class="anchor" href="#%e5%bc%95%e7%94%a8">#</a>
+</h2>
+<p>
+  <a href="https://studygolang.com/articles/26823">手把手教你写一个完美的Golang Dockerfile</a>
+
+  <a href="https://studygolang.com/articles/18670">Golang1.5到Golang1.12包管理：golang vendor 到 go mod</a>
+
+  <a href="https://coding3min.com/801.html">官方golang包管理神器，值得一试！go mod | 编程三分钟</a></p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/minibear2333/golang/edit/master/content/%e7%95%aa%e5%a4%96.%e5%b8%b8%e7%94%a8%e6%93%8d%e4%bd%9c/Golang%e6%89%93%e9%95%9c%e5%83%8fDockerfile%e7%9a%84%e5%86%99%e6%b3%95.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#可联网的环境">可联网的环境</a></li>
+    <li><a href="#离线打包">离线打包</a></li>
+    <li><a href="#有可能会遇到的问题">有可能会遇到的问题</a>
+      <ul>
+        <li><a href="#docker镜像源速度慢">docker镜像源速度慢</a></li>
+        <li><a href="#更新docker的yum源">更新docker的yum源</a></li>
+      </ul>
+    </li>
+    <li><a href="#引用">引用</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

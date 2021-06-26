@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="2.2 匿名函数和闭包 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.2-no-name-func
+ 与本节相关的有，匿名函数没有留源代码
+2.2.1 匿名函数 #  话不多说，今天小熊就带各位家人感受下go语言函数中的高级语法。
+在 前面的文章 里我们学会了把函数当作变量传递，可以在不改动原有函数内部实现的情况下，改变函数实现细节（设计模式：装饰器）。
+这种情况下的作为变量传递的函数往往只有这一个地方用到了，其他地方不会重复使用。那就没必要单独定义一个函数在外面！（多此一举的事本熊不做！）
+like this:
+func functionValue(a, b int, do func(int, int) int) { fmt.Println(do(a, b)) } //使用匿名函数的方法调用他 实现匿名加函数 functionValue(1,2,func(a,b int) int{ return a&#43;b }) //使用匿名函数的方法调用他 实现匿名减函数 functionValue(1,2,func(a,b int) int{ return a-b }) 输出
+3 -1 在调用的时候我们才实现了一个匿名函数（没有名字的函数）
+那是不是只有把函数当变量传递的时候才用到匿名函数呢？并，不，是！
+各位同学，让我上黑板给大家实现一个简单的匿名函数用法。
+f := func(i int) { fmt.Println(i) } f(1) 把匿名函数赋值给一个变量(这里是f)，f就是他的函数名，后面就可以直接调用啦~，但是这种简单使用的情况实际上会不会用到呢？很残酷，几乎没有。
+匿名函数配合下面的场景使用效果更佳。
+2.2.2 闭包 #  你有没有一种情况，常常要定义好多全局变量来共享数据，这种变量一旦多了非常难看，还会污染环境，有没有一种办法，可以通过重复调用同一个函数，来修改函数内部的变量呢？
+我翻来覆去发现是真的有！这个东西就叫闭包！">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
+<meta property="og:description" content="2.2 匿名函数和闭包 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.2-no-name-func
+ 与本节相关的有，匿名函数没有留源代码
+2.2.1 匿名函数 #  话不多说，今天小熊就带各位家人感受下go语言函数中的高级语法。
+在 前面的文章 里我们学会了把函数当作变量传递，可以在不改动原有函数内部实现的情况下，改变函数实现细节（设计模式：装饰器）。
+这种情况下的作为变量传递的函数往往只有这一个地方用到了，其他地方不会重复使用。那就没必要单独定义一个函数在外面！（多此一举的事本熊不做！）
+like this:
+func functionValue(a, b int, do func(int, int) int) { fmt.Println(do(a, b)) } //使用匿名函数的方法调用他 实现匿名加函数 functionValue(1,2,func(a,b int) int{ return a&#43;b }) //使用匿名函数的方法调用他 实现匿名减函数 functionValue(1,2,func(a,b int) int{ return a-b }) 输出
+3 -1 在调用的时候我们才实现了一个匿名函数（没有名字的函数）
+那是不是只有把函数当变量传递的时候才用到匿名函数呢？并，不，是！
+各位同学，让我上黑板给大家实现一个简单的匿名函数用法。
+f := func(i int) { fmt.Println(i) } f(1) 把匿名函数赋值给一个变量(这里是f)，f就是他的函数名，后面就可以直接调用啦~，但是这种简单使用的情况实际上会不会用到呢？很残酷，几乎没有。
+匿名函数配合下面的场景使用效果更佳。
+2.2.2 闭包 #  你有没有一种情况，常常要定义好多全局变量来共享数据，这种变量一旦多了非常难看，还会污染环境，有没有一种办法，可以通过重复调用同一个函数，来修改函数内部的变量呢？
+我翻来覆去发现是真的有！这个东西就叫闭包！" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://golang.coding3min.com/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/" /><meta property="article:section" content="2.func-containers" />
+
+
+
+<title>2 2 匿名函数和闭包 | go语言精进之路</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ea6717a4caf675b694ef8b9e3f2065b6c1b46d43c0f34b83e7b487f27fee9430.js" integrity="sha256-6mcXpMr2dbaU74uePyBltsG0bUPA80uD57SH8n/ulDA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="https://coding3min.com">机智的程序员小熊</a></li>
+<li>
+  <a href="https://github.com/minibear2333/">GitHub</a></li>
+<li>
+  <a href="/qrcode/">微信公众号</a></li>
+<li><strong>帮助与提示</strong>
+<ul>
+<li>
+  <a href="/howtocontribute/">0.0 如何参与贡献</a></li>
+<li>
+  <a href="/books-share/">0.1 书籍推荐</a></li>
+</ul>
+</li>
+<li><strong>第一章、Go基础</strong>
+<ul>
+<li>
+  <a href="/1.base/1-1-install-download/">1.1 安装与下载</a></li>
+<li>
+  <a href="/1.base/1-2-hello-world/">1.2 跑起来</a></li>
+<li>
+  <a href="/1.base/1-3-go-mod/">1.3 go mod最佳实践</a></li>
+<li>
+  <a href="/1.base/1-4-variables/">1.4 变量与常量</a></li>
+<li>
+  <a href="/1.base/1-5-switch%E5%92%8Ctypeswitch/">1.5 switch和type switch</a></li>
+<li>
+  <a href="/1.base/1-6-for-range/">1.6 循环</a></li>
+<li>
+  <a href="/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">1.7 range深度解析</a></li>
+</ul>
+</li>
+<li><strong>第二章、函数和容器</strong>
+<ul>
+<li>
+  <a href="/2.func-containers/2-1-func/">2.1 函数简单使用和基本知识解析</a></li>
+<li>
+  <a href="/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/"class=active>2.2 匿名函数和闭包</a></li>
+<li>
+  <a href="/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/">2.3 可变参数</a></li>
+<li>
+  <a href="/2.func-containers/2-4-map/">2.4 集合（map）</a></li>
+<li>
+  <a href="/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/">2.5 数组和切片</a></li>
+</ul>
+</li>
+<li><strong>第三章、语法进阶</strong>
+<ul>
+<li>
+  <a href="/3.grammar-advancement/3-1-point/">3.1 指针讨论</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-2-struct/">3.2 结构体</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/">3.3 接口与多态</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">3.4 异常处理</a></li>
+</ul>
+</li>
+<li><strong>第四章、并发和并行</strong>
+<ul>
+<li>
+  <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
+<li>
+  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+<li>
+  <a href="/4.concurrent/select/">4.3 select</a></li>
+<li>
+  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+</ul>
+</li>
+<li><strong>时间处理与定时任务</strong>
+<ul>
+<li>
+  <a href="/a.timer/reset/readme/">设置可热更新的定时器</a></li>
+</ul>
+</li>
+<li><strong>常用操作</strong>
+<ul>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/">1.1 Go文件操作大全</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">1.2 Go代码基本标准规范</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/">1.3 切片排序sort包的使用</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/">1.4 Go与Dockerfile</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">1.5 goroutine等待</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/">1.6 命令行操作</a></li>
+<li>
+  <a href="/tools/readme/">2. 小工具</a></li>
+</ul>
+</li>
+<li><strong>go陷阱与缺陷</strong>
+<ul>
+<li>
+  <a href="/impossible/range/readme/">range的第二个值实际上是值拷贝</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>2 2 匿名函数和闭包</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#221-匿名函数">2.2.1 匿名函数</a></li>
+    <li><a href="#222-闭包">2.2.2 闭包</a></li>
+    <li><a href="#223-闭包形式-2">2.2.3 闭包形式 2</a></li>
+    <li><a href="#224-闭包存在的-bug">2.2.4 闭包存在的 bug</a></li>
+    <li><a href="#225-小结">2.2.5 小结</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="22-匿名函数和闭包">
+  2.2 匿名函数和闭包
+  <a class="anchor" href="#22-%e5%8c%bf%e5%90%8d%e5%87%bd%e6%95%b0%e5%92%8c%e9%97%ad%e5%8c%85">#</a>
+</h1>
+<blockquote>
+<p>本节源码位置 <a href="https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.2-no-name-func">https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.2-no-name-func</a></p>
+</blockquote>
+<p>与本节相关的有，匿名函数没有留源代码</p>
+<h2 id="221-匿名函数">
+  2.2.1 匿名函数
+  <a class="anchor" href="#221-%e5%8c%bf%e5%90%8d%e5%87%bd%e6%95%b0">#</a>
+</h2>
+<p>话不多说，今天小熊就带各位家人感受下<code>go</code>语言函数中的高级语法。</p>
+<p>在 
+  <a href="https://mp.weixin.qq.com/s/HsaEjO9TgUcfrBhaMS0C5A">前面的文章</a> 里我们学会了把函数当作变量传递，可以在<strong>不改动原有函数内部实现</strong>的情况下，<strong>改变函数实现细节</strong>（设计模式：装饰器）。</p>
+<p>这种情况下的作为变量传递的函数往往只有这一个地方用到了，其他地方不会重复使用。那就没必要单独定义一个函数在外面！（多此一举的事本熊不做！）</p>
+<p>like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">functionValue</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">do</span> <span style="color:#66d9ef">func</span>(<span style="color:#66d9ef">int</span>, <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span>) {
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">do</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>))
+}
+
+<span style="color:#75715e">//使用匿名函数的方法调用他 实现匿名加函数
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">functionValue</span>(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">a</span>,<span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span>{
+<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span><span style="color:#f92672">+</span><span style="color:#a6e22e">b</span> })
+<span style="color:#75715e">//使用匿名函数的方法调用他 实现匿名减函数
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">functionValue</span>(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">a</span>,<span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span>{
+<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span><span style="color:#f92672">-</span><span style="color:#a6e22e">b</span> })
+</code></pre></div><p>输出</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#ae81ff">3</span>
+-1
+</code></pre></div><p>在调用的时候我们才实现了一个匿名函数（没有名字的函数）</p>
+<p>那是不是只有把函数当变量传递的时候才用到匿名函数呢？并，不，是！</p>
+<p>各位同学，让我上黑板给大家实现一个简单的匿名函数用法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">f</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">i</span> <span style="color:#66d9ef">int</span>) {
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">i</span>)
+	}
+
+<span style="color:#a6e22e">f</span>(<span style="color:#ae81ff">1</span>)
+</code></pre></div><p>把匿名函数赋值给一个变量(这里是<code>f</code>)，<code>f</code>就是他的函数名，后面就可以直接调用啦~，但是这种简单使用的情况实际上会不会用到呢？很残酷，几乎没有。</p>
+<p>匿名函数配合下面的场景使用效果更佳。</p>
+<h2 id="222-闭包">
+  2.2.2 闭包
+  <a class="anchor" href="#222-%e9%97%ad%e5%8c%85">#</a>
+</h2>
+<p>你有没有一种情况，常常要定义好多全局变量来共享数据，这种变量一旦多了非常难看，还会污染环境，有没有一种办法，可以通过重复调用同一个函数，来修改函数内部的变量呢？</p>
+<p>我翻来覆去发现是真的有！这个东西就叫闭包！</p>
+<p>
+  <img src="https://coding3min.oss-accelerate.aliyuncs.com/coding3min/2020-04-27-135104.jpg" alt="" /></p>
+<p>闭包的简单实现，把函数定义在函数内部，并当作返回值返回。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">closureSample</span>() <span style="color:#66d9ef">func</span>() {
+	<span style="color:#a6e22e">count</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">func</span>() {
+		<span style="color:#a6e22e">count</span> <span style="color:#f92672">++</span>
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;调用次数 %v \n&#34;</span>, <span style="color:#a6e22e">count</span>)
+	}
+}
+</code></pre></div><p>怎么用才爽？我先丧心病狂的调用两次<code>closureSample</code>函数，得到两个函数<code>c1</code>、<code>c2</code>,这两个函数就是<code>closureSample</code>函数的返回值，类型是一个匿名函数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">c1</span>, <span style="color:#a6e22e">c2</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">closureSample</span>(), <span style="color:#a6e22e">closureSample</span>()
+</code></pre></div><p>疯狂调用！！！</p>
+<p>
+  <img src="https://coding3min.oss-accelerate.aliyuncs.com/coding3min/2020-04-27-140145.jpg" alt="" /></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#a6e22e">c1</span>()
+	<span style="color:#a6e22e">c1</span>()
+	<span style="color:#a6e22e">c1</span>()
+	<span style="color:#75715e">// 你会发现c2又从1开始输出，因为两个函数的变量是独立使用的
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">c2</span>()
+	<span style="color:#a6e22e">c2</span>()
+</code></pre></div><p>输出</p>
+<pre><code>调用次数 1
+调用次数 2
+调用次数 3
+调用次数 1
+调用次数 2
+调用次数 3
+</code></pre><p>神奇不神奇！在调用<code>c2</code>的时候，完全没有影响到<code>c1</code>！</p>
+<p>这是因为各个函数是独立使用一套自己的内部变量，互相不影响，所以闭包也可以当测试用例使用。</p>
+<p>用来传入不同的实现，重复调用得到不同的返回，不用定义全局变量。</p>
+<ul>
+<li>好处：可以减少全局变量防止变量污染</li>
+<li>坏处：延长了局部变量和函数的生命周期，增加了 gc 的压力</li>
+</ul>
+<h2 id="223-闭包形式-2">
+  2.2.3 闭包形式 2
+  <a class="anchor" href="#223-%e9%97%ad%e5%8c%85%e5%bd%a2%e5%bc%8f-2">#</a>
+</h2>
+<p>通过上面的例子，不难发现闭包内部的匿名函数可以使用到外部的变量。</p>
+<p>闭包形式 2，立即执行函数，声明完以后加括号，用以表示即刻调用。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span>() {
+		<span style="color:#75715e">// to do something
+</span><span style="color:#75715e"></span>	}()
+</code></pre></div><h2 id="224-闭包存在的-bug">
+  2.2.4 闭包存在的 bug
+  <a class="anchor" href="#224-%e9%97%ad%e5%8c%85%e5%ad%98%e5%9c%a8%e7%9a%84-bug">#</a>
+</h2>
+<p><code>go</code> 里创建一个协程(类似于子线程)非常的容易，只要在语句前加一个<code>go</code>关键字就可以了。看看下面这个函数会出现什么问题。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;第一次 i 产生变化中 %v \n&#34;</span>, <span style="color:#a6e22e">i</span>)
+		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;第一次输出： %v\n&#34;</span>, <span style="color:#a6e22e">i</span>)
+		}()
+	}
+	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</code></pre></div><p>协程创建完以后立即会执行，但是协程创建这个事件和协程执行代码是分离的，他可以全部创建完再执行，而且主线程和协程是同时运行的(并发)，有可能主线程执行完了，协程还没执行。</p>
+<p>这个时候协程才会调用外部的变量，i 已经变成 3 了。</p>
+<pre><code>第一次 i 产生变化中 0
+第一次 i 产生变化中 1
+第一次 i 产生变化中 2
+第一次输出： 3
+第一次输出： 3
+第一次输出： 3
+</code></pre><p>解决办法，创建副本，可以给匿名函数加一个参数，传值过来自动生成副本</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;第二次 i 产生变化中 %v \n&#34;</span>, <span style="color:#a6e22e">i</span>)
+		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">tmp</span> <span style="color:#66d9ef">int</span>) {
+			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;第二次输出： %v\n&#34;</span>, <span style="color:#a6e22e">tmp</span>)
+		}(<span style="color:#a6e22e">i</span>)
+	}
+<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</code></pre></div><p>输出</p>
+<pre><code>第二次 i 产生变化中 0
+第二次 i 产生变化中 1
+第二次输出： 0
+第二次 i 产生变化中 2
+第二次输出： 2
+第二次输出： 1
+</code></pre><p>第二种创建副本的形式</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">3</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;第三次 i 产生变化中 %v \n&#34;</span>, <span style="color:#a6e22e">i</span>)
+		<span style="color:#a6e22e">tmp</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">i</span>
+		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;第三次输出： %v\n&#34;</span>, <span style="color:#a6e22e">tmp</span>)
+		}()
+	}
+	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</code></pre></div><p>输出</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">第三次</span> <span style="color:#a6e22e">i</span> <span style="color:#a6e22e">产生变化中</span> <span style="color:#ae81ff">0</span>
+<span style="color:#a6e22e">第三次</span> <span style="color:#a6e22e">i</span> <span style="color:#a6e22e">产生变化中</span> <span style="color:#ae81ff">1</span>
+<span style="color:#a6e22e">第三次</span> <span style="color:#a6e22e">i</span> <span style="color:#a6e22e">产生变化中</span> <span style="color:#ae81ff">2</span>
+<span style="color:#a6e22e">第三次输出</span><span style="color:#960050;background-color:#1e0010">：</span> <span style="color:#ae81ff">0</span>
+<span style="color:#a6e22e">第三次输出</span><span style="color:#960050;background-color:#1e0010">：</span> <span style="color:#ae81ff">2</span>
+<span style="color:#a6e22e">第三次输出</span><span style="color:#960050;background-color:#1e0010">：</span> <span style="color:#ae81ff">1</span>
+</code></pre></div><h2 id="225-小结">
+  2.2.5 小结
+  <a class="anchor" href="#225-%e5%b0%8f%e7%bb%93">#</a>
+</h2>
+<p>匿名函数在做参数传递时常用于设计模式中的订阅模式和策略模式、装饰器模式、调用链模式，同时匿名函数可以访问到外部变量的特性，也常常用于并发，在用于并发时要小心闭包bug。</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/minibear2333/golang/edit/master/content/2.func-containers/2-2-%e5%8c%bf%e5%90%8d%e5%87%bd%e6%95%b0%e5%92%8c%e9%97%ad%e5%8c%85.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#221-匿名函数">2.2.1 匿名函数</a></li>
+    <li><a href="#222-闭包">2.2.2 闭包</a></li>
+    <li><a href="#223-闭包形式-2">2.2.3 闭包形式 2</a></li>
+    <li><a href="#224-闭包存在的-bug">2.2.4 闭包存在的 bug</a></li>
+    <li><a href="#225-小结">2.2.5 小结</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

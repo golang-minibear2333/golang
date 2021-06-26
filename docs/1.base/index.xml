@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>1.bases on go语言精进之路</title>
+    <link>https://golang.coding3min.com/1.base/</link>
+    <description>Recent content in 1.bases on go语言精进之路</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://golang.coding3min.com/1.base/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/1.base/1-1-install-download/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/1.base/1-1-install-download/</guid>
+      <description>1.1 安装和下载 #  1.1.1 下载位置 #   go语言中文网
+1.1.2 如何安装 #  为你的系统下载了相应的安装包后，请按照 安装说明 进行安装。
+如果你选择从源码构建，请参考 从源码进行安装 。
+查看 发布历史 了解更多关于 Go 各版本的发布说明。
+1.1.3 小结 #  安装其实很容易，如果出现什么安装问题欢迎留言</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/1.base/1-2-hello-world/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/1.base/1-2-hello-world/</guid>
+      <description>1.2.1 hello world #  Go 语言是谷歌 2009 发布的第二款开源编程语言。
+Go 语言专门针对多处理器系统应用程序的编程进行了优化，使用 Go 编译的程序可以媲美 C 或 C++代码的速度，而且更加安全、支持并行进程。
+1.2.1 为什么要选择学习 Go 语言呢？与其他语言的应用相比，它有什么优点呢？ #  1、学习曲线它包含了类 C 语法、GC 内置和工程工具。这一点非常重要，因为 Go 语言容易学习，所以一个普通的大学生花一个星期就能写出来可以上手的、高性能的应用。在国内大家都追求快，这也是为什么国内 Go 流行的原因之一。
+2、效率 Go 拥有接近 C 的运行效率和接近 PHP 的开发效率，这就很有利的支撑了上面大家追求快速的需求。
+3、出身名门、血统纯正之所以说 Go 语言出身名门，是因为我们知道 Go 语言出自 Google 公司，这个公司在业界的知名度和实力自然不用多说。Google 公司聚集了一批牛人，在各种编程语言称雄争霸的局面下推出新的编程语言，自然有它的战略考虑。而且从 Go 语言的发展态势来看，Google 对它这个新的宠儿还是很看重的，Go 自然有一个良好的发展前途。我们看看 Go 语言的主要创造者，血统纯正这点就可见端倪了。
+4、自由高效：组合的思想、无侵入式的接口 Go 语言可以说是开发效率和运行效率二者的完美融合，天生的并发编程支持。Go 语言支持当前所有的编程范式，包括过程式编程、面向对象编程以及函数式编程。程序员们可以各取所需、自由组合、想怎么玩就怎么玩。
+5、强大的标准库这包括互联网应用、系统编程和网络编程。Go 里面的标准库基本上已经是非常稳定了，特别是我这里提到的三个，网络层、系统层的库非常实用。
+6、部署方便：二进制文件、Copy 部署我相信这一点是很多人选择 Go 的最大理由，因为部署太方便了，所以现在也有很多人用 Go 开发运维程序。
+7、简单的并发它包含了降低心智的并发和简易的数据同步，我觉得这是 Go 最大的特色。之所以写正确的并发、容错和可扩展的程序如此之难，是因为我们用了错误的工具和错误的抽象，Go 可以说这一块做的相当简单。
+8、稳定性 Go 拥有强大的编译检查、严格的编码规范和完整的软件生命周期工具，具有很强的稳定性，稳定压倒一切。那么为什么 Go 相比于其他程序会更稳定呢？这是因为 Go 提供了软件生命周期（开发、测试、部署、维护等等）的各个环节的工具，如 go tool、gofmt、go test。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/1.base/1-3-go-mod/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/1.base/1-3-go-mod/</guid>
+      <description>1.3 go mod最佳实践 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/1.base/1.3-go-mod
+ java 里有一个叫 maven 的包管理工具， go 也有一个叫 go mod 的管理工具，可以管理项目引用的第三方包版本、自动识别项目中用到的包、自动下载和管理包。
+为什么要使用go mod？
+ 使用go mod仓库中可以不用再上传依赖代码包，防止代码仓库过大浪费以及多个项目同时用包时的浪费 可以管理引用包的版本，这一点是gopath（src模式）和vendor做不到的 如果依赖gopath不同项目如果引用了同一个软件包的不同版本，就会造成编译麻烦  gopath是go之前的默认策略，每个项目在运行时都要严格放在src目录下，而go mod不用
+原来的包管理方式
+ 在不使用额外的工具的情况下，Go 的依赖包需要手工下载， 第三方包没有版本的概念，如果第三方包的作者做了不兼容升级，会让开发者很难受 协作开发时，需要统一各个开发成员本地$GOPATH/src下的依赖包 引用的包引用了已经转移的包，而作者没改的话，需要自己修改引用。 第三方包和自己的包的源码都在src下，很混乱。对于混合技术栈的项目来说，目录的存放会有一些问题  新的包管理模式解决了以上问题
+ 自动下载依赖包 项目不必放在$GOPATH/src内了 项目内会生成一个go.mod文件，列出包依赖 所以来的第三方包会准确的指定版本号 对于已经转移的包，可以用 replace 申明替换，不需要改代码  1.3.1 配置 #  golang&amp;gt;=1.12 添加环境变量 GO111MODULE 为 on 或者 auto ，设置方法
+go env GO111MODULE=on go env -w GO111MODULE=&amp;#34;on&amp;#34; go env -w GOPROXY=https://goproxy.io go mod init 项目名 go mod tidy #add missing and remove unused modules  打开go mod 模式 使用国内下载包代理 初始化mod项目 自动增加包和删除无用包到 GOPATH 目录下（build的时候也会自动下载包加入到go.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/1.base/1-4-variables/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/1.base/1-4-variables/</guid>
+      <description>1.4 声明【变量】的各种方式 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/1.base/1.4-variables
+ 讲变量就要先知道 go 语言有哪些数据类型。
+1.4.1 数据类型 #  数据类型的出现是为了把数据分成所需内存大小不同的数据。
+ 布尔型(bool): 值只可以是常量 true 或者 false。 数字类型: 整型 int 和浮点型 float，支持复数（业务代码用不到），其中位的运算采用补码。 字符串类型（string）: 使用UTF-8编码标识Unicode文本。 其他：指针、数组、结构体(struct)、联合体 (union不常用)、函数、切片、接口（interface）、Map 、 Channel  大多数类型都是接触过的，比如c++的结构体，比如python的切片，java的接口，别看类型那么多以后写多了自然就会用了。
+go 语言声明变量的方式非常简单
+1.4.2 第一种方式、var #  var name string 结构为var+变量名+类型
+name = &amp;#34;s&amp;#34; 像这样赋值
+//根据赋值自动判断类型 var p = name 因为name是字符串类型，所以p也是同类型
+//多变量声明,int类型不赋值自动赋值为0，比如d e f var a, b, c = 1, 2, 3 var d, e, f int 一次声明多个类型不同的变量</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/1.base/1-5-switch%E5%92%8Ctypeswitch/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/1.base/1-5-switch%E5%92%8Ctypeswitch/</guid>
+      <description>1.5 switch和type switch #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/1.base/1.5-switch-type-switch
+ 1.5.1 if else #   if 20&amp;gt;0{ fmt.Println(&amp;#34;yes&amp;#34;) } 输出
+yes ifelse
+ if 20&amp;lt;0{ }else{ fmt.Println(&amp;#34;no&amp;#34;) } 输出
+no 1.5.2 switch 和 type switch #   switch 好理解,是一个替代if else else else接口而提出的,如下，switch 后跟变量，case 后跟常量，只要变量值和常量匹配，就执行该分支下的语句。
+switch name { case &amp;#34;coding3min&amp;#34;: fmt.Println(&amp;#34;welcome&amp;#34; + name) default: fmt.Println(&amp;#34;403 forbidden:&amp;#34; + name) return } 当然switch语句会逐个匹配case语句，一个一个的判断过去，直到有符合的语句存在。
+switch { case number &amp;gt;= 90: fmt.Println(&amp;#34;优秀&amp;#34;) case number &amp;gt;= 80: fmt.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/1.base/1-6-for-range/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/1.base/1-6-for-range/</guid>
+      <description>1.6 循环 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/1.base/1.6-for-range
+ 今天 go 语言的内容是循环。
+由于在不少实际问题中有许多具有规律性的重复操作，因此在程序中就需要重复执行某些语句。
+go 语言的循环和其他的没什么不同，只是语法上略微有些差别。
+1.6.1 for 循环方式 1 和 c++、java 相似 #  nums := []int{1, 2, 3, 4, 5, 6} for i := 0; i &amp;lt; len(nums); i++ { fmt.Println(i) } 1.6.2 for 循环方式 2 省略赋值和++ #  a, b := 1, 5 for a &amp;lt; b { fmt.Println(a) a++ } 1.6.3 for 循环方式 3 迭代 #   优点：不用引入无意义的变量 缺点：不是直接索引，如果数据量极大会有性能损耗  for index, value := range nums { fmt.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/</guid>
+      <description>1.7 range深度解析 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/1.base/1.7-range-deep
+ 1.7.1 range（范围） #  range 关键字在 go 语言中是相当常用好用的语法糖，可以用在 for 循环中迭代 array、slice、map、channel、字符串所有涉及到遍历输出的东西。
+1.7.2 怎么用？ #  我们在前一节 循环 中初次触及到了 range，也知道他可以省略key，或者省略value来循环遍历的特性，但是这种特性要结合实际情况考量该用哪一个。
+切片迭代
+nums := []int{1, 2, 3} for k, v := range nums { fmt.Printf(&amp;#34;key: %v , value: %v \n&amp;#34;, k, v) } 这和迭代方式非常适合用for-range语句，如果减少赋值，直接索引num[key]可以减少损耗。如下
+for k, _:= range nums { map迭代 注意，从 Go1开始，遍历的起始节点就是随机了。
+kvs := map[string]string{ &amp;#34;a&amp;#34;:&amp;#34;a&amp;#34;, &amp;#34;b&amp;#34;:&amp;#34;b&amp;#34;, } for k, v := range kvs { fmt.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="2.3 可变参数 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.3-varargs
+ 接连两篇函数专题深度解析，相信大家已经对函数的语法有了深入的了解。
+这次小熊给大家带来了一个函数的特性【可变参数】，作为函数专题的结束。
+2.3.1 有没有发现？ #  我们有时候会用到的输出、错误输出、字符串格式化系统函数，你可以传入任意个数的参数，他全都能处理！
+fmt.Println(&#34;a&#34;,&#34;b&#34;,&#34;c&#34;,&#34;d&#34;) 就像一个任劳任怨的老父亲，那到底是为什么呢？
+2.3.2 因为 #  因为在go语言中语言级别自带了一种语法，可以声明可变参数！
+func 函数名(固定参数，v ...T) (返回参数列表){ 函数体 } 2.3.3 怎么用？ #  先和小熊一起试试，写一个不定参数累加的函数
+func sum(t ...int) (res int) { for _, v := range t { res &#43;= v } return res } fmt.Println(sum(1, 2, 3, 4, 5)) 输出结果
+15 2.3.4 如果连参数类型都不知道，怎么办？ #  上一节我们已知参数类型是int，还记得我们前面说过的switch判断类型做处理的例子吗？ switch和type switch。
+参考这个例子重写下函数，让他可以接收任意类型的参数。
+func sumNum(t .">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
+<meta property="og:description" content="2.3 可变参数 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.3-varargs
+ 接连两篇函数专题深度解析，相信大家已经对函数的语法有了深入的了解。
+这次小熊给大家带来了一个函数的特性【可变参数】，作为函数专题的结束。
+2.3.1 有没有发现？ #  我们有时候会用到的输出、错误输出、字符串格式化系统函数，你可以传入任意个数的参数，他全都能处理！
+fmt.Println(&#34;a&#34;,&#34;b&#34;,&#34;c&#34;,&#34;d&#34;) 就像一个任劳任怨的老父亲，那到底是为什么呢？
+2.3.2 因为 #  因为在go语言中语言级别自带了一种语法，可以声明可变参数！
+func 函数名(固定参数，v ...T) (返回参数列表){ 函数体 } 2.3.3 怎么用？ #  先和小熊一起试试，写一个不定参数累加的函数
+func sum(t ...int) (res int) { for _, v := range t { res &#43;= v } return res } fmt.Println(sum(1, 2, 3, 4, 5)) 输出结果
+15 2.3.4 如果连参数类型都不知道，怎么办？ #  上一节我们已知参数类型是int，还记得我们前面说过的switch判断类型做处理的例子吗？ switch和type switch。
+参考这个例子重写下函数，让他可以接收任意类型的参数。
+func sumNum(t ." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://golang.coding3min.com/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/" /><meta property="article:section" content="2.func-containers" />
+
+
+
+<title>2 3 可变参数 | go语言精进之路</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ea6717a4caf675b694ef8b9e3f2065b6c1b46d43c0f34b83e7b487f27fee9430.js" integrity="sha256-6mcXpMr2dbaU74uePyBltsG0bUPA80uD57SH8n/ulDA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="https://coding3min.com">机智的程序员小熊</a></li>
+<li>
+  <a href="https://github.com/minibear2333/">GitHub</a></li>
+<li>
+  <a href="/qrcode/">微信公众号</a></li>
+<li><strong>帮助与提示</strong>
+<ul>
+<li>
+  <a href="/howtocontribute/">0.0 如何参与贡献</a></li>
+<li>
+  <a href="/books-share/">0.1 书籍推荐</a></li>
+</ul>
+</li>
+<li><strong>第一章、Go基础</strong>
+<ul>
+<li>
+  <a href="/1.base/1-1-install-download/">1.1 安装与下载</a></li>
+<li>
+  <a href="/1.base/1-2-hello-world/">1.2 跑起来</a></li>
+<li>
+  <a href="/1.base/1-3-go-mod/">1.3 go mod最佳实践</a></li>
+<li>
+  <a href="/1.base/1-4-variables/">1.4 变量与常量</a></li>
+<li>
+  <a href="/1.base/1-5-switch%E5%92%8Ctypeswitch/">1.5 switch和type switch</a></li>
+<li>
+  <a href="/1.base/1-6-for-range/">1.6 循环</a></li>
+<li>
+  <a href="/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">1.7 range深度解析</a></li>
+</ul>
+</li>
+<li><strong>第二章、函数和容器</strong>
+<ul>
+<li>
+  <a href="/2.func-containers/2-1-func/">2.1 函数简单使用和基本知识解析</a></li>
+<li>
+  <a href="/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">2.2 匿名函数和闭包</a></li>
+<li>
+  <a href="/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/"class=active>2.3 可变参数</a></li>
+<li>
+  <a href="/2.func-containers/2-4-map/">2.4 集合（map）</a></li>
+<li>
+  <a href="/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/">2.5 数组和切片</a></li>
+</ul>
+</li>
+<li><strong>第三章、语法进阶</strong>
+<ul>
+<li>
+  <a href="/3.grammar-advancement/3-1-point/">3.1 指针讨论</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-2-struct/">3.2 结构体</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/">3.3 接口与多态</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">3.4 异常处理</a></li>
+</ul>
+</li>
+<li><strong>第四章、并发和并行</strong>
+<ul>
+<li>
+  <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
+<li>
+  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+<li>
+  <a href="/4.concurrent/select/">4.3 select</a></li>
+<li>
+  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+</ul>
+</li>
+<li><strong>时间处理与定时任务</strong>
+<ul>
+<li>
+  <a href="/a.timer/reset/readme/">设置可热更新的定时器</a></li>
+</ul>
+</li>
+<li><strong>常用操作</strong>
+<ul>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/">1.1 Go文件操作大全</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">1.2 Go代码基本标准规范</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/">1.3 切片排序sort包的使用</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/">1.4 Go与Dockerfile</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">1.5 goroutine等待</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/">1.6 命令行操作</a></li>
+<li>
+  <a href="/tools/readme/">2. 小工具</a></li>
+</ul>
+</li>
+<li><strong>go陷阱与缺陷</strong>
+<ul>
+<li>
+  <a href="/impossible/range/readme/">range的第二个值实际上是值拷贝</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>2 3 可变参数</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#231-有没有发现">2.3.1 有没有发现？</a></li>
+    <li><a href="#232-因为">2.3.2 因为</a></li>
+    <li><a href="#233-怎么用">2.3.3 怎么用？</a></li>
+    <li><a href="#234-如果连参数类型都不知道怎么办">2.3.4 如果连参数类型都不知道，怎么办？</a></li>
+    <li><a href="#235-留给你的寻找的答案">2.3.5 留给你的寻找的答案</a></li>
+    <li><a href="#236-小结">2.3.6 小结</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="23-可变参数">
+  2.3 可变参数
+  <a class="anchor" href="#23-%e5%8f%af%e5%8f%98%e5%8f%82%e6%95%b0">#</a>
+</h1>
+<blockquote>
+<p>本节源码位置 <a href="https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.3-varargs">https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.3-varargs</a></p>
+</blockquote>
+<p>接连两篇函数专题深度解析，相信大家已经对函数的语法有了深入的了解。</p>
+<p>这次小熊给大家带来了一个函数的特性【可变参数】，作为函数专题的结束。</p>
+<h2 id="231-有没有发现">
+  2.3.1 有没有发现？
+  <a class="anchor" href="#231-%e6%9c%89%e6%b2%a1%e6%9c%89%e5%8f%91%e7%8e%b0">#</a>
+</h2>
+<p>我们有时候会用到的输出、错误输出、字符串格式化系统函数，你可以传入任意个数的参数，他全都能处理！</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;a&#34;</span>,<span style="color:#e6db74">&#34;b&#34;</span>,<span style="color:#e6db74">&#34;c&#34;</span>,<span style="color:#e6db74">&#34;d&#34;</span>)
+</code></pre></div><p>就像一个任劳任怨的老父亲，那到底是为什么呢？</p>
+<h2 id="232-因为">
+  2.3.2 因为
+  <a class="anchor" href="#232-%e5%9b%a0%e4%b8%ba">#</a>
+</h2>
+<p>因为在<code>go</code>语言中语言级别自带了一种语法，可以声明可变参数！</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">函数名</span>(<span style="color:#a6e22e">固定参数</span><span style="color:#960050;background-color:#1e0010">，</span><span style="color:#a6e22e">v</span> <span style="color:#f92672">...</span><span style="color:#a6e22e">T</span>) (<span style="color:#a6e22e">返回参数列表</span>){
+<span style="color:#a6e22e">函数体</span>
+}
+</code></pre></div><h2 id="233-怎么用">
+  2.3.3 怎么用？
+  <a class="anchor" href="#233-%e6%80%8e%e4%b9%88%e7%94%a8">#</a>
+</h2>
+<p>先和小熊一起试试，写一个不定参数累加的函数</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sum</span>(<span style="color:#a6e22e">t</span> <span style="color:#f92672">...</span><span style="color:#66d9ef">int</span>) (<span style="color:#a6e22e">res</span> <span style="color:#66d9ef">int</span>) {
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">t</span> {
+		<span style="color:#a6e22e">res</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">v</span>
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
+}
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">sum</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>))
+</code></pre></div><p>输出结果</p>
+<pre><code>15
+</code></pre><h2 id="234-如果连参数类型都不知道怎么办">
+  2.3.4 如果连参数类型都不知道，怎么办？
+  <a class="anchor" href="#234-%e5%a6%82%e6%9e%9c%e8%bf%9e%e5%8f%82%e6%95%b0%e7%b1%bb%e5%9e%8b%e9%83%bd%e4%b8%8d%e7%9f%a5%e9%81%93%e6%80%8e%e4%b9%88%e5%8a%9e">#</a>
+</h2>
+<p>上一节我们已知参数类型是<code>int</code>，还记得我们前面说过的<code>switch</code>判断类型做处理的例子吗？
+  <a href="https://mp.weixin.qq.com/s/cQzuPC2MwDBvzfWnWFhDJg">switch和type switch</a>。</p>
+<p>参考这个例子重写下函数，让他可以接收任意类型的参数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sumNum</span>(<span style="color:#a6e22e">t</span> <span style="color:#f92672">...</span><span style="color:#66d9ef">interface</span>{}) (<span style="color:#a6e22e">res</span> <span style="color:#66d9ef">float64</span>){
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>,<span style="color:#a6e22e">tmp</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">t</span>{
+		<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span><span style="color:#a6e22e">tmp</span>.(<span style="color:#66d9ef">type</span>) {
+		<span style="color:#66d9ef">case</span> <span style="color:#66d9ef">int</span>:
+			<span style="color:#a6e22e">res</span> <span style="color:#f92672">+=</span> float64(<span style="color:#a6e22e">v</span>)
+		<span style="color:#66d9ef">case</span> <span style="color:#66d9ef">float64</span>:
+			<span style="color:#a6e22e">res</span><span style="color:#f92672">+=</span> <span style="color:#a6e22e">v</span>
+		<span style="color:#66d9ef">case</span> <span style="color:#66d9ef">float32</span>:
+			<span style="color:#a6e22e">res</span> <span style="color:#f92672">+=</span> float64(<span style="color:#a6e22e">v</span>)
+		}
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
+}
+</code></pre></div><p>测试下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">sumNum</span>(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2.1</span>,<span style="color:#e6db74">&#34;asd&#34;</span>,<span style="color:#66d9ef">true</span>))
+</code></pre></div><p>因为忽略了输出</p>
+<pre><code>3.1
+</code></pre><p>但是上面的例子并没有覆盖全部的数字，如果一个一个类型的匹配会疯掉的。有没有更好的方法，可以一下子匹配到所有的数字？</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">sumNum</span>(<span style="color:#a6e22e">t</span> <span style="color:#f92672">...</span><span style="color:#66d9ef">interface</span>{}) (<span style="color:#a6e22e">res</span> <span style="color:#66d9ef">float64</span>) {
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">tmp</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">t</span> {
+		<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tmp</span>.(<span style="color:#66d9ef">type</span>) {
+		<span style="color:#66d9ef">case</span> <span style="color:#66d9ef">int</span>, <span style="color:#66d9ef">int8</span>, <span style="color:#66d9ef">int16</span>, 
+    <span style="color:#66d9ef">int32</span>, <span style="color:#66d9ef">int64</span>, <span style="color:#66d9ef">uint</span>, 
+    <span style="color:#66d9ef">uint8</span>, <span style="color:#66d9ef">uint16</span>, <span style="color:#66d9ef">uint32</span>,
+    <span style="color:#66d9ef">uint64</span>, <span style="color:#66d9ef">float32</span>, <span style="color:#66d9ef">float64</span>, 
+    <span style="color:#66d9ef">complex64</span>, <span style="color:#66d9ef">complex128</span>:
+			<span style="color:#a6e22e">convertStr</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%v&#34;</span>, <span style="color:#a6e22e">v</span>)
+			<span style="color:#a6e22e">convertFloat64</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseFloat</span>(<span style="color:#a6e22e">convertStr</span>, <span style="color:#ae81ff">64</span>)
+			<span style="color:#a6e22e">res</span> <span style="color:#f92672">+=</span> <span style="color:#a6e22e">convertFloat64</span>
+		}
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
+}
+</code></pre></div><p>上面的代码在case里一下子匹配了所有可能的数字类型，再用格式化输出转换成字符串，最后转换成<code>float64</code>来使用，这是一种折中的办法，速度可能会比较慢（因为格式化内部逻辑比较复杂消耗速度）。</p>
+<p>为了保证速度还是不要省掉一大堆的<code>case</code>，明确了类型再做强转。</p>
+<h2 id="235-留给你的寻找的答案">
+  2.3.5 留给你的寻找的答案
+  <a class="anchor" href="#235-%e7%95%99%e7%bb%99%e4%bd%a0%e7%9a%84%e5%af%bb%e6%89%be%e7%9a%84%e7%ad%94%e6%a1%88">#</a>
+</h2>
+<p>有没有一种只留一个<code>case</code>，同时处理速度又快的方法呢？</p>
+<p>—— 爱你们的小熊</p>
+<h2 id="236-小结">
+  2.3.6 小结
+  <a class="anchor" href="#236-%e5%b0%8f%e7%bb%93">#</a>
+</h2>
+<p>本节介绍了不定参数，知道参数类型与不知道参数类型的处理方法，你可以把这种模式用于类型转换、以及策略模式。</p>
+<p>在<code>fmt</code>包中，有很多<code>Print</code>就是使用了不定参数，有兴趣可以看一下源码。</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/minibear2333/golang/edit/master/content/2.func-containers/2-3-%e5%8f%af%e5%8f%98%e5%8f%82%e6%95%b0.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#231-有没有发现">2.3.1 有没有发现？</a></li>
+    <li><a href="#232-因为">2.3.2 因为</a></li>
+    <li><a href="#233-怎么用">2.3.3 怎么用？</a></li>
+    <li><a href="#234-如果连参数类型都不知道怎么办">2.3.4 如果连参数类型都不知道，怎么办？</a></li>
+    <li><a href="#235-留给你的寻找的答案">2.3.5 留给你的寻找的答案</a></li>
+    <li><a href="#236-小结">2.3.6 小结</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

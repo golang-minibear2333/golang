@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>番外.常用操作s on go语言精进之路</title>
+    <link>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/</link>
+    <description>Recent content in 番外.常用操作s on go语言精进之路</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/</guid>
+      <description>简介 #  kingpin 功能比 flag 库强大，用法差不多。 相比 flag 库，最重要的一点就是支持不加 - 的调用。 比如一个命令行程序有三个函数分别为 A , B , C ，要实现根据命令行的输入运行不同的函数，如果用flag实现的话应该是下面这种使用方法：
+./cli --method A ./cli --method B ./cli --method C 每次都需要输入 --method ，然而用 kingpin 库实现的话就可以达到下面这种效果：
+./cli A ./cli B ./cli C 节省了很多输入操作。
+使用方法 #  go get gopkg.in/alecthomas/kingpin.v2 go mod vendor 这样子 go.mod 文件里就引入了， vendor 文件夹就缓存了此包，然后直接在代码中使用。
+package main import ( &amp;#34;fmt&amp;#34; &amp;#34;gopkg.in/alecthomas/kingpin.v2&amp;#34; &amp;#34;net/http&amp;#34; ) func main() { var ( listenAddress = kingpin.Flag( &amp;#34;web.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/</guid>
+      <description>引言 #  对于dockerfile而言，何为完美? 我认为应该满足以下三点：
+ 体积小 构建快 够安全  PS: 注意！从 Docker 17.05 版本起， Docker 才开始支持容器镜像的多阶段构建(multi-stage build)，所以本文所使用 docker 版本必须高于 17.05 （多阶段构建的意思就是把编译的过程也放同一个 Dockerfile 里，不用在自己的开发机或服务器上编译，再把编译出的二进制程序打入镜像）
+可联网的环境 #   根据官方的说法，从 Go 1.13 开始，模块管理模式将是 Go 语言开发的默认模式。
+ 我们使用go mod 做包管理，就不需要有任何额外配置
+FROMgolang:1.13.5-alpine3.10 AS builderWORKDIR/buildRUN adduser -u 10001 -D app-runnerENV GOPROXY https://goproxy.cnCOPY go.mod .COPY go.sum .RUN go mod downloadCOPY . .RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a -o your-application .FROMalpine:3.10 AS finalWORKDIR/appCOPY --from=builder /build/your-application /app/#COPY --from=builder /build/config /app/configCOPY --from=builder /etc/passwd /etc/passwdCOPY --from=builder /etc/ssl/certs/ca-certificates.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/</guid>
+      <description>文档 #   不刻意制定详细文档 编码级别文档化，支持一键导出文档  统一的标准和习惯，提高可读性 #  三个统一
+ 统一的日志 统一的接口规范：错误码、返回格式、国际化 统一编码习惯  统一编码习惯 #  变量常量
+ 变量必须见名知义不得用拼音，且长度在 3-20 个字母 名词必须单数 常量必须全大写  所有程序必须有注释
+提交记录必须指明 tapd 单号，功能，更新记录
+代码文件名
+ 必须见名知义，保证内部代码单一职责 文件夹必须与包名保持一致，全小写，尽量使用短命名，不能使用下划线、中划线等字符  函数
+ 单个函数长度不超过 50 行 参数个数不要超过 5 个（参数过多通常意味着缺少封装，不易维护，容易出错） 函数返回值个数不要超过 3 个，如果超过，建议将其中关系密切的返回值参数封装成一个结构体。  格式化要求 提交代码时，必须使用 gofmt 对代码进行格式化 提交代码时，必须使用 golint 对代码进行检查。 字符串形式的 json 时，使用反单引号，而不是双引号。
+&amp;#34;{\&amp;#34;key\&amp;#34;:\&amp;#34;value\&amp;#34;}&amp;#34; 改为格式更清晰的：
+` { &amp;#34;key&amp;#34;:&amp;#34;value&amp;#34; } ` 如果有其他建议欢迎补充</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/</guid>
+      <description>Go 官方库的文件操作分散在多个包中，比如os、ioutil包，我本来想写一篇总结性的 Go 文件操作的文章，却发现已经有人 2015 年已经写了一篇这样的文章，写的非常好，所以我翻译成了中文，强烈推荐你阅读一下。
+原文: Working with Files in Go, 作者: NanoDano
+介绍 #  万物皆文件 #  UNIX 的一个基础设计就是&amp;quot;万物皆文件&amp;quot;(everything is a file)。我们不必知道一个文件到底映射成什么，操作系统的设备驱动抽象成文件。操作系统为设备提供了文件格式的接口。
+Go 语言中的 reader 和 writer 接口也类似。我们只需简单的读写字节，不必知道 reader 的数据来自哪里，也不必知道 writer 将数据发送到哪里。
+你可以在/dev下查看可用的设备，有些可能需要较高的权限才能访问。
+基本操作 #  创建空文件 #  package main import ( &amp;#34;log&amp;#34; &amp;#34;os&amp;#34; ) var ( newFile *os.File err error ) func main() { newFile, err = os.Create(&amp;#34;test.txt&amp;#34;) if err != nil { log.Fatal(err) } log.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/</guid>
+      <description>golang的sort包提供了部分切片排序的函数和用户自定义数据集的函数。
+排序切片 #  func Example1() { arry := []int{5,8,3,1,4,2,7,6} fmt.Println(arry) sort.Ints(arry) fmt.Println(arry) // Output:  // [5 8 3 1 4 2 7 6]  // [1 2 3 4 5 6 7 8] } 排序用户自定义数据集 #  type Person struct { Name string Age int } func (p Person) String() string { return fmt.Sprintf(&amp;#34;%s: %d&amp;#34;, p.Name, p.Age) } // ByAge implements sort.Interface for []Person based on // the Age field.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/</guid>
+      <description>简介 #  Goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
+package main import ( &amp;#34;time&amp;#34; &amp;#34;fmt&amp;#34; ) func say(s string) { for i := 0; i &amp;lt; 3; i++ { time.Sleep(100 * time.Millisecond) fmt.Println(s) } } func main() { go say(&amp;#34;hello world&amp;#34;) fmt.Println(&amp;#34;over!&amp;#34;) } 输出 over！ , 主线程没有等待
+唯一好方案 #  Golang 官方在 sync 包中提供了 WaitGroup 类型来解决这个问题。其文档描述如下：
+ A WaitGroup waits for a collection of goroutines to finish. The main goroutine calls Add to set the number of goroutines to wait for.</description>
+    </item>
+    
+  </channel>
+</rss>

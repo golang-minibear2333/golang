@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="3.1 指针讨论 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/3.1-point
+ 3.1.1 指针 #  c 中有指针的概念，在 go 中也有，但是实际上用的比较少，因为指针容易出错，而且不易阅读。
+每个变量都有他的地址
+var a int fmt.Printf(&#34;a 的地址是：%p \n&#34;, &amp;a) 输出
+a 的地址是：0xc0000b2008 指针用来存地址
+//声明 变量名 &#43; 指针类型 , 命令规则以ptr结尾 var ptr *int /* 指向整型*/ // var fp *float32 /* 指向浮点型 */ ptr = &amp;a // 变量内部存的值是普通类型，指针内部存的值是地址 fmt.Printf(&#34;ptr 存的值是：%p \n&#34;, ptr) 输出，可以看到 ptr 存的值就是 a 的地址。
+ptr 存的值是：0xc0000b2008 存的就是 a 的地址，ptr 的指向*ptr 肯定就是 a 本身了。
+if a == *ptr { fmt.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
+<meta property="og:description" content="3.1 指针讨论 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/3.1-point
+ 3.1.1 指针 #  c 中有指针的概念，在 go 中也有，但是实际上用的比较少，因为指针容易出错，而且不易阅读。
+每个变量都有他的地址
+var a int fmt.Printf(&#34;a 的地址是：%p \n&#34;, &amp;a) 输出
+a 的地址是：0xc0000b2008 指针用来存地址
+//声明 变量名 &#43; 指针类型 , 命令规则以ptr结尾 var ptr *int /* 指向整型*/ // var fp *float32 /* 指向浮点型 */ ptr = &amp;a // 变量内部存的值是普通类型，指针内部存的值是地址 fmt.Printf(&#34;ptr 存的值是：%p \n&#34;, ptr) 输出，可以看到 ptr 存的值就是 a 的地址。
+ptr 存的值是：0xc0000b2008 存的就是 a 的地址，ptr 的指向*ptr 肯定就是 a 本身了。
+if a == *ptr { fmt." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://golang.coding3min.com/3.grammar-advancement/3-1-point/" /><meta property="article:section" content="3.grammar-advancement" />
+
+<meta property="article:modified_time" content="2021-06-26T03:09:32&#43;08:00" />
+
+<title>3 1 Point | go语言精进之路</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ea6717a4caf675b694ef8b9e3f2065b6c1b46d43c0f34b83e7b487f27fee9430.js" integrity="sha256-6mcXpMr2dbaU74uePyBltsG0bUPA80uD57SH8n/ulDA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="https://coding3min.com">机智的程序员小熊</a></li>
+<li>
+  <a href="https://github.com/minibear2333/">GitHub</a></li>
+<li>
+  <a href="/qrcode/">微信公众号</a></li>
+<li><strong>帮助与提示</strong>
+<ul>
+<li>
+  <a href="/howtocontribute/">0.0 如何参与贡献</a></li>
+<li>
+  <a href="/books-share/">0.1 书籍推荐</a></li>
+</ul>
+</li>
+<li><strong>第一章、Go基础</strong>
+<ul>
+<li>
+  <a href="/1.base/1-1-install-download/">1.1 安装与下载</a></li>
+<li>
+  <a href="/1.base/1-2-hello-world/">1.2 跑起来</a></li>
+<li>
+  <a href="/1.base/1-3-go-mod/">1.3 go mod最佳实践</a></li>
+<li>
+  <a href="/1.base/1-4-variables/">1.4 变量与常量</a></li>
+<li>
+  <a href="/1.base/1-5-switch%E5%92%8Ctypeswitch/">1.5 switch和type switch</a></li>
+<li>
+  <a href="/1.base/1-6-for-range/">1.6 循环</a></li>
+<li>
+  <a href="/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">1.7 range深度解析</a></li>
+</ul>
+</li>
+<li><strong>第二章、函数和容器</strong>
+<ul>
+<li>
+  <a href="/2.func-containers/2-1-func/">2.1 函数简单使用和基本知识解析</a></li>
+<li>
+  <a href="/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">2.2 匿名函数和闭包</a></li>
+<li>
+  <a href="/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/">2.3 可变参数</a></li>
+<li>
+  <a href="/2.func-containers/2-4-map/">2.4 集合（map）</a></li>
+<li>
+  <a href="/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/">2.5 数组和切片</a></li>
+</ul>
+</li>
+<li><strong>第三章、语法进阶</strong>
+<ul>
+<li>
+  <a href="/3.grammar-advancement/3-1-point/"class=active>3.1 指针讨论</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-2-struct/">3.2 结构体</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/">3.3 接口与多态</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">3.4 异常处理</a></li>
+</ul>
+</li>
+<li><strong>第四章、并发和并行</strong>
+<ul>
+<li>
+  <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
+<li>
+  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+<li>
+  <a href="/4.concurrent/select/">4.3 select</a></li>
+<li>
+  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+</ul>
+</li>
+<li><strong>时间处理与定时任务</strong>
+<ul>
+<li>
+  <a href="/a.timer/reset/readme/">设置可热更新的定时器</a></li>
+</ul>
+</li>
+<li><strong>常用操作</strong>
+<ul>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/">1.1 Go文件操作大全</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">1.2 Go代码基本标准规范</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/">1.3 切片排序sort包的使用</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/">1.4 Go与Dockerfile</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">1.5 goroutine等待</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/">1.6 命令行操作</a></li>
+<li>
+  <a href="/tools/readme/">2. 小工具</a></li>
+</ul>
+</li>
+<li><strong>go陷阱与缺陷</strong>
+<ul>
+<li>
+  <a href="/impossible/range/readme/">range的第二个值实际上是值拷贝</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>3 1 Point</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#311-指针">3.1.1 指针</a></li>
+    <li><a href="#312-指针的作用">3.1.2 指针的作用</a></li>
+    <li><a href="#313-多维指针">3.1.3 多维指针</a></li>
+    <li><a href="#314-小结">3.1.4 小结</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="31-指针讨论">
+  3.1 指针讨论
+  <a class="anchor" href="#31-%e6%8c%87%e9%92%88%e8%ae%a8%e8%ae%ba">#</a>
+</h1>
+<blockquote>
+<p>本节源码位置 <a href="https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/3.1-point">https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/3.1-point</a></p>
+</blockquote>
+<h2 id="311-指针">
+  3.1.1 指针
+  <a class="anchor" href="#311-%e6%8c%87%e9%92%88">#</a>
+</h2>
+<p><code>c</code> 中有指针的概念，在 <code>go</code> 中也有，但是实际上用的比较少，因为指针容易出错，而且不易阅读。</p>
+<p>每个变量都有他的地址</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int</span>
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;a 的地址是：%p \n&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+</code></pre></div><p>输出</p>
+<pre><code>a 的地址是：0xc0000b2008
+</code></pre><p>指针用来存地址</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#75715e">//声明 变量名 + 指针类型 , 命令规则以ptr结尾
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ptr</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span> <span style="color:#75715e">/* 指向整型*/</span>
+<span style="color:#75715e">// var fp *float32 /* 指向浮点型 */
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">ptr</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span> <span style="color:#75715e">// 变量内部存的值是普通类型，指针内部存的值是地址
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;ptr 存的值是：%p \n&#34;</span>, <span style="color:#a6e22e">ptr</span>)
+</code></pre></div><p>输出，可以看到 <code>ptr</code> 存的值就是 <code>a</code> 的地址。</p>
+<pre><code>ptr 存的值是：0xc0000b2008
+</code></pre><p>存的就是 a 的地址，ptr 的指向*ptr 肯定就是 a 本身了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">==</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">ptr</span> {
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;a == *ptr&#34;</span>)
+}
+</code></pre></div><p>输出</p>
+<pre><code>a == *ptr
+</code></pre><h2 id="312-指针的作用">
+  3.1.2 指针的作用
+  <a class="anchor" href="#312-%e6%8c%87%e9%92%88%e7%9a%84%e4%bd%9c%e7%94%a8">#</a>
+</h2>
+<p>指针可以消灭掉返回值，直接对参数做改变。</p>
+<p>定义一个交换函数，形参为指针类型</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">swap</span>(<span style="color:#a6e22e">x</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">y</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>) {
+	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">temp</span> <span style="color:#66d9ef">int</span>
+	<span style="color:#a6e22e">temp</span> = <span style="color:#f92672">*</span><span style="color:#a6e22e">x</span> <span style="color:#75715e">/* 保存 x 地址的值 */</span>
+	<span style="color:#f92672">*</span><span style="color:#a6e22e">x</span> = <span style="color:#f92672">*</span><span style="color:#a6e22e">y</span>   <span style="color:#75715e">/* 将 y 赋值给 x */</span>
+	<span style="color:#f92672">*</span><span style="color:#a6e22e">y</span> = <span style="color:#a6e22e">temp</span> <span style="color:#75715e">/* 将 temp 赋值给 y */</span>
+}
+</code></pre></div><p>调用</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">100</span>
+<span style="color:#a6e22e">b</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">200</span>
+
+<span style="color:#75715e">//操作地址，不需要返回
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">swap</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">b</span>)
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;交换后 a 的值 : %d\n&#34;</span>, <span style="color:#a6e22e">a</span>)
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;交换后 b 的值 : %d\n&#34;</span>, <span style="color:#a6e22e">b</span>)
+</code></pre></div><p>输出</p>
+<pre><code>交换后 a 的值 : 200
+交换后 b 的值 : 100
+</code></pre><p>虽然可以这么做，但是不推荐，因为 <code>go</code> 比 <code>c++</code> 多出来多返回值的特性，所以这里写在返回里可读性更强。</p>
+<p>PS1: 但如果你的参数是比较复杂的类型，比如数组。用指针可以节省空间。</p>
+<p>PS2: 对引用类型的操作会改变原引用类型的值，这里与指针有异曲同工之妙。</p>
+<h2 id="313-多维指针">
+  3.1.3 多维指针
+  <a class="anchor" href="#313-%e5%a4%9a%e7%bb%b4%e6%8c%87%e9%92%88">#</a>
+</h2>
+<p>刚刚用到的指针，只不过指向一个变量的地址，他就被叫做一维指针。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ptr</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>
+<span style="color:#a6e22e">ptr</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>
+</code></pre></div><p>指针本身也是一个变量，是变量就有地址，所以指针也可以被取地址。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ptr</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>
+<span style="color:#a6e22e">pptr</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ptr</span>
+</code></pre></div><p><code>*int</code> 类型的指针存的是 <code>int</code> 类型数据的地址，得到 <code>*变量类型</code> 就是他的指针，推导出指向 <code>*int</code> 变量的指针为 <code>**int</code> 类型，这种类型被称为二维指针，每多一个 <code>*</code> 就多一个维。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">int</span>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ptr</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>  <span style="color:#75715e">//一维
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">pptr</span> <span style="color:#f92672">**</span><span style="color:#66d9ef">int</span> <span style="color:#75715e">// 二维
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ppptr</span> <span style="color:#f92672">***</span><span style="color:#66d9ef">int</span> <span style="color:#75715e">// 三维
+</span><span style="color:#75715e"></span>
+<span style="color:#a6e22e">ptr</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>
+<span style="color:#a6e22e">pptr</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">ptr</span>
+<span style="color:#a6e22e">ppptr</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">pptr</span>
+
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;a的地址：%p \n&#34;</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">a</span>)
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;ptr存的地址：%p \n&#34;</span>, <span style="color:#a6e22e">ptr</span>)
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;pptr存的地址的指向：%p \n&#34;</span>, <span style="color:#f92672">*</span><span style="color:#a6e22e">pptr</span>)
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;ppptr存的地址的指向的指向：%p \n&#34;</span>, <span style="color:#f92672">**</span><span style="color:#a6e22e">ppptr</span>)
+</code></pre></div><p>输出</p>
+<pre><code>a的地址：0xc000014090
+ptr存的地址：0xc000014090
+pptr存的地址的指向：0xc000014090
+ppptr存的地址的指向的指向：0xc000014090
+</code></pre><p>PS1: 日常工作中，不建议使用多维指针，可读性不好，容易犯错误，一层指针能搞定的，一定不要使用多维炫技术。不然过几个月你自己都看不懂。</p>
+<p>PS2: 不得不使用二维指针的场景：你希望在一个函数的参数中改变一个指针的值，你就只能传这个指针的指针给这个函数。</p>
+<p>PS3：多维指针的唯一好处：减少传参</p>
+<p><strong>你在工作中啥时候用到了指针/多维指针？</strong></p>
+<h2 id="314-小结">
+  3.1.4 小结
+  <a class="anchor" href="#314-%e5%b0%8f%e7%bb%93">#</a>
+</h2>
+<p>在<code>Java</code>中没有指针的概念，但是有引用的概念，在<code>C++</code>中比较常见，我们操作内存一定会用到指针，存储了变量的地址。</p>
+<p>为了程序的可读性，一般只会用到一维指针，掌握指针的概念，后面还有大用。</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+  <div><a class="flex align-center" href="https://github.com/minibear2333/golang/commit/f2ac9b51f69b336a06d753c121bc64c0476034c7" title='Last modified by minibear2333 | Jun 26, 2021' target="_blank" rel="noopener">
+      <img src="/svg/calendar.svg" class="book-icon" alt="Calendar" />
+      <span>Jun 26, 2021</span>
+    </a>
+  </div>
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/minibear2333/golang/edit/master/content/3.grammar-advancement/3-1-point.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#311-指针">3.1.1 指针</a></li>
+    <li><a href="#312-指针的作用">3.1.2 指针的作用</a></li>
+    <li><a href="#313-多维指针">3.1.3 多维指针</a></li>
+    <li><a href="#314-小结">3.1.4 小结</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

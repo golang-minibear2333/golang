@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="4.1 go语言中的并发特性 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/4.1-goroutine.go
+ 以前我们写并发的程序一般是用多线程来实现，自己维护一个线程池，在恰当的时候创建、销毁、分配资源。
+go 在并发方面为我们提供了一个语言级别的支持， goroutine 和 chan 相互配合，这决定了他的先天优势。
+goroutine 的概念类似于线程， Go 程序运行时会自动调度和管理，系统能智能地将 goroutine 中的任务合理地分配给 CPU , 让这些任务尽量并发运作。
+4.1.1 他和线程对比 #  从使用上讲
+ 比线程更轻量级，可以创建十万、百万不用担心资源问题。 和 chan 搭配使用，实现高并发， goroutine 之间传输数据更方便。 如果访问同一个数据块，要小心数据竞态问题、共享锁还是互斥锁的选择问题、并发操作的数据同步问题（后面会说）  从其实现上讲
+ 从资源上讲，线程的栈内存大小一般是固定的一般为 2MB ，虽然这个数值可以设置，但是 太大了浪费，太小了容易不够用, 而 goroutine 栈内存是可变的，初始一般为 2KB ，随着需求可以扩大达到1GB。 所以 goroutine 十分的轻量级，且能满足不同的需求。 从调度上讲，线程的调度由 OS 的内核完成；线程的切换需要 CPU寄存器 和 内存的数据交换 ，从而切换不同的线程上下文。 其触发方式为 CPU时钟 , 而 goroutine 的调度则比较轻量级，由自身的调度器完成。 协程同线程的关系，有些类似于 线程同进程的关系。  4.1.2 创建与使用 #  创建一个 goroutine ，只需要在函数前加一个 go 关键字就成了。">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
+<meta property="og:description" content="4.1 go语言中的并发特性 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/4.1-goroutine.go
+ 以前我们写并发的程序一般是用多线程来实现，自己维护一个线程池，在恰当的时候创建、销毁、分配资源。
+go 在并发方面为我们提供了一个语言级别的支持， goroutine 和 chan 相互配合，这决定了他的先天优势。
+goroutine 的概念类似于线程， Go 程序运行时会自动调度和管理，系统能智能地将 goroutine 中的任务合理地分配给 CPU , 让这些任务尽量并发运作。
+4.1.1 他和线程对比 #  从使用上讲
+ 比线程更轻量级，可以创建十万、百万不用担心资源问题。 和 chan 搭配使用，实现高并发， goroutine 之间传输数据更方便。 如果访问同一个数据块，要小心数据竞态问题、共享锁还是互斥锁的选择问题、并发操作的数据同步问题（后面会说）  从其实现上讲
+ 从资源上讲，线程的栈内存大小一般是固定的一般为 2MB ，虽然这个数值可以设置，但是 太大了浪费，太小了容易不够用, 而 goroutine 栈内存是可变的，初始一般为 2KB ，随着需求可以扩大达到1GB。 所以 goroutine 十分的轻量级，且能满足不同的需求。 从调度上讲，线程的调度由 OS 的内核完成；线程的切换需要 CPU寄存器 和 内存的数据交换 ，从而切换不同的线程上下文。 其触发方式为 CPU时钟 , 而 goroutine 的调度则比较轻量级，由自身的调度器完成。 协程同线程的关系，有些类似于 线程同进程的关系。  4.1.2 创建与使用 #  创建一个 goroutine ，只需要在函数前加一个 go 关键字就成了。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://golang.coding3min.com/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/" /><meta property="article:section" content="4.concurrent" />
+
+
+
+<title>4 1 Go语言中的并发特性 | go语言精进之路</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ea6717a4caf675b694ef8b9e3f2065b6c1b46d43c0f34b83e7b487f27fee9430.js" integrity="sha256-6mcXpMr2dbaU74uePyBltsG0bUPA80uD57SH8n/ulDA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="https://coding3min.com">机智的程序员小熊</a></li>
+<li>
+  <a href="https://github.com/minibear2333/">GitHub</a></li>
+<li>
+  <a href="/qrcode/">微信公众号</a></li>
+<li><strong>帮助与提示</strong>
+<ul>
+<li>
+  <a href="/howtocontribute/">0.0 如何参与贡献</a></li>
+<li>
+  <a href="/books-share/">0.1 书籍推荐</a></li>
+</ul>
+</li>
+<li><strong>第一章、Go基础</strong>
+<ul>
+<li>
+  <a href="/1.base/1-1-install-download/">1.1 安装与下载</a></li>
+<li>
+  <a href="/1.base/1-2-hello-world/">1.2 跑起来</a></li>
+<li>
+  <a href="/1.base/1-3-go-mod/">1.3 go mod最佳实践</a></li>
+<li>
+  <a href="/1.base/1-4-variables/">1.4 变量与常量</a></li>
+<li>
+  <a href="/1.base/1-5-switch%E5%92%8Ctypeswitch/">1.5 switch和type switch</a></li>
+<li>
+  <a href="/1.base/1-6-for-range/">1.6 循环</a></li>
+<li>
+  <a href="/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">1.7 range深度解析</a></li>
+</ul>
+</li>
+<li><strong>第二章、函数和容器</strong>
+<ul>
+<li>
+  <a href="/2.func-containers/2-1-func/">2.1 函数简单使用和基本知识解析</a></li>
+<li>
+  <a href="/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">2.2 匿名函数和闭包</a></li>
+<li>
+  <a href="/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/">2.3 可变参数</a></li>
+<li>
+  <a href="/2.func-containers/2-4-map/">2.4 集合（map）</a></li>
+<li>
+  <a href="/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/">2.5 数组和切片</a></li>
+</ul>
+</li>
+<li><strong>第三章、语法进阶</strong>
+<ul>
+<li>
+  <a href="/3.grammar-advancement/3-1-point/">3.1 指针讨论</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-2-struct/">3.2 结构体</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/">3.3 接口与多态</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">3.4 异常处理</a></li>
+</ul>
+</li>
+<li><strong>第四章、并发和并行</strong>
+<ul>
+<li>
+  <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/"class=active>4.1 并发特性</a></li>
+<li>
+  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+<li>
+  <a href="/4.concurrent/select/">4.3 select</a></li>
+<li>
+  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+</ul>
+</li>
+<li><strong>时间处理与定时任务</strong>
+<ul>
+<li>
+  <a href="/a.timer/reset/readme/">设置可热更新的定时器</a></li>
+</ul>
+</li>
+<li><strong>常用操作</strong>
+<ul>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/">1.1 Go文件操作大全</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">1.2 Go代码基本标准规范</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/">1.3 切片排序sort包的使用</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/">1.4 Go与Dockerfile</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">1.5 goroutine等待</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/">1.6 命令行操作</a></li>
+<li>
+  <a href="/tools/readme/">2. 小工具</a></li>
+</ul>
+</li>
+<li><strong>go陷阱与缺陷</strong>
+<ul>
+<li>
+  <a href="/impossible/range/readme/">range的第二个值实际上是值拷贝</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>4 1 Go语言中的并发特性</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#411-他和线程对比">4.1.1 他和线程对比</a></li>
+    <li><a href="#412-创建与使用">4.1.2 创建与使用</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#414-小结">4.1.4 小结</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="41-go语言中的并发特性">
+  4.1 go语言中的并发特性
+  <a class="anchor" href="#41-go%e8%af%ad%e8%a8%80%e4%b8%ad%e7%9a%84%e5%b9%b6%e5%8f%91%e7%89%b9%e6%80%a7">#</a>
+</h1>
+<blockquote>
+<p>本节源码位置 <a href="https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/4.1-goroutine.go">https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/4.1-goroutine.go</a></p>
+</blockquote>
+<p>以前我们写并发的程序一般是用多线程来实现，自己维护一个线程池，在恰当的时候创建、销毁、分配资源。</p>
+<p><code>go</code> 在并发方面为我们提供了一个语言级别的支持， <code>goroutine</code> 和 <code>chan</code> 相互配合，这决定了他的先天优势。</p>
+<p><code>goroutine</code> 的概念类似于线程， <code>Go</code> 程序运行时会自动调度和管理，系统能智能地将 <code>goroutine</code> 中的任务合理地分配给 <code>CPU</code> , 让这些任务尽量并发运作。</p>
+<h2 id="411-他和线程对比">
+  4.1.1 他和线程对比
+  <a class="anchor" href="#411-%e4%bb%96%e5%92%8c%e7%ba%bf%e7%a8%8b%e5%af%b9%e6%af%94">#</a>
+</h2>
+<p><strong>从使用上讲</strong></p>
+<ul>
+<li>比线程更轻量级，可以创建十万、百万不用担心资源问题。</li>
+<li>和 <code>chan</code> 搭配使用，实现高并发， <code>goroutine</code> 之间传输数据更方便。</li>
+<li>如果访问同一个数据块，要小心数据竞态问题、共享锁还是互斥锁的选择问题、并发操作的数据同步问题（后面会说）</li>
+</ul>
+<p><strong>从其实现上讲</strong></p>
+<ul>
+<li>从资源上讲，线程的栈内存大小一般是固定的一般为 <code>2MB</code> ，虽然这个数值可以设置，但是 太大了浪费，太小了容易不够用, 而 <code>goroutine</code> 栈内存是可变的，初始一般为 <code>2KB</code> ，随着需求可以扩大达到1GB。 所以 <code>goroutine</code> 十分的轻量级，且能满足不同的需求。</li>
+<li>从调度上讲，线程的调度由 <code>OS</code> 的内核完成；线程的切换需要 <strong>CPU寄存器</strong> 和 <strong>内存的数据交换</strong> ，从而切换不同的线程上下文。 其触发方式为 <code>CPU时钟</code> , 而 <code>goroutine</code> 的调度则比较轻量级，由自身的调度器完成。</li>
+<li>协程同线程的关系，有些类似于 线程同进程的关系。</li>
+</ul>
+<h2 id="412-创建与使用">
+  4.1.2 创建与使用
+  <a class="anchor" href="#412-%e5%88%9b%e5%bb%ba%e4%b8%8e%e4%bd%bf%e7%94%a8">#</a>
+</h2>
+<p>创建一个 <code>goroutine</code> ，只需要在函数前加一个 <code>go</code> 关键字就成了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">go</span> <span style="color:#a6e22e">函数名</span>(<span style="color:#a6e22e">参数</span>)
+</code></pre></div><p>看一个 <code>dome</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">quickFun</span>(){
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;maybe you can&#39;s see me!&#34;</span>)
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>(){
+	<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">quickFun</span>() <span style="color:#75715e">// 创建了一个 goroutine
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;hey&#34;</span>)
+	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+}
+</code></pre></div><ul>
+<li><code>goroutine</code> 和 <code>main</code> 主线程同时运行</li>
+<li><code>main</code> 运行结束会暴力终止所有协程，所以上面的程序多等待了1秒</li>
+<li><code>Go</code> 程序从 <code>main</code> 包的 <code>main()</code> 函数开始，在程序启动时， <code>Go</code> 程序就会为 <code>main()</code> 函数创建一个默认的 <code>goroutine</code> 。</li>
+</ul>
+<p>输出</p>
+<pre><code>hey
+maybe you can's see me!
+</code></pre><p>对，就是这么简单，如果你的函数只在这里使用，也可以用匿名函数来创建 <code>goroutine</code> 。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Go" data-lang="Go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>(){
+	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;hello &#34;</span>)
+	}()
+	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>) <span style="color:#75715e">//main运行结束会暴力终止所有协程，所以这里先等待1秒
+</span><span style="color:#75715e"></span>}
+</code></pre></div><p>PS: 和线程不同，<code>goroutine</code>没有唯一的<code>id</code>，所以我们没办法专门正对某个协程进行操作。</p>
+<h1 id="413-goroutine">
+  4.1.3 goroutine
+  <a class="anchor" href="#413-goroutine">#</a>
+</h1>
+<blockquote>
+<p>本节源码位置 <a href="https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/4.2-goroutine.go">https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/4.2-goroutine.go</a></p>
+</blockquote>
+<p>goroutine 是 Go 语言并行设计的核心。goroutine 是一种比线程更轻量的实现，十几个 goroutine 可能在底层就是几个线程。 不同的是，Golang 在 runtime、系统调用等多方面对 goroutine
+调度进行了封装和处理，当遇到长时间执行或者进行系统调用时，会主动把当前 goroutine 的 CPU (P) 转让出去，让其他 goroutine 能被调度并执行，也就是 Golang 从语言层面支持了协程。要使用 goroutine
+只需要简单的在需要执行的函数前添加 go 关键字即可。当执行 goroutine 时候，Go 语言立即返回，接着执行剩余的代码，goroutine 不阻塞主线程。下面我们通过一小段代码来讲解 go 的使用：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">//首先我们先实现一个 Add()函数
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>) {
+<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span>
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">c</span>)
+}
+
+<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>) <span style="color:#75715e">//使用go关键字让函数并发执行
+</span></code></pre></div><p>Go 的并发执行就是这么简单，当在一个函数前加上 go 关键字，该函数就会在一个新的 goroutine 中并发执行，当该函数执行完毕时，这个新的 goroutine
+也就结束了。不过需要注意的是，如果该函数具有返回值，那么返回值会被丢弃。所以什么时候用 go 还需要酌情考虑。</p>
+<p>接着我们通过一个案例来体验一下 Go 的并发到底是怎么样的。新建源文件 
+  <a href="goroutine.go">goroutine.go</a>，输入以下代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>) {
+	<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span>
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">c</span>)
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#ae81ff">10</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+		<span style="color:#66d9ef">go</span> <span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">i</span>)
+	}
+}
+</code></pre></div><p>执行 goroutine.go 文件会发现屏幕上什么都没有，但程序并不会报错，这是什么原因呢？原来当主程序执行到 for 循环时启动了 10 个 goroutine，然后主程序就退出了，而启动的 10 个 goroutine 还没来得及执行
+Add() 函数，所以程序不会有任何输出。也就是说主 goroutine 并不会等待其他 goroutine 执行结束。那么如何解决这个问题呢？Go 语言提供的信道（channel）就是专门解决并发通信问题的，下一节我们将详细介绍。</p>
+<h2 id="414-小结">
+  4.1.4 小结
+  <a class="anchor" href="#414-%e5%b0%8f%e7%bb%93">#</a>
+</h2>
+<p>学go语言必学并发，轻量协程，还要配合数据传输，生产者消费者模型，生产环境开发利器。</p>
+<p>但要并发bug是老大难了，要注意的事良好的代码风格，编程习惯。</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/minibear2333/golang/edit/master/content/4.concurrent/4-1-go%e8%af%ad%e8%a8%80%e4%b8%ad%e7%9a%84%e5%b9%b6%e5%8f%91%e7%89%b9%e6%80%a7.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#411-他和线程对比">4.1.1 他和线程对比</a></li>
+    <li><a href="#412-创建与使用">4.1.2 创建与使用</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#414-小结">4.1.4 小结</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

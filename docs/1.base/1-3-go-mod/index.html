@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="1.3 go mod最佳实践 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/1.base/1.3-go-mod
+ java 里有一个叫 maven 的包管理工具， go 也有一个叫 go mod 的管理工具，可以管理项目引用的第三方包版本、自动识别项目中用到的包、自动下载和管理包。
+为什么要使用go mod？
+ 使用go mod仓库中可以不用再上传依赖代码包，防止代码仓库过大浪费以及多个项目同时用包时的浪费 可以管理引用包的版本，这一点是gopath（src模式）和vendor做不到的 如果依赖gopath不同项目如果引用了同一个软件包的不同版本，就会造成编译麻烦  gopath是go之前的默认策略，每个项目在运行时都要严格放在src目录下，而go mod不用
+原来的包管理方式
+ 在不使用额外的工具的情况下，Go 的依赖包需要手工下载， 第三方包没有版本的概念，如果第三方包的作者做了不兼容升级，会让开发者很难受 协作开发时，需要统一各个开发成员本地$GOPATH/src下的依赖包 引用的包引用了已经转移的包，而作者没改的话，需要自己修改引用。 第三方包和自己的包的源码都在src下，很混乱。对于混合技术栈的项目来说，目录的存放会有一些问题  新的包管理模式解决了以上问题
+ 自动下载依赖包 项目不必放在$GOPATH/src内了 项目内会生成一个go.mod文件，列出包依赖 所以来的第三方包会准确的指定版本号 对于已经转移的包，可以用 replace 申明替换，不需要改代码  1.3.1 配置 #  golang&gt;=1.12 添加环境变量 GO111MODULE 为 on 或者 auto ，设置方法
+go env GO111MODULE=on go env -w GO111MODULE=&#34;on&#34; go env -w GOPROXY=https://goproxy.io go mod init 项目名 go mod tidy #add missing and remove unused modules  打开go mod 模式 使用国内下载包代理 初始化mod项目 自动增加包和删除无用包到 GOPATH 目录下（build的时候也会自动下载包加入到go.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
+<meta property="og:description" content="1.3 go mod最佳实践 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/1.base/1.3-go-mod
+ java 里有一个叫 maven 的包管理工具， go 也有一个叫 go mod 的管理工具，可以管理项目引用的第三方包版本、自动识别项目中用到的包、自动下载和管理包。
+为什么要使用go mod？
+ 使用go mod仓库中可以不用再上传依赖代码包，防止代码仓库过大浪费以及多个项目同时用包时的浪费 可以管理引用包的版本，这一点是gopath（src模式）和vendor做不到的 如果依赖gopath不同项目如果引用了同一个软件包的不同版本，就会造成编译麻烦  gopath是go之前的默认策略，每个项目在运行时都要严格放在src目录下，而go mod不用
+原来的包管理方式
+ 在不使用额外的工具的情况下，Go 的依赖包需要手工下载， 第三方包没有版本的概念，如果第三方包的作者做了不兼容升级，会让开发者很难受 协作开发时，需要统一各个开发成员本地$GOPATH/src下的依赖包 引用的包引用了已经转移的包，而作者没改的话，需要自己修改引用。 第三方包和自己的包的源码都在src下，很混乱。对于混合技术栈的项目来说，目录的存放会有一些问题  新的包管理模式解决了以上问题
+ 自动下载依赖包 项目不必放在$GOPATH/src内了 项目内会生成一个go.mod文件，列出包依赖 所以来的第三方包会准确的指定版本号 对于已经转移的包，可以用 replace 申明替换，不需要改代码  1.3.1 配置 #  golang&gt;=1.12 添加环境变量 GO111MODULE 为 on 或者 auto ，设置方法
+go env GO111MODULE=on go env -w GO111MODULE=&#34;on&#34; go env -w GOPROXY=https://goproxy.io go mod init 项目名 go mod tidy #add missing and remove unused modules  打开go mod 模式 使用国内下载包代理 初始化mod项目 自动增加包和删除无用包到 GOPATH 目录下（build的时候也会自动下载包加入到go." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://golang.coding3min.com/1.base/1-3-go-mod/" /><meta property="article:section" content="1.base" />
+
+<meta property="article:modified_time" content="2021-06-26T03:09:32&#43;08:00" />
+
+<title>1 3 Go Mod | go语言精进之路</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ea6717a4caf675b694ef8b9e3f2065b6c1b46d43c0f34b83e7b487f27fee9430.js" integrity="sha256-6mcXpMr2dbaU74uePyBltsG0bUPA80uD57SH8n/ulDA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="https://coding3min.com">机智的程序员小熊</a></li>
+<li>
+  <a href="https://github.com/minibear2333/">GitHub</a></li>
+<li>
+  <a href="/qrcode/">微信公众号</a></li>
+<li><strong>帮助与提示</strong>
+<ul>
+<li>
+  <a href="/howtocontribute/">0.0 如何参与贡献</a></li>
+<li>
+  <a href="/books-share/">0.1 书籍推荐</a></li>
+</ul>
+</li>
+<li><strong>第一章、Go基础</strong>
+<ul>
+<li>
+  <a href="/1.base/1-1-install-download/">1.1 安装与下载</a></li>
+<li>
+  <a href="/1.base/1-2-hello-world/">1.2 跑起来</a></li>
+<li>
+  <a href="/1.base/1-3-go-mod/"class=active>1.3 go mod最佳实践</a></li>
+<li>
+  <a href="/1.base/1-4-variables/">1.4 变量与常量</a></li>
+<li>
+  <a href="/1.base/1-5-switch%E5%92%8Ctypeswitch/">1.5 switch和type switch</a></li>
+<li>
+  <a href="/1.base/1-6-for-range/">1.6 循环</a></li>
+<li>
+  <a href="/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">1.7 range深度解析</a></li>
+</ul>
+</li>
+<li><strong>第二章、函数和容器</strong>
+<ul>
+<li>
+  <a href="/2.func-containers/2-1-func/">2.1 函数简单使用和基本知识解析</a></li>
+<li>
+  <a href="/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">2.2 匿名函数和闭包</a></li>
+<li>
+  <a href="/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/">2.3 可变参数</a></li>
+<li>
+  <a href="/2.func-containers/2-4-map/">2.4 集合（map）</a></li>
+<li>
+  <a href="/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/">2.5 数组和切片</a></li>
+</ul>
+</li>
+<li><strong>第三章、语法进阶</strong>
+<ul>
+<li>
+  <a href="/3.grammar-advancement/3-1-point/">3.1 指针讨论</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-2-struct/">3.2 结构体</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/">3.3 接口与多态</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">3.4 异常处理</a></li>
+</ul>
+</li>
+<li><strong>第四章、并发和并行</strong>
+<ul>
+<li>
+  <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
+<li>
+  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+<li>
+  <a href="/4.concurrent/select/">4.3 select</a></li>
+<li>
+  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+</ul>
+</li>
+<li><strong>时间处理与定时任务</strong>
+<ul>
+<li>
+  <a href="/a.timer/reset/readme/">设置可热更新的定时器</a></li>
+</ul>
+</li>
+<li><strong>常用操作</strong>
+<ul>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/">1.1 Go文件操作大全</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">1.2 Go代码基本标准规范</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/">1.3 切片排序sort包的使用</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/">1.4 Go与Dockerfile</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">1.5 goroutine等待</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/">1.6 命令行操作</a></li>
+<li>
+  <a href="/tools/readme/">2. 小工具</a></li>
+</ul>
+</li>
+<li><strong>go陷阱与缺陷</strong>
+<ul>
+<li>
+  <a href="/impossible/range/readme/">range的第二个值实际上是值拷贝</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>1 3 Go Mod</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#131-配置">1.3.1 配置</a></li>
+    <li><a href="#132-gomod-文件">1.3.2 go.mod 文件</a></li>
+    <li><a href="#133-gosum-文件">1.3.3 go.sum 文件</a></li>
+    <li><a href="#134-go-mod-命令的使用">1.3.4 go mod 命令的使用</a></li>
+    <li><a href="#135-vendor是什么">1.3.5 vendor是什么</a></li>
+    <li><a href="#136-最佳实践">1.3.6 最佳实践</a></li>
+    <li><a href="#137-tips">1.3.7 tips</a></li>
+    <li><a href="#138-小结">1.3.8 小结</a></li>
+    <li><a href="#139-引用">1.3.9 引用</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="13-go-mod最佳实践">
+  1.3 go mod最佳实践
+  <a class="anchor" href="#13-go-mod%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5">#</a>
+</h1>
+<blockquote>
+<p>本节源码位置 <a href="https://github.com/golang-minibear2333/golang/blob/master/1.base/1.3-go-mod">https://github.com/golang-minibear2333/golang/blob/master/1.base/1.3-go-mod</a></p>
+</blockquote>
+<p><code>java</code> 里有一个叫 <code>maven</code> 的包管理工具， <code>go</code> 也有一个叫 <code>go mod</code> 的管理工具，可以管理项目引用的第三方包版本、自动识别项目中用到的包、自动下载和管理包。</p>
+<p>为什么要使用go mod？</p>
+<ul>
+<li>使用go mod仓库中可以不用再上传依赖代码包，防止代码仓库过大浪费以及多个项目同时用包时的浪费</li>
+<li>可以管理引用包的版本，这一点是gopath（src模式）和vendor做不到的</li>
+<li>如果依赖gopath不同项目如果引用了同一个软件包的不同版本，就会造成编译麻烦</li>
+</ul>
+<p>gopath是go之前的默认策略，每个项目在运行时都要严格放在<code>src</code>目录下，而go mod不用</p>
+<p><strong>原来的包管理方式</strong></p>
+<ul>
+<li>在不使用额外的工具的情况下，<code>Go</code> 的依赖包需要手工下载，</li>
+<li>第三方包没有版本的概念，如果第三方包的作者做了不兼容升级，会让开发者很难受</li>
+<li>协作开发时，需要统一各个开发成员本地<code>$GOPATH/src</code>下的依赖包</li>
+<li>引用的包引用了已经转移的包，而作者没改的话，需要自己修改引用。</li>
+<li>第三方包和自己的包的源码都在<code>src</code>下，很混乱。对于混合技术栈的项目来说，目录的存放会有一些问题</li>
+</ul>
+<p><strong>新的包管理模式解决了以上问题</strong></p>
+<ul>
+<li>自动下载依赖包</li>
+<li>项目不必放在<code>$GOPATH/src</code>内了</li>
+<li>项目内会生成一个<code>go.mod</code>文件，列出包依赖</li>
+<li>所以来的第三方包会准确的指定版本号</li>
+<li>对于已经转移的包，可以用 <code>replace</code> 申明替换，不需要改代码</li>
+</ul>
+<h2 id="131-配置">
+  1.3.1 配置
+  <a class="anchor" href="#131-%e9%85%8d%e7%bd%ae">#</a>
+</h2>
+<p><code>golang&gt;=1.12</code>
+添加环境变量 <code>GO111MODULE</code> 为 <code>on</code> 或者 <code>auto</code> ，设置方法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-BASH" data-lang="BASH">go env GO111MODULE<span style="color:#f92672">=</span>on
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">go env -w GO111MODULE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;on&#34;</span>
+go env -w GOPROXY<span style="color:#f92672">=</span>https://goproxy.io
+go mod init 项目名
+go mod tidy <span style="color:#75715e">#add missing and remove unused modules</span>
+</code></pre></div><ul>
+<li>打开go mod 模式</li>
+<li>使用国内下载包代理</li>
+<li>初始化mod项目</li>
+<li>自动增加包和删除无用包到 GOPATH 目录下（build的时候也会自动下载包加入到go.mod里面的）</li>
+</ul>
+<p>注意：只要在本地设置一个公用path目录就可以了，全部的包都会下载到那里，其他本地项目用到时就可以共享了</p>
+<p>自动生成了go.mod和go.sum文件，可以不用理会，下面是简单介绍</p>
+<h2 id="132-gomod-文件">
+  1.3.2 go.mod 文件
+  <a class="anchor" href="#132-gomod-%e6%96%87%e4%bb%b6">#</a>
+</h2>
+<p>go.mod 的内容比较容易理解</p>
+<ul>
+<li>第一行：模块的引用路径</li>
+<li>第二行：项目使用的 go 版本</li>
+<li>第三行：项目所需的直接依赖包及其版本</li>
+</ul>
+<p>在实际应用上，你会看见更复杂的 go.mod 文件，比如下面这样</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">module</span> <span style="color:#a6e22e">github</span>.<span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">BingmingWong</span><span style="color:#f92672">/</span><span style="color:#a6e22e">module</span><span style="color:#f92672">-</span><span style="color:#a6e22e">test</span>
+
+<span style="color:#66d9ef">go</span> <span style="color:#ae81ff">1.14</span>
+
+<span style="color:#a6e22e">require</span> (
+<span style="color:#a6e22e">example</span>.<span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">apple</span> <span style="color:#a6e22e">v0</span><span style="color:#ae81ff">.1.2</span>
+<span style="color:#a6e22e">example</span>.<span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">banana</span> <span style="color:#a6e22e">v1</span><span style="color:#ae81ff">.2.3</span>
+<span style="color:#a6e22e">example</span>.<span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">banana</span><span style="color:#f92672">/</span><span style="color:#a6e22e">v2</span> <span style="color:#a6e22e">v2</span><span style="color:#ae81ff">.3.4</span>
+<span style="color:#a6e22e">example</span>.<span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">pear</span> <span style="color:#75715e">// indirect
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">example</span>.<span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">strawberry</span> <span style="color:#75715e">// incompatible
+</span><span style="color:#75715e"></span>)
+
+<span style="color:#a6e22e">exclude</span> <span style="color:#a6e22e">example</span>.<span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">banana</span> <span style="color:#a6e22e">v1</span><span style="color:#ae81ff">.2.4</span>
+<span style="color:#a6e22e">replace</span><span style="color:#960050;background-color:#1e0010">（</span>
+<span style="color:#a6e22e">golang</span>.<span style="color:#a6e22e">org</span><span style="color:#f92672">/</span><span style="color:#a6e22e">x</span><span style="color:#f92672">/</span><span style="color:#a6e22e">crypto</span> <span style="color:#a6e22e">v0</span><span style="color:#ae81ff">.0.0</span><span style="color:#f92672">-</span><span style="color:#ae81ff">20180820150726</span><span style="color:#f92672">-</span><span style="color:#ae81ff">614</span><span style="color:#a6e22e">d502a4dac</span> = &gt; <span style="color:#a6e22e">github</span>.<span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">golang</span><span style="color:#f92672">/</span><span style="color:#a6e22e">crypto</span> <span style="color:#a6e22e">v0</span><span style="color:#ae81ff">.0.0</span><span style="color:#f92672">-</span><span style="color:#ae81ff">20180820150726</span><span style="color:#f92672">-</span><span style="color:#ae81ff">614</span><span style="color:#a6e22e">d502a4dac</span>
+<span style="color:#a6e22e">golang</span>.<span style="color:#a6e22e">org</span><span style="color:#f92672">/</span><span style="color:#a6e22e">x</span><span style="color:#f92672">/</span><span style="color:#a6e22e">net</span> <span style="color:#a6e22e">v0</span><span style="color:#ae81ff">.0.0</span><span style="color:#f92672">-</span><span style="color:#ae81ff">20180821023952</span><span style="color:#f92672">-</span><span style="color:#ae81ff">922</span><span style="color:#a6e22e">f4815f713</span> = &gt; <span style="color:#a6e22e">github</span>.<span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">golang</span><span style="color:#f92672">/</span><span style="color:#a6e22e">net</span> <span style="color:#a6e22e">v0</span><span style="color:#ae81ff">.0.0</span><span style="color:#f92672">-</span><span style="color:#ae81ff">20180826012351</span><span style="color:#f92672">-</span><span style="color:#ae81ff">8</span><span style="color:#a6e22e">a410e7b638d</span>
+<span style="color:#a6e22e">golang</span>.<span style="color:#a6e22e">org</span><span style="color:#f92672">/</span><span style="color:#a6e22e">x</span><span style="color:#f92672">/</span><span style="color:#a6e22e">text</span> <span style="color:#a6e22e">v0</span><span style="color:#ae81ff">.3.0</span> = &gt; <span style="color:#a6e22e">github</span>.<span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">golang</span><span style="color:#f92672">/</span><span style="color:#a6e22e">text</span> <span style="color:#a6e22e">v0</span><span style="color:#ae81ff">.3.0</span>
+)
+</code></pre></div><p>主要是多出了两个 flag：</p>
+<ul>
+<li>exclude：忽略指定版本的依赖包</li>
+<li>replace：由于在国内访问golang.org/x的各个包都需要翻墙，你可以在go.mod中使用replace替换成github上对应的库。</li>
+</ul>
+<h2 id="133-gosum-文件">
+  1.3.3 go.sum 文件
+  <a class="anchor" href="#133-gosum-%e6%96%87%e4%bb%b6">#</a>
+</h2>
+<p>每一行都是由 模块路径，模块版本，哈希检验值 组成，其中哈希检验值是用来保证当前缓存的模块不会被篡改。hash 是以h1:开头的字符串，表示生成checksum的算法是第一版的hash算法（sha256）。</p>
+<p>值得注意的是，为什么有的包只有一行</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">&lt;module&gt; &lt;version&gt;/go.mod &lt;hash&gt;
+</code></pre></div><p>而有的包却有两行呢</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">&lt;module&gt; &lt;version&gt; &lt;hash&gt;
+&lt;module&gt; &lt;version&gt;/go.mod &lt;hash&gt;
+</code></pre></div><p>那些有两行的包，区别就在于 hash 值不一行，一个是 <code>h1:hash</code>，一个是 go.mod <code>h1:hash</code></p>
+<p>而  <code>h1:hash</code> 和 <code>go.mod</code> <code>h1:hash</code>两者，要不就是同时存在，要不就是只存在 <code>go.mod</code> <code>h1:hash</code>。那什么情况下会不存在 <code>h1:hash</code> 呢，就是当 Go
+认为肯定用不到某个模块版本的时候就会省略它的<code>h1 hash</code>，就会出现不存在 <code>h1 hash</code>，只存在 <code>go.mod</code> <code>h1:hash</code> 的情况。[引用自 3]</p>
+<p><code>go.mod</code> 和 <code>go.sum</code> 是 go modules 版本管理的指导性文件，因此 <code>go.mod</code> 和 <code>go.sum</code> 文件都应该提交到你的 Git 仓库中去，避免其他人使用你写项目时，重新生成的<code>go.mod</code>
+和 <code>go.sum</code> 与你开发的基准版本的不一致。</p>
+<h2 id="134-go-mod-命令的使用">
+  1.3.4 go mod 命令的使用
+  <a class="anchor" href="#134-go-mod-%e5%91%bd%e4%bb%a4%e7%9a%84%e4%bd%bf%e7%94%a8">#</a>
+</h2>
+<p>go mod init：初始化go mod， 生成go.mod文件，后可接参数指定 module 名，上面已经演示过。</p>
+<p>go mod download：手动触发下载依赖包到本地cache（默认为$GOPATH/pkg/mod目录）</p>
+<p>go mod graph：打印项目的模块依赖结构</p>
+<p>图片 go mod tidy ：添加缺少的包，且删除无用的包</p>
+<p>go mod verify ：校验模块是否被篡改过</p>
+<p>go mod why：查看为什么需要依赖</p>
+<p>go mod vendor ：导出项目所有依赖到vendor下</p>
+<p>写入go.mod有两种方法：</p>
+<ul>
+<li>你只要在项目中有 import 并使用或者使用下划线强制占用，然后 go build 就会 go module 就会自动下载并添加。</li>
+<li><code>go mod tidy</code></li>
+</ul>
+<h2 id="135-vendor是什么">
+  1.3.5 vendor是什么
+  <a class="anchor" href="#135-vendor%e6%98%af%e4%bb%80%e4%b9%88">#</a>
+</h2>
+<p>vendor是项目缓存，为了防止开源代码项目被删除无法引用下载，会使用vendor来做缓存管理，它是独立的，你可以手动管理引用的包，代码包查找的顺序是向上冒泡</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">包同目录下的vendor
+包目录向上的最近的一个vendor
+...
+GOPATH src 下的vendor
+GOROOT src
+GOPATH src
+</code></pre></div><p>这样的话， 我们可以把包的依赖都放在 vendor 下，然后提交到仓库，这样可以省却拉取包的时间，并且相对自由，你想怎么改都可以</p>
+<h2 id="136-最佳实践">
+  1.3.6 最佳实践
+  <a class="anchor" href="#136-%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5">#</a>
+</h2>
+<p>go mod 只是一个依赖包版本管理工具，包的查找顺序还是一样的，使用mod就不用把代码都放到src下来管理，可以根据go.mod文件中记录的版本来索引</p>
+<p>我建议：</p>
+<ul>
+<li>使用mod管理版本，并使用go vendor来cache依赖包，上传到仓库防止代码包被删除</li>
+<li>运行时用到自己的项目，不要使用本地代码，而是保证依赖包都是稳定的，防止忘记提交</li>
+<li>如果你想发布包把自己写的模板给别人用，记得提交到仓库</li>
+</ul>
+<p>这样就可以单个项目独立下来debug了，依赖包版本也管理上了</p>
+<p>PS: go项目就可以使用mod和vendor，如果要集成其他语言代码为子模块可以使用git submodule</p>
+<h2 id="137-tips">
+  1.3.7 tips
+  <a class="anchor" href="#137-tips">#</a>
+</h2>
+<p><strong>Q1: 我的包下哪去了？</strong></p>
+<p>A: 依赖的第三方包被下载到了 <code>$GOPATH/pkg/mod</code> 路径下。</p>
+<p><strong>Q2: <code>GO111MODULE</code> 的三个参数 <code>auto</code> 、 <code>on</code> 、 <code>off</code> 有什么区别？</strong></p>
+<p>A: <code>auto</code> 根据是否在 <code>src</code> 下自动判定， <code>on</code> 只用 <code>go.mod</code> ， <code>off</code> 只用 <code>src</code> 。</p>
+<p><strong>Q3: 依赖包中的地址失效了怎么办？比如 golang. org/x/… 下的包都无法下载怎么办？</strong></p>
+<p>A: 在 <code>go.mod</code> 文件里用 <code>replace</code> 替换包，例如</p>
+<pre><code>replace golang.org/x/text =&gt; github.com/golang/text latest
+</code></pre><p>这样， <code>go</code> 会用 <code>github.com/golang/text</code> 替代 <code>golang.org/x/text</code></p>
+<p><strong>Q4: 在 <code>go mod</code> 模式中，项目自己引用自己中的某些模块怎么办？</strong></p>
+<p>A: <code>go.mod</code> 文件里的第一行会申明 <code>module main</code> ，把这个 <code>main</code> 改为你的项目名，引用的时候就 <code>import &quot;项目名/模块名&quot;</code> 即可。</p>
+<blockquote>
+<p>根据官方的说法，从 <code>Go 1.13</code> 开始，模块管理模式将是 Go 语言开发的<strong>默认模式</strong>。</p>
+</blockquote>
+<h2 id="138-小结">
+  1.3.8 小结
+  <a class="anchor" href="#138-%e5%b0%8f%e7%bb%93">#</a>
+</h2>
+<p>go mod 是未来的默认模式，未来会取消 go path 也就是src 的方式，但自己的项目目录还是尽量按路径放置，不然回头找不到了</p>
+<h2 id="139-引用">
+  1.3.9 引用
+  <a class="anchor" href="#139-%e5%bc%95%e7%94%a8">#</a>
+</h2>
+<p>
+  <a href="https://mp.weixin.qq.com/s/U2teH_ZCSMW6qNH404t6yw">Go Modules</a>
+
+  <a href="https://juejin.im/post/5c9c8c4fe51d450bc9547ba1">掘金</a></p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+  <div><a class="flex align-center" href="https://github.com/minibear2333/golang/commit/f2ac9b51f69b336a06d753c121bc64c0476034c7" title='Last modified by minibear2333 | Jun 26, 2021' target="_blank" rel="noopener">
+      <img src="/svg/calendar.svg" class="book-icon" alt="Calendar" />
+      <span>Jun 26, 2021</span>
+    </a>
+  </div>
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/minibear2333/golang/edit/master/content/1.base/1-3-go-mod.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#131-配置">1.3.1 配置</a></li>
+    <li><a href="#132-gomod-文件">1.3.2 go.mod 文件</a></li>
+    <li><a href="#133-gosum-文件">1.3.3 go.sum 文件</a></li>
+    <li><a href="#134-go-mod-命令的使用">1.3.4 go mod 命令的使用</a></li>
+    <li><a href="#135-vendor是什么">1.3.5 vendor是什么</a></li>
+    <li><a href="#136-最佳实践">1.3.6 最佳实践</a></li>
+    <li><a href="#137-tips">1.3.7 tips</a></li>
+    <li><a href="#138-小结">1.3.8 小结</a></li>
+    <li><a href="#139-引用">1.3.9 引用</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

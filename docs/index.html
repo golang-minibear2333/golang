@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta name="generator" content="Hugo 0.84.0" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Go语言精进之路 #  大家好，我是小熊，本书基于Go语言版本 1.16 版本，后续可能会再调整，目录也还未明确，正在努力持续更新中，整体进度未明。
+如果对这个项目感兴趣，请点击一下 Star ，项目会 持续更新，感谢大家的支持。
+  电子书见 -&gt; Go语言精进之路-在线电子书 实战项目见 -&gt; Golang实战练习库  语法速查   学习与交流 #   哪有那么多人生开挂，不过都是厚积薄发 。 我的个人网站: https://coding3min.com 我用Golang 刷 算法的项目  基本会先更新在公众号，再同步到站点上。若想一起学习，欢迎加我的微信：qupzhi。
+也可以关注公众号：
+ 本书定位 #  本书给快速入门学习Go语言使用。更偏向于实战，计划扫清Go语言一切障碍，包括Go语言实战、Go语言并发，也希望能给学习Golang 的你一些帮助。
+在本书中会持续迭代总结各种Go语言脚手架的使用方式与基本原理，是一本速查笔记，也是一本深入笔记，适合中、高级工程师学习收藏。
+面向群体 #   有一定其他语言基础的 Go 语言爱好者 后端、云计算、安全等领域工作涉及到 Go 语言的工程师 想要进一步熟悉掌握Go并发、以及探索 Go 语言框架、开源项目的开发人员  为什么要写这本书 #  我的职业生涯非常丰富，做过研发、实施运维、架构的工作，数年前我学习过Java，接着从事C&#43;&#43;开发的工作、后来工作中陆续接触过 C#、Python、Golang，目前专注于Golang研发。
+虽然网上有很多入门与实战方面的书籍，但我想总结一下我工作或学习过程中接触到的知识，以供查阅。
+批评和建议 #  如果有任何建议或疑问欢迎随时在本书的评论区与我交流，会尽量在 1-2 天内回复你。">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="Introduction" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://golang.coding3min.com/" />
+
+<title>Introduction | go语言精进之路</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ea6717a4caf675b694ef8b9e3f2065b6c1b46d43c0f34b83e7b487f27fee9430.js" integrity="sha256-6mcXpMr2dbaU74uePyBltsG0bUPA80uD57SH8n/ulDA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="https://golang.coding3min.com/index.xml" title="go语言精进之路" />
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="https://coding3min.com">机智的程序员小熊</a></li>
+<li>
+  <a href="https://github.com/minibear2333/">GitHub</a></li>
+<li>
+  <a href="/qrcode/">微信公众号</a></li>
+<li><strong>帮助与提示</strong>
+<ul>
+<li>
+  <a href="/howtocontribute/">0.0 如何参与贡献</a></li>
+<li>
+  <a href="/books-share/">0.1 书籍推荐</a></li>
+</ul>
+</li>
+<li><strong>第一章、Go基础</strong>
+<ul>
+<li>
+  <a href="/1.base/1-1-install-download/">1.1 安装与下载</a></li>
+<li>
+  <a href="/1.base/1-2-hello-world/">1.2 跑起来</a></li>
+<li>
+  <a href="/1.base/1-3-go-mod/">1.3 go mod最佳实践</a></li>
+<li>
+  <a href="/1.base/1-4-variables/">1.4 变量与常量</a></li>
+<li>
+  <a href="/1.base/1-5-switch%E5%92%8Ctypeswitch/">1.5 switch和type switch</a></li>
+<li>
+  <a href="/1.base/1-6-for-range/">1.6 循环</a></li>
+<li>
+  <a href="/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">1.7 range深度解析</a></li>
+</ul>
+</li>
+<li><strong>第二章、函数和容器</strong>
+<ul>
+<li>
+  <a href="/2.func-containers/2-1-func/">2.1 函数简单使用和基本知识解析</a></li>
+<li>
+  <a href="/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">2.2 匿名函数和闭包</a></li>
+<li>
+  <a href="/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/">2.3 可变参数</a></li>
+<li>
+  <a href="/2.func-containers/2-4-map/">2.4 集合（map）</a></li>
+<li>
+  <a href="/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/">2.5 数组和切片</a></li>
+</ul>
+</li>
+<li><strong>第三章、语法进阶</strong>
+<ul>
+<li>
+  <a href="/3.grammar-advancement/3-1-point/">3.1 指针讨论</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-2-struct/">3.2 结构体</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/">3.3 接口与多态</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">3.4 异常处理</a></li>
+</ul>
+</li>
+<li><strong>第四章、并发和并行</strong>
+<ul>
+<li>
+  <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
+<li>
+  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+<li>
+  <a href="/4.concurrent/select/">4.3 select</a></li>
+<li>
+  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+</ul>
+</li>
+<li><strong>时间处理与定时任务</strong>
+<ul>
+<li>
+  <a href="/a.timer/reset/readme/">设置可热更新的定时器</a></li>
+</ul>
+</li>
+<li><strong>常用操作</strong>
+<ul>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/">1.1 Go文件操作大全</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">1.2 Go代码基本标准规范</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/">1.3 切片排序sort包的使用</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/">1.4 Go与Dockerfile</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">1.5 goroutine等待</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/">1.6 命令行操作</a></li>
+<li>
+  <a href="/tools/readme/">2. 小工具</a></li>
+</ul>
+</li>
+<li><strong>go陷阱与缺陷</strong>
+<ul>
+<li>
+  <a href="/impossible/range/readme/">range的第二个值实际上是值拷贝</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Introduction</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#学习与交流">学习与交流</a></li>
+    <li><a href="#本书定位">本书定位</a></li>
+    <li><a href="#面向群体">面向群体</a></li>
+    <li><a href="#为什么要写这本书">为什么要写这本书</a></li>
+    <li><a href="#批评和建议">批评和建议</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="go语言精进之路">
+  Go语言精进之路
+  <a class="anchor" href="#go%e8%af%ad%e8%a8%80%e7%b2%be%e8%bf%9b%e4%b9%8b%e8%b7%af">#</a>
+</h1>
+<p>大家好，我是小熊，本书基于Go语言版本 <code>1.16</code> 版本，后续可能会再调整，目录也还未明确，正在<strong>努力持续更新中</strong>，整体进度未明。</p>
+<p>如果对这个项目感兴趣，请点击一下 
+  <a href="https://github.com/golang-minibear2333/golang"><strong>Star</strong></a> ，项目会 <strong>持续更新</strong>，感谢大家的支持。</p>
+<hr>
+<ul>
+<li>电子书见 -&gt; 
+  <a href="http://golang.coding3min.com/">Go语言精进之路-在线电子书</a></li>
+<li>实战项目见 -&gt; 
+  <a href="https://github.com/golang-minibear2333/">Golang实战练习库</a></li>
+<li>
+  <a href="https://coding3min.com/561.html">语法速查</a></li>
+</ul>
+<hr>
+<h2 id="学习与交流">
+  学习与交流
+  <a class="anchor" href="#%e5%ad%a6%e4%b9%a0%e4%b8%8e%e4%ba%a4%e6%b5%81">#</a>
+</h2>
+<ul>
+<li>哪有那么多人生开挂，不过都是厚积薄发 。</li>
+<li>我的个人网站: <a href="https://coding3min.com">https://coding3min.com</a></li>
+<li>我用<code>Golang</code> 刷 
+  <a href="https://github.com/minibear2333/interview-leetcode">算法的项目</a></li>
+</ul>
+<p>基本会先更新在公众号，再同步到站点上。若想一起学习，欢迎加我的微信：qupzhi。</p>
+<p>也可以关注公众号：</p>
+<p>
+  <img src="qrcode.jpg" alt="" /></p>
+<h2 id="本书定位">
+  本书定位
+  <a class="anchor" href="#%e6%9c%ac%e4%b9%a6%e5%ae%9a%e4%bd%8d">#</a>
+</h2>
+<p>本书给快速入门学习Go语言使用。更偏向于实战，计划扫清Go语言一切障碍，包括Go语言实战、Go语言并发，也希望能给学习<code>Golang</code> 的你一些帮助。</p>
+<p>在本书中会持续迭代总结各种Go语言脚手架的使用方式与基本原理，是一本速查笔记，也是一本深入笔记，适合中、高级工程师学习收藏。</p>
+<h2 id="面向群体">
+  面向群体
+  <a class="anchor" href="#%e9%9d%a2%e5%90%91%e7%be%a4%e4%bd%93">#</a>
+</h2>
+<ul>
+<li>有一定其他语言基础的 Go 语言爱好者</li>
+<li>后端、云计算、安全等领域工作涉及到 Go 语言的工程师</li>
+<li>想要进一步熟悉掌握Go并发、以及探索 Go 语言框架、开源项目的开发人员</li>
+</ul>
+<h2 id="为什么要写这本书">
+  为什么要写这本书
+  <a class="anchor" href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e5%86%99%e8%bf%99%e6%9c%ac%e4%b9%a6">#</a>
+</h2>
+<p>我的职业生涯非常丰富，做过研发、实施运维、架构的工作，数年前我学习过<code>Java</code>，接着从事<code>C++</code>开发的工作、后来工作中陆续接触过 <code>C#</code>、<code>Python</code>、<code>Golang</code>，目前专注于<code>Golang</code>研发。</p>
+<p>虽然网上有很多入门与实战方面的书籍，但我想总结一下我工作或学习过程中接触到的知识，以供查阅。</p>
+<h2 id="批评和建议">
+  批评和建议
+  <a class="anchor" href="#%e6%89%b9%e8%af%84%e5%92%8c%e5%bb%ba%e8%ae%ae">#</a>
+</h2>
+<p>如果有任何建议或疑问欢迎随时在本书的评论区与我交流，会尽量在 1-2 天内回复你。</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+  <div><a class="flex align-center" href="https://github.com/minibear2333/golang/commit/f2ac9b51f69b336a06d753c121bc64c0476034c7" title='Last modified by minibear2333 | Jun 26, 2021' target="_blank" rel="noopener">
+      <img src="/svg/calendar.svg" class="book-icon" alt="Calendar" />
+      <span>Jun 26, 2021</span>
+    </a>
+  </div>
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/minibear2333/golang/edit/master/content/_index.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#学习与交流">学习与交流</a></li>
+    <li><a href="#本书定位">本书定位</a></li>
+    <li><a href="#面向群体">面向群体</a></li>
+    <li><a href="#为什么要写这本书">为什么要写这本书</a></li>
+    <li><a href="#批评和建议">批评和建议</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

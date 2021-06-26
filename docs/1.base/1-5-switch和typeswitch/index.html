@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="1.5 switch和type switch #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/1.base/1.5-switch-type-switch
+ 1.5.1 if else #   if 20&gt;0{ fmt.Println(&#34;yes&#34;) } 输出
+yes ifelse
+ if 20&lt;0{ }else{ fmt.Println(&#34;no&#34;) } 输出
+no 1.5.2 switch 和 type switch #   switch 好理解,是一个替代if else else else接口而提出的,如下，switch 后跟变量，case 后跟常量，只要变量值和常量匹配，就执行该分支下的语句。
+switch name { case &#34;coding3min&#34;: fmt.Println(&#34;welcome&#34; &#43; name) default: fmt.Println(&#34;403 forbidden:&#34; &#43; name) return } 当然switch语句会逐个匹配case语句，一个一个的判断过去，直到有符合的语句存在。
+switch { case number &gt;= 90: fmt.Println(&#34;优秀&#34;) case number &gt;= 80: fmt.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
+<meta property="og:description" content="1.5 switch和type switch #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/1.base/1.5-switch-type-switch
+ 1.5.1 if else #   if 20&gt;0{ fmt.Println(&#34;yes&#34;) } 输出
+yes ifelse
+ if 20&lt;0{ }else{ fmt.Println(&#34;no&#34;) } 输出
+no 1.5.2 switch 和 type switch #   switch 好理解,是一个替代if else else else接口而提出的,如下，switch 后跟变量，case 后跟常量，只要变量值和常量匹配，就执行该分支下的语句。
+switch name { case &#34;coding3min&#34;: fmt.Println(&#34;welcome&#34; &#43; name) default: fmt.Println(&#34;403 forbidden:&#34; &#43; name) return } 当然switch语句会逐个匹配case语句，一个一个的判断过去，直到有符合的语句存在。
+switch { case number &gt;= 90: fmt.Println(&#34;优秀&#34;) case number &gt;= 80: fmt." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://golang.coding3min.com/1.base/1-5-switch%E5%92%8Ctypeswitch/" /><meta property="article:section" content="1.base" />
+
+
+
+<title>1 5 Switch和typeswitch | go语言精进之路</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ea6717a4caf675b694ef8b9e3f2065b6c1b46d43c0f34b83e7b487f27fee9430.js" integrity="sha256-6mcXpMr2dbaU74uePyBltsG0bUPA80uD57SH8n/ulDA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="https://coding3min.com">机智的程序员小熊</a></li>
+<li>
+  <a href="https://github.com/minibear2333/">GitHub</a></li>
+<li>
+  <a href="/qrcode/">微信公众号</a></li>
+<li><strong>帮助与提示</strong>
+<ul>
+<li>
+  <a href="/howtocontribute/">0.0 如何参与贡献</a></li>
+<li>
+  <a href="/books-share/">0.1 书籍推荐</a></li>
+</ul>
+</li>
+<li><strong>第一章、Go基础</strong>
+<ul>
+<li>
+  <a href="/1.base/1-1-install-download/">1.1 安装与下载</a></li>
+<li>
+  <a href="/1.base/1-2-hello-world/">1.2 跑起来</a></li>
+<li>
+  <a href="/1.base/1-3-go-mod/">1.3 go mod最佳实践</a></li>
+<li>
+  <a href="/1.base/1-4-variables/">1.4 变量与常量</a></li>
+<li>
+  <a href="/1.base/1-5-switch%E5%92%8Ctypeswitch/"class=active>1.5 switch和type switch</a></li>
+<li>
+  <a href="/1.base/1-6-for-range/">1.6 循环</a></li>
+<li>
+  <a href="/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">1.7 range深度解析</a></li>
+</ul>
+</li>
+<li><strong>第二章、函数和容器</strong>
+<ul>
+<li>
+  <a href="/2.func-containers/2-1-func/">2.1 函数简单使用和基本知识解析</a></li>
+<li>
+  <a href="/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">2.2 匿名函数和闭包</a></li>
+<li>
+  <a href="/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/">2.3 可变参数</a></li>
+<li>
+  <a href="/2.func-containers/2-4-map/">2.4 集合（map）</a></li>
+<li>
+  <a href="/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/">2.5 数组和切片</a></li>
+</ul>
+</li>
+<li><strong>第三章、语法进阶</strong>
+<ul>
+<li>
+  <a href="/3.grammar-advancement/3-1-point/">3.1 指针讨论</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-2-struct/">3.2 结构体</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/">3.3 接口与多态</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">3.4 异常处理</a></li>
+</ul>
+</li>
+<li><strong>第四章、并发和并行</strong>
+<ul>
+<li>
+  <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
+<li>
+  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+<li>
+  <a href="/4.concurrent/select/">4.3 select</a></li>
+<li>
+  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+</ul>
+</li>
+<li><strong>时间处理与定时任务</strong>
+<ul>
+<li>
+  <a href="/a.timer/reset/readme/">设置可热更新的定时器</a></li>
+</ul>
+</li>
+<li><strong>常用操作</strong>
+<ul>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/">1.1 Go文件操作大全</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">1.2 Go代码基本标准规范</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/">1.3 切片排序sort包的使用</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/">1.4 Go与Dockerfile</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">1.5 goroutine等待</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/">1.6 命令行操作</a></li>
+<li>
+  <a href="/tools/readme/">2. 小工具</a></li>
+</ul>
+</li>
+<li><strong>go陷阱与缺陷</strong>
+<ul>
+<li>
+  <a href="/impossible/range/readme/">range的第二个值实际上是值拷贝</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>1 5 Switch和typeswitch</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#151-if-else">1.5.1 if else</a></li>
+    <li><a href="#152-switch-和--type-switch">1.5.2 switch 和  type switch</a></li>
+    <li><a href="#153-switch-的高级玩法">1.5.3 switch 的高级玩法？</a></li>
+    <li><a href="#154-小结">1.5.4 小结</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="15-switch和type-switch">
+  1.5 switch和type switch
+  <a class="anchor" href="#15-switch%e5%92%8ctype-switch">#</a>
+</h1>
+<blockquote>
+<p>本节源码位置 <a href="https://github.com/golang-minibear2333/golang/blob/master/1.base/1.5-switch-type-switch">https://github.com/golang-minibear2333/golang/blob/master/1.base/1.5-switch-type-switch</a></p>
+</blockquote>
+<h2 id="151-if-else">
+  1.5.1 if else
+  <a class="anchor" href="#151-if-else">#</a>
+</h2>
+<p>
+  <img src="https://coding3min.oss-accelerate.aliyuncs.com/coding3min/2020-04-14-125215.jpg" alt="" /></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">if</span> <span style="color:#ae81ff">20</span>&gt;<span style="color:#ae81ff">0</span>{
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;yes&#34;</span>)
+	}
+</code></pre></div><p>输出</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">yes</span>
+</code></pre></div><p>ifelse</p>
+<p>
+  <img src="https://coding3min.oss-accelerate.aliyuncs.com/coding3min/2020-04-14-125252.jpg" alt="" /></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">if</span> <span style="color:#ae81ff">20</span>&lt;<span style="color:#ae81ff">0</span>{
+
+	}<span style="color:#66d9ef">else</span>{
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;no&#34;</span>)
+	}
+</code></pre></div><p>输出</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">no</span>
+</code></pre></div><h2 id="152-switch-和--type-switch">
+  1.5.2 switch 和  type switch
+  <a class="anchor" href="#152-switch-%e5%92%8c--type-switch">#</a>
+</h2>
+<p>
+  <img src="https://coding3min.oss-accelerate.aliyuncs.com/coding3min/2020-04-14-125322.jpg" alt="" /></p>
+<p><code>switch</code> 好理解,是一个替代<code>if else else else</code>接口而提出的,如下，<code>switch</code> 后跟变量，<code>case</code> 后跟常量，只要变量值和常量匹配，就执行该分支下的语句。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">name</span> {
+	<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;coding3min&#34;</span>:
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;welcome&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">name</span>)
+	<span style="color:#66d9ef">default</span>:
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;403 forbidden:&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">name</span>)
+		<span style="color:#66d9ef">return</span>
+	}
+</code></pre></div><p>当然<code>switch</code>语句会逐个匹配<code>case</code>语句，一个一个的判断过去，直到有符合的语句存在。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">switch</span> {
+	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">number</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">90</span>:
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;优秀&#34;</span>)
+	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">number</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">80</span>:
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;良好&#34;</span>)
+	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">number</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">60</span>:
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;凑合&#34;</span>)
+	<span style="color:#66d9ef">default</span>:
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;太搓了&#34;</span>)
+	}
+</code></pre></div><p>如果没有一个是匹配的，就执行<code>default</code>后的语句。</p>
+<p>注意<code>switch</code>后可以跟空，如上</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">switch</span> {
+</code></pre></div><p>这样<code>case</code>就必须是表达式。</p>
+<h2 id="153-switch-的高级玩法">
+  1.5.3 switch 的高级玩法？
+  <a class="anchor" href="#153-switch-%e7%9a%84%e9%ab%98%e7%ba%a7%e7%8e%a9%e6%b3%95">#</a>
+</h2>
+<p>有一个流传于坊间的神秘玩法，可以用<code>switch</code>语句来判断传入变量的类型，然后做一些羞羞的事情。<code>x</code>是一个未知类型的变量，<code>switch t := x.(type)</code> 用这个方式来赋值，<code>t</code>就是有确定类型的变量。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">x</span>.(<span style="color:#66d9ef">type</span>) {
+	<span style="color:#66d9ef">case</span> <span style="color:#66d9ef">int</span>:
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">t</span>
+	<span style="color:#66d9ef">case</span> <span style="color:#66d9ef">float64</span>:
+		<span style="color:#66d9ef">return</span> int(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Ceil</span>(<span style="color:#a6e22e">t</span>))
+	}
+</code></pre></div><p>什么叫未知类型？？</p>
+<p>这就是 <code>go</code> 中有意思的地方了, <code>interface{}</code> 类型，是一种神奇的类型，他可以是任何类型的接口，而具体的类型是实现。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">x</span> <span style="color:#66d9ef">interface</span>{}
+	<span style="color:#a6e22e">x</span> = <span style="color:#ae81ff">1</span>
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">x</span>)
+</code></pre></div><p>输出<code>1</code></p>
+<p>所以完整的函数是这样的</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">typeSwitchDemo</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">interface</span>{}) <span style="color:#66d9ef">int</span> {
+	<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">x</span>.(<span style="color:#66d9ef">type</span>) {
+	<span style="color:#66d9ef">case</span> <span style="color:#66d9ef">int</span>:
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">t</span>
+	<span style="color:#66d9ef">case</span> <span style="color:#66d9ef">float64</span>:
+		<span style="color:#66d9ef">return</span> int(<span style="color:#a6e22e">math</span>.<span style="color:#a6e22e">Ceil</span>(<span style="color:#a6e22e">t</span>))
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+}
+</code></pre></div><p>这个东西有什么用呢？？有没有想过如果你有一个场景，你在调用第三方的接口，却发现对方的接口发生了微调，原来的<code>int</code>类型，被转换成了<code>string</code>类型，你必须写出兼容两种方式的代码来解析<code>json</code>。</p>
+<p>那么这个时候，<code>type switch</code> 将会是你的武器。</p>
+<p>感兴趣可以 跑到这里看看，我是怎么使用这个武器的。</p>
+<p><a href="https://github.com/golang-minibear2333/golang/blob/master/golang/medium/json_interface/fixed_json.go">https://github.com/golang-minibear2333/golang/blob/master/golang/medium/json_interface/fixed_json.go</a></p>
+<h2 id="154-小结">
+  1.5.4 小结
+  <a class="anchor" href="#154-%e5%b0%8f%e7%bb%93">#</a>
+</h2>
+<p>通过这一节了解到go语言中无类型语法<code>interface{}</code>，这和<code>java</code>种任何类都是集成于一个统一的基类一样</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/minibear2333/golang/edit/master/content/1.base/1-5-switch%e5%92%8ctypeswitch.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#151-if-else">1.5.1 if else</a></li>
+    <li><a href="#152-switch-和--type-switch">1.5.2 switch 和  type switch</a></li>
+    <li><a href="#153-switch-的高级玩法">1.5.3 switch 的高级玩法？</a></li>
+    <li><a href="#154-小结">1.5.4 小结</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

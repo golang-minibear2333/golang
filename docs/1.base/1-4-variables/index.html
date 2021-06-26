@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="1.4 声明【变量】的各种方式 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/1.base/1.4-variables
+ 讲变量就要先知道 go 语言有哪些数据类型。
+1.4.1 数据类型 #  数据类型的出现是为了把数据分成所需内存大小不同的数据。
+ 布尔型(bool): 值只可以是常量 true 或者 false。 数字类型: 整型 int 和浮点型 float，支持复数（业务代码用不到），其中位的运算采用补码。 字符串类型（string）: 使用UTF-8编码标识Unicode文本。 其他：指针、数组、结构体(struct)、联合体 (union不常用)、函数、切片、接口（interface）、Map 、 Channel  大多数类型都是接触过的，比如c&#43;&#43;的结构体，比如python的切片，java的接口，别看类型那么多以后写多了自然就会用了。
+go 语言声明变量的方式非常简单
+1.4.2 第一种方式、var #  var name string 结构为var&#43;变量名&#43;类型
+name = &#34;s&#34; 像这样赋值
+//根据赋值自动判断类型 var p = name 因为name是字符串类型，所以p也是同类型
+//多变量声明,int类型不赋值自动赋值为0，比如d e f var a, b, c = 1, 2, 3 var d, e, f int 一次声明多个类型不同的变量">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
+<meta property="og:description" content="1.4 声明【变量】的各种方式 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/1.base/1.4-variables
+ 讲变量就要先知道 go 语言有哪些数据类型。
+1.4.1 数据类型 #  数据类型的出现是为了把数据分成所需内存大小不同的数据。
+ 布尔型(bool): 值只可以是常量 true 或者 false。 数字类型: 整型 int 和浮点型 float，支持复数（业务代码用不到），其中位的运算采用补码。 字符串类型（string）: 使用UTF-8编码标识Unicode文本。 其他：指针、数组、结构体(struct)、联合体 (union不常用)、函数、切片、接口（interface）、Map 、 Channel  大多数类型都是接触过的，比如c&#43;&#43;的结构体，比如python的切片，java的接口，别看类型那么多以后写多了自然就会用了。
+go 语言声明变量的方式非常简单
+1.4.2 第一种方式、var #  var name string 结构为var&#43;变量名&#43;类型
+name = &#34;s&#34; 像这样赋值
+//根据赋值自动判断类型 var p = name 因为name是字符串类型，所以p也是同类型
+//多变量声明,int类型不赋值自动赋值为0，比如d e f var a, b, c = 1, 2, 3 var d, e, f int 一次声明多个类型不同的变量" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://golang.coding3min.com/1.base/1-4-variables/" /><meta property="article:section" content="1.base" />
+
+<meta property="article:modified_time" content="2021-06-26T03:09:32&#43;08:00" />
+
+<title>1 4 Variables | go语言精进之路</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.ea6717a4caf675b694ef8b9e3f2065b6c1b46d43c0f34b83e7b487f27fee9430.js" integrity="sha256-6mcXpMr2dbaU74uePyBltsG0bUPA80uD57SH8n/ulDA=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>
+  <a href="https://coding3min.com">机智的程序员小熊</a></li>
+<li>
+  <a href="https://github.com/minibear2333/">GitHub</a></li>
+<li>
+  <a href="/qrcode/">微信公众号</a></li>
+<li><strong>帮助与提示</strong>
+<ul>
+<li>
+  <a href="/howtocontribute/">0.0 如何参与贡献</a></li>
+<li>
+  <a href="/books-share/">0.1 书籍推荐</a></li>
+</ul>
+</li>
+<li><strong>第一章、Go基础</strong>
+<ul>
+<li>
+  <a href="/1.base/1-1-install-download/">1.1 安装与下载</a></li>
+<li>
+  <a href="/1.base/1-2-hello-world/">1.2 跑起来</a></li>
+<li>
+  <a href="/1.base/1-3-go-mod/">1.3 go mod最佳实践</a></li>
+<li>
+  <a href="/1.base/1-4-variables/"class=active>1.4 变量与常量</a></li>
+<li>
+  <a href="/1.base/1-5-switch%E5%92%8Ctypeswitch/">1.5 switch和type switch</a></li>
+<li>
+  <a href="/1.base/1-6-for-range/">1.6 循环</a></li>
+<li>
+  <a href="/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">1.7 range深度解析</a></li>
+</ul>
+</li>
+<li><strong>第二章、函数和容器</strong>
+<ul>
+<li>
+  <a href="/2.func-containers/2-1-func/">2.1 函数简单使用和基本知识解析</a></li>
+<li>
+  <a href="/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">2.2 匿名函数和闭包</a></li>
+<li>
+  <a href="/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/">2.3 可变参数</a></li>
+<li>
+  <a href="/2.func-containers/2-4-map/">2.4 集合（map）</a></li>
+<li>
+  <a href="/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/">2.5 数组和切片</a></li>
+</ul>
+</li>
+<li><strong>第三章、语法进阶</strong>
+<ul>
+<li>
+  <a href="/3.grammar-advancement/3-1-point/">3.1 指针讨论</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-2-struct/">3.2 结构体</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/">3.3 接口与多态</a></li>
+<li>
+  <a href="/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">3.4 异常处理</a></li>
+</ul>
+</li>
+<li><strong>第四章、并发和并行</strong>
+<ul>
+<li>
+  <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
+<li>
+  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+<li>
+  <a href="/4.concurrent/select/">4.3 select</a></li>
+<li>
+  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+</ul>
+</li>
+<li><strong>时间处理与定时任务</strong>
+<ul>
+<li>
+  <a href="/a.timer/reset/readme/">设置可热更新的定时器</a></li>
+</ul>
+</li>
+<li><strong>常用操作</strong>
+<ul>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/">1.1 Go文件操作大全</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">1.2 Go代码基本标准规范</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/">1.3 切片排序sort包的使用</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/">1.4 Go与Dockerfile</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">1.5 goroutine等待</a></li>
+<li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/">1.6 命令行操作</a></li>
+<li>
+  <a href="/tools/readme/">2. 小工具</a></li>
+</ul>
+</li>
+<li><strong>go陷阱与缺陷</strong>
+<ul>
+<li>
+  <a href="/impossible/range/readme/">range的第二个值实际上是值拷贝</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>1 4 Variables</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#141-数据类型">1.4.1 数据类型</a></li>
+    <li><a href="#142-第一种方式var">1.4.2 第一种方式、var</a></li>
+    <li><a href="#143-方式二">1.4.3 方式二、:=</a></li>
+    <li><a href="#144-常量">1.4.4 常量</a></li>
+    <li><a href="#145-类型转换">1.4.5 类型转换</a></li>
+    <li><a href="#146-小结">1.4.6 小结</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="14-声明变量的各种方式">
+  1.4 声明【变量】的各种方式
+  <a class="anchor" href="#14-%e5%a3%b0%e6%98%8e%e5%8f%98%e9%87%8f%e7%9a%84%e5%90%84%e7%a7%8d%e6%96%b9%e5%bc%8f">#</a>
+</h1>
+<blockquote>
+<p>本节源码位置 <a href="https://github.com/golang-minibear2333/golang/blob/master/1.base/1.4-variables">https://github.com/golang-minibear2333/golang/blob/master/1.base/1.4-variables</a></p>
+</blockquote>
+<p>讲变量就要先知道 go 语言有哪些数据类型。</p>
+<h2 id="141-数据类型">
+  1.4.1 数据类型
+  <a class="anchor" href="#141-%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b">#</a>
+</h2>
+<p>数据类型的出现是为了把数据分成所需内存大小不同的数据。</p>
+<ul>
+<li>布尔型(<code>bool</code>): 值只可以是常量 <code>true</code> 或者 <code>false</code>。</li>
+<li>数字类型: 整型 <code>int</code> 和浮点型 <code>float</code>，支持复数（业务代码用不到），其中位的运算采用补码。</li>
+<li>字符串类型（<code>string</code>）: 使用<code>UTF-8</code>编码标识<code>Unicode</code>文本。</li>
+<li>其他：指针、数组、结构体(<code>struct</code>)、联合体 (<code>union</code>不常用)、函数、切片、接口（<code>interface</code>）、<code>Map</code> 、 <code>Channel</code></li>
+</ul>
+<p>大多数类型都是接触过的，比如<code>c++</code>的结构体，比如<code>python</code>的切片，<code>java</code>的接口，别看类型那么多以后写多了自然就会用了。</p>
+<p>go 语言声明变量的方式非常简单</p>
+<h2 id="142-第一种方式var">
+  1.4.2 第一种方式、var
+  <a class="anchor" href="#142-%e7%ac%ac%e4%b8%80%e7%a7%8d%e6%96%b9%e5%bc%8fvar">#</a>
+</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>
+</code></pre></div><p>结构为<code>var</code>+<code>变量名</code>+<code>类型</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">name</span> = <span style="color:#e6db74">&#34;s&#34;</span>
+</code></pre></div><p>像这样赋值</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">//根据赋值自动判断类型
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">p</span> = <span style="color:#a6e22e">name</span>
+</code></pre></div><p>因为<code>name</code>是字符串类型，所以<code>p</code>也是同类型</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">//多变量声明,int类型不赋值自动赋值为0，比如d e f
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">c</span> = <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">d</span>, <span style="color:#a6e22e">e</span>, <span style="color:#a6e22e">f</span> <span style="color:#66d9ef">int</span>
+</code></pre></div><p>一次声明多个类型不同的变量</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">//类型不同的多个变量，难看的要死
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> (
+		<span style="color:#a6e22e">k</span> <span style="color:#66d9ef">int</span>
+		<span style="color:#a6e22e">l</span> <span style="color:#66d9ef">string</span>
+	)
+
+<span style="color:#75715e">//这样好看
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">m</span>, <span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">o</span> = <span style="color:#e6db74">&#34;a&#34;</span>, <span style="color:#ae81ff">1</span>, <span style="color:#66d9ef">true</span>
+</code></pre></div><h2 id="143-方式二">
+  1.4.3 方式二、:=
+  <a class="anchor" href="#143-%e6%96%b9%e5%bc%8f%e4%ba%8c">#</a>
+</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">//直接声明并赋值（必须是初次声明才有冒号）
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">p2</span> <span style="color:#f92672">:=</span> <span style="color:#e6db74">&#34;as&#34;</span>
+<span style="color:#75715e">// 多个变量一次性声明并赋值
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">h</span>, <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>
+</code></pre></div><h2 id="144-常量">
+  1.4.4 常量
+  <a class="anchor" href="#144-%e5%b8%b8%e9%87%8f">#</a>
+</h2>
+<p>常量就是<strong>不可变的变量</strong>，定义方式</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">identifier</span> [<span style="color:#66d9ef">type</span>] = <span style="color:#a6e22e">value</span>
+</code></pre></div><p>约定常量全大写表示</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">int</span> = <span style="color:#ae81ff">1</span>
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">B</span> = <span style="color:#ae81ff">1</span>
+<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">C</span>, <span style="color:#a6e22e">D</span>, <span style="color:#a6e22e">E</span> = <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>
+</code></pre></div><p>一般常量被用于枚举</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#66d9ef">const</span> (
+		<span style="color:#a6e22e">Success</span> = <span style="color:#ae81ff">0</span>
+		<span style="color:#a6e22e">UnKonw</span>  = <span style="color:#ae81ff">1</span>
+		<span style="color:#a6e22e">Error</span>   = <span style="color:#ae81ff">2</span>
+	)
+</code></pre></div><p>不过要枚举还是用 <code>go</code> 自带的特殊常量好一点，这种特殊被认为是可以被编译器修改的常量</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#75715e">//const 出现时被重置为0，每出现一次自动加1
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">const</span> (
+		<span style="color:#a6e22e">F</span> = <span style="color:#66d9ef">iota</span>
+		<span style="color:#a6e22e">G</span> = <span style="color:#66d9ef">iota</span>
+		<span style="color:#a6e22e">H</span> = <span style="color:#66d9ef">iota</span>
+	)
+</code></pre></div><p>F、G、H 值为0，1，2</p>
+<p>当然可以简写成这样，效果是一样的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#66d9ef">const</span> (
+		<span style="color:#a6e22e">I</span> = <span style="color:#66d9ef">iota</span>
+		<span style="color:#a6e22e">J</span>
+		<span style="color:#a6e22e">K</span>
+	)
+</code></pre></div><h2 id="145-类型转换">
+  1.4.5 类型转换
+  <a class="anchor" href="#145-%e7%b1%bb%e5%9e%8b%e8%bd%ac%e6%8d%a2">#</a>
+</h2>
+<p>没有什么好说的，和其他语言相似，类型转换都是类型+变量的形式，如下。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"> <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">aInt</span> <span style="color:#66d9ef">int</span> = <span style="color:#ae81ff">17</span>
+
+	<span style="color:#75715e">// 一般用这种方式强制转
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;转float64 %f  \n&#34;</span>, float64(<span style="color:#a6e22e">aInt</span>))
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;转string %v  \n&#34;</span>, <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Itoa</span>(<span style="color:#a6e22e">aInt</span>))
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;转float64 %f  \n&#34;</span>, float64(<span style="color:#a6e22e">aInt</span>))[]
+</code></pre></div><p>输出</p>
+<pre><code>转float64 17.000000  
+转string 17  
+转float64 17.000000  
+</code></pre><p>各种类型转字符串</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#a6e22e">resString</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%d %v %v&#34;</span>, <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;coding3min&#34;</span>, <span style="color:#66d9ef">true</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">resString</span>)
+</code></pre></div><p>输出</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#ae81ff">1</span> <span style="color:#a6e22e">coding3min</span> <span style="color:#66d9ef">true</span>
+</code></pre></div><p><code>string</code>  和 <code>bytes</code> 的互相转换</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// string  to bytes
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">resBytes</span> <span style="color:#f92672">:=</span> []byte(<span style="color:#e6db74">&#34;asdfasdf&#34;</span>)
+	<span style="color:#75715e">// bytes to string
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">resString</span> = string(<span style="color:#a6e22e">resBytes</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">resString</span>)
+</code></pre></div><p>输出</p>
+<pre><code>asdfasdf
+</code></pre><h2 id="146-小结">
+  1.4.6 小结
+  <a class="anchor" href="#146-%e5%b0%8f%e7%bb%93">#</a>
+</h2>
+<p>本节介绍了常量和变量，以及变量之间简单类型的转换，这里语言的基础，需要熟练掌握，特别是在做算法的时候更是高频用到。</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+  <div><a class="flex align-center" href="https://github.com/minibear2333/golang/commit/f2ac9b51f69b336a06d753c121bc64c0476034c7" title='Last modified by minibear2333 | Jun 26, 2021' target="_blank" rel="noopener">
+      <img src="/svg/calendar.svg" class="book-icon" alt="Calendar" />
+      <span>Jun 26, 2021</span>
+    </a>
+  </div>
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/minibear2333/golang/edit/master/content/1.base/1-4-variables.md" target="_blank" rel="noopener">
+      <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#141-数据类型">1.4.1 数据类型</a></li>
+    <li><a href="#142-第一种方式var">1.4.2 第一种方式、var</a></li>
+    <li><a href="#143-方式二">1.4.3 方式二、:=</a></li>
+    <li><a href="#144-常量">1.4.4 常量</a></li>
+    <li><a href="#145-类型转换">1.4.5 类型转换</a></li>
+    <li><a href="#146-小结">1.4.6 小结</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

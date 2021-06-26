@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>A.timers on go语言精进之路</title>
+    <link>https://golang.coding3min.com/a.timer/</link>
+    <description>Recent content in A.timers on go语言精进之路</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 26 Jun 2021 02:39:47 +0800</lastBuildDate><atom:link href="https://golang.coding3min.com/a.timer/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>可热更新的定时器</title>
+      <link>https://golang.coding3min.com/a.timer/reset/readme/</link>
+      <pubDate>Sat, 26 Jun 2021 02:39:47 +0800</pubDate>
+      
+      <guid>https://golang.coding3min.com/a.timer/reset/readme/</guid>
+      <description>可热更新的定时器 #  废话不多说，直接上代码
+package main import ( &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) type Server struct { tk *time.Ticker reset chan struct{} Close chan struct{} Period int64 } func main() { s := CreateServer(1) go s.Start() time.Sleep(time.Duration(10) * time.Second) s.Update(3) time.Sleep(time.Duration(10) * time.Second) s.Stop() fmt.Println(&amp;#34;good bye&amp;#34;) } func CreateServer(Period int64) *Server { return &amp;amp;Server{ tk: nil, reset: make(chan struct{}), Close: make(chan struct{}), Period: Period, } } // 程序启动 func (s *Server) Start() { // 定时 	s.</description>
+    </item>
+    
+  </channel>
+</rss>

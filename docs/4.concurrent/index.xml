@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>4.concurrents on go语言精进之路</title>
+    <link>https://golang.coding3min.com/4.concurrent/</link>
+    <description>Recent content in 4.concurrents on go语言精进之路</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 26 Jun 2021 02:39:47 +0800</lastBuildDate><atom:link href="https://golang.coding3min.com/4.concurrent/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>channel</title>
+      <link>https://golang.coding3min.com/4.concurrent/channel/</link>
+      <pubDate>Sat, 26 Jun 2021 02:39:47 +0800</pubDate>
+      
+      <guid>https://golang.coding3min.com/4.concurrent/channel/</guid>
+      <description>channel #  channel 是goroutine 之间互相通讯的东西。类似我们 Unix 上的管道（可以在进程间传递消息），用来 goroutine 之间发消息和接收消息。其实，就是在做 goroutine 之间的内存共享。channel 是类型相关的，也就是说一个 channel 只能传递一种类型的值，这个类型需要在 channel 声明时指定。
+声明与初始化 #  channel 的一般声明形式：var chanName chan ElementType。
+与普通变量的声明不同的是在类型前面加了 channel 关键字，ElementType 则指定了这个 channel 所能传递的元素类型。示例：
+var a chan int //声明一个传递元素类型为int的channel var b chan float64 var c chan string 初始化一个 channel 也非常简单，直接使用 Go 语言内置的 make() 函数，示例：
+a := make(chan int) //初始化一个int型的名为a的channel b := make(chan float64) c := make(chan string) channel 最频繁的操作就是写入和读取，这两个操作也非常简单，示例：
+a := make(chan int) a &amp;lt;- 1 //将数据写入channel z := &amp;lt;-a //从channel中读取数据 </description>
+    </item>
+    
+    <item>
+      <title>select</title>
+      <link>https://golang.coding3min.com/4.concurrent/select/</link>
+      <pubDate>Sat, 26 Jun 2021 02:39:47 +0800</pubDate>
+      
+      <guid>https://golang.coding3min.com/4.concurrent/select/</guid>
+      <description>select #  select 用于处理异步 IO 问题，它的语法与 switch 非常类似。由 select 开始一个新的选择块，每个选择条件由 case 语句来描述，并且每个 case 语句里必须是一个 channel 操作。它既可以用于 channel 的数据接收，也可以用于 channel 的数据发送。如果 select 的多个分支都满足条件，则会随机的选取其中一个满足条件的分支。
+新建源文件 channel.go，输入以下代码：
+func main() { c1 := make(chan string) c2 := make(chan string) go func() { time.Sleep(time.Second * 1) c1 &amp;lt;- &amp;#34;one&amp;#34; }() go func() { time.Sleep(time.Second * 2) c2 &amp;lt;- &amp;#34;two&amp;#34; }() start := time.Now() // 获取当前时间  for i := 0; i &amp;lt; 2; i++ { select { case msg1 := &amp;lt;-c1: fmt.</description>
+    </item>
+    
+    <item>
+      <title>timeout</title>
+      <link>https://golang.coding3min.com/4.concurrent/timeout/</link>
+      <pubDate>Sat, 26 Jun 2021 02:39:47 +0800</pubDate>
+      
+      <guid>https://golang.coding3min.com/4.concurrent/timeout/</guid>
+      <description>timeout #  超时机制 #  通过前面的内容我们了解到，channel 的读写操作非常简单，只需要通过 &amp;lt;- 操作符即可实现，但是 channel 的使用不当却会带来大麻烦。我们先来看之前的一段代码：
+a := make(chan int) a &amp;lt;- 1 z := &amp;lt;-a 观察上面三行代码，第 2 行往 channel 内写入了数据，第 3 行从 channel 中读取了数据，如果程序运行正常当然不会出什么问题，可如果第二行数据写入失败，或者 channel 中没有数据，那么第 3 行代码会因为永远无法从 a 中读取到数据而一直处于阻塞状态。
+相反的，如果 channel 中的数据一直没有被读取，那么写入操作也会一直处于阻塞状态。如果不正确处理这个情况，很可能会导致整个 goroutine 锁死，这就是超时问题。Go 语言没有针对超时提供专门的处理机制，但是我们却可以利用 select 来巧妙地实现超时处理机制，下面看一个示例：
+t := make(chan bool) go func() { time.Sleep(1e9) //等待1秒  t &amp;lt;- true }() select { case &amp;lt;-ch: //从ch中读取数据  case &amp;lt;-t: //如果1秒后没有从ch中读取到数据，那么从t中读取，并进行下一步操作 } 这样的方法就可以让程序在等待 1 秒后继续执行，而不会因为 ch 读取等待而导致程序停滞，从而巧妙地实现了超时处理机制，这种方法不仅简单，在实际项目开发中也是非常实用的。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/</guid>
+      <description>4.1 go语言中的并发特性 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/3.grammar-advancement/4.1-goroutine.go
+ 以前我们写并发的程序一般是用多线程来实现，自己维护一个线程池，在恰当的时候创建、销毁、分配资源。
+go 在并发方面为我们提供了一个语言级别的支持， goroutine 和 chan 相互配合，这决定了他的先天优势。
+goroutine 的概念类似于线程， Go 程序运行时会自动调度和管理，系统能智能地将 goroutine 中的任务合理地分配给 CPU , 让这些任务尽量并发运作。
+4.1.1 他和线程对比 #  从使用上讲
+ 比线程更轻量级，可以创建十万、百万不用担心资源问题。 和 chan 搭配使用，实现高并发， goroutine 之间传输数据更方便。 如果访问同一个数据块，要小心数据竞态问题、共享锁还是互斥锁的选择问题、并发操作的数据同步问题（后面会说）  从其实现上讲
+ 从资源上讲，线程的栈内存大小一般是固定的一般为 2MB ，虽然这个数值可以设置，但是 太大了浪费，太小了容易不够用, 而 goroutine 栈内存是可变的，初始一般为 2KB ，随着需求可以扩大达到1GB。 所以 goroutine 十分的轻量级，且能满足不同的需求。 从调度上讲，线程的调度由 OS 的内核完成；线程的切换需要 CPU寄存器 和 内存的数据交换 ，从而切换不同的线程上下文。 其触发方式为 CPU时钟 , 而 goroutine 的调度则比较轻量级，由自身的调度器完成。 协程同线程的关系，有些类似于 线程同进程的关系。  4.1.2 创建与使用 #  创建一个 goroutine ，只需要在函数前加一个 go 关键字就成了。</description>
+    </item>
+    
+  </channel>
+</rss>
