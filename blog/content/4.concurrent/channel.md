@@ -1,9 +1,3 @@
----
-title: "channel"
-date: 2021-06-26T02:39:47+08:00
-draft: true
----
-
 # channel
 
 channel 是goroutine 之间互相通讯的东西。类似我们 Unix 上的管道（可以在进程间传递消息），用来 goroutine 之间发消息和接收消息。其实，就是在做 goroutine 之间的内存共享。channel

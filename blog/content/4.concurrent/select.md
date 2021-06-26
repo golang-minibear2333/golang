@@ -1,9 +1,3 @@
----
-title: "select"
-date: 2021-06-26T02:39:47+08:00
-draft: true
----
-
 # select
 
 select 用于处理异步 IO 问题，它的语法与 switch 非常类似。由 select 开始一个新的选择块，每个选择条件由 case 语句来描述，并且每个 case 语句里必须是一个 channel 操作。它既可以用于 channel

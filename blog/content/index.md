@@ -33,7 +33,7 @@ headless: true
     * [4.3 select](4.concurrent/select)
     * [4.4 设置超时](4.concurrent/timeout)
 * **时间处理与定时任务**
-    * [设置可热更新的定时器](a.timer/reset/README)
+    * [设置可热更新的定时器](a.timer/reset/reset-time)
 * **常用操作**
     * [1.1 Go文件操作大全](番外.常用操作/Go文件操作大全)
     * [1.2 Go代码基本标准规范](番外.常用操作/Go代码基本标准规范)
