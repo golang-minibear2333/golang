@@ -6,11 +6,14 @@ blog="blog"
 function buildFun() {
     echo pwd: `pwd`
     cp -r blog blog.bak
-    mv blog.bak
-    hugo -D
-    rm -rf ../../golang-minibear2333.github.io/*
-    cp -r public/* ../../golang-minibear2333.github.io
-    rm -rf public/*
+    mv blog.bak ../
+    cd ../
+    rm -rf ./golang-minibear2333.github.io/*
+    mv blog.bak/public/* ./golang-minibear2333.github.io/
+    rm -rf blog.bak/
+    cd ./golang-minibear2333.github.io/
+    git add -A
+    git commit -m "update"
 }
 
 if [ -d ${currPath}/${blog} ]; then
