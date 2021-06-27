@@ -7,7 +7,8 @@ function buildFun() {
     echo pwd: `pwd`
     cp -r blog blog.bak
     mv blog.bak ../
-    cd ../
+    cd ../blog.bak && hugo -D
+    cd ..
     rm -rf ./golang-minibear2333.github.io/*
     mv blog.bak/public/* ./golang-minibear2333.github.io/
     rm -rf blog.bak/

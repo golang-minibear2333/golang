@@ -35,7 +35,7 @@ disableKinds = ['taxonomy', 'taxonomyTerm']
 
   # Set source repository location.
   # Used for 'Last Modified' and 'Edit this page' links.
-  BookRepo = 'https://github.com/minibear2333/golang'
+  BookRepo = 'https://github.com/golang-minibear2333/golang'
 
   # Specifies commit portion of the link to the page's last modified commit hash for 'doc' page
   # type.
