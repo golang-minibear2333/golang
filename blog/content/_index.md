@@ -2,7 +2,11 @@
 
 大家好，我是小熊，本书基于Go语言版本 `1.16` 版本，后续可能会再调整，目录也还未明确，正在**努力持续更新中**，整体进度未明。
 
-如果对这个项目感兴趣，请点击一下 [**Star**](https://github.com/golang-minibear2333/golang) ，项目会 **持续更新**，感谢大家的支持。
+![](https://img.shields.io/github/watchers/golang-minibear2333/golang.svg)
+![](https://img.shields.io/github/stars/golang-minibear2333/golang.svg)
+![](https://img.shields.io/github/forks/golang-minibear2333/golang.svg)
+
+如果对这个项目感兴趣，请点击一下 -->  [**Star**](https://github.com/golang-minibear2333/golang) ，项目会 **持续更新**，感谢大家的支持。
 
 -------
 
