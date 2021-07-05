@@ -41,7 +41,7 @@ for range是值拷贝出来的副本
 		fmt.Println(v.Index, v.Num)
 	}
 ```
-### 怎么做？
+## 怎么做？
 
 两个办法，用下标（map也一样）
 ```go
@@ -68,7 +68,7 @@ for range是值拷贝出来的副本
 	}
 ```
 
-### for range 原理
+## for range 原理
 通过查看 [源代码](https://github.com/golang/gofrontend) ，我们可以发现for range的实现是：
 
 ```go
