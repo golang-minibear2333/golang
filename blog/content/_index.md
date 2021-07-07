@@ -6,7 +6,7 @@
 ![](https://img.shields.io/github/stars/golang-minibear2333/golang.svg)
 ![](https://img.shields.io/github/forks/golang-minibear2333/golang.svg)
 
-如果对这个项目感兴趣，请点击一下 -->  [**Star**](https://github.com/golang-minibear2333/golang) ，项目会 **持续更新**，感谢大家的支持。
+如果对这个项目感兴趣 请 -->   [***点击这里跳转项目进行Star***](https://github.com/golang-minibear2333/golang) ，项目会 **持续更新**，感谢大家的支持。
 
 -------
 

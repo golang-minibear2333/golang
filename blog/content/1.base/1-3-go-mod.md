@@ -106,10 +106,15 @@ golang.org/x/text v0.3.0 = > github.com/golang/text v0.3.0
 <module> <version>/go.mod <hash>
 ```
 
-那些有两行的包，区别就在于 hash 值不一行，一个是 `h1:hash`，一个是 go.mod `h1:hash`
+那些有两行的包，区别就在于 hash 值有两行，一行是 `h1:hash` 也就是模块包的hash，另一行是 go.mod `h1:hash`，举例如下
+
+```shell
+github.com/sirupsen/logrus v1.8.1 h1:dJKuHgqk1NNQlqoA6BTlM1Wf9DOH3NBjQyu0h9+AZZE=
+github.com/sirupsen/logrus v1.8.1/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic61uBYv0=
+```
 
 而  `h1:hash` 和 `go.mod` `h1:hash`两者，要不就是同时存在，要不就是只存在 `go.mod` `h1:hash`。那什么情况下会不存在 `h1:hash` 呢，就是当 Go
-认为肯定用不到某个模块版本的时候就会省略它的`h1 hash`，就会出现不存在 `h1 hash`，只存在 `go.mod` `h1:hash` 的情况。[引用自 3]
+认为肯定用不到某个模块版本的时候就会省略它的`h1 hash`，就会出现不存在 `h1 hash`，只存在 `go.mod` `h1:hash` 的情况。
 
 `go.mod` 和 `go.sum` 是 go modules 版本管理的指导性文件，因此 `go.mod` 和 `go.sum` 文件都应该提交到你的 Git 仓库中去，避免其他人使用你写项目时，重新生成的`go.mod`
 和 `go.sum` 与你开发的基准版本的不一致。
@@ -122,7 +127,7 @@ go mod download：手动触发下载依赖包到本地cache（默认为$GOPATH/p
 
 go mod graph：打印项目的模块依赖结构
 
-图片 go mod tidy ：添加缺少的包，且删除无用的包
+go mod tidy ：添加缺少的包，且删除无用的包
 
 go mod verify ：校验模块是否被篡改过
 
