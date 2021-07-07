@@ -67,9 +67,89 @@ PS: 在取值的时候`m[key]`，假如`key`不存在，不会报错，会返回
 	}
 ```
 
-map容器就到这里了。
+### 2.4.3 map 内部元素的修改
 
-## 2.4.3 能够在并发环境中使用的`map`
+map 可以拷贝吗？
+
+`map` 其实是不能拷贝的，如果想要拷贝一个 `map` ，只有一种办法就是循环赋值，就像这样
+
+```go
+originalMap := make(map[string]int)
+originalMap["one"] = 1
+originalMap["two"] = 2
+
+// Create the target map
+targetMap := make(map[string]int)
+
+// Copy from the original map to the target map
+for key, value := range originalMap {
+    targetMap[key] = value
+}
+```
+
+如果 `map` 中有指针，还要考虑深拷贝的过程
+
+```go
+originalMap := make(map[string]*int)
+var num int = 1
+originalMap["one"] = &num
+
+// Create the target map
+targetMap := make(map[string]*int)
+
+// Copy from the original map to the target map
+for key, value := range originalMap {
+var tmpNum int = *value
+    targetMap[key] = &tmpNum
+}
+```
+
+如果想要更新 `map` 中的`value`，可以通过赋值来进行操作
+
+```go
+map["one"] = 1
+```
+
+但如果 `value` 是一个结构体，可以直接替换结构体，但无法更新结构体内部的值
+
+```go
+originalMap := make(map[string]Person)
+originalMap["minibear2333"] = Person{age: 26}
+originalMap["minibear2333"].age = 5
+```
+
+你可以 [试下源码函数 updateMapValue](https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.4-map/map1.go) ，会报这个错误
+
+> Cannot assign to originalMap["minibear2333"].age
+
+问题链接 [issue-3117](https://github.com/golang/go/issues/3117) , 其中 [ianlancetaylor](https://github.com/golang/go/issues/3117#issuecomment-430632750) 的回答很好的解释了这一点
+
+简单来说就是map不是一个并发安全的结构，所以，并不能修改他在结构体中的值。
+
+这如果目前的形式不能修改的话，就面临两种选择，
+
+* 1.修改原来的设计; 
+*  2.想办法让map中的成员变量可以修改，
+
+因为懒得该这个结构体，就选择了方法2
+
+要么创建个临时变量，做拷贝，像这样
+
+```go
+tmp := m["foo"]
+tmp.x = 4
+m["foo"] = tmp
+```
+
+要么直接用指针，比较方便
+
+```go
+originalPointMap := make(map[string]*Person)
+originalPointMap["minibear2333"] = &Person{age: 26}
+originalPointMap["minibear2333"].age = 5
+```
+
+## 2.4.4 能够在并发环境中使用的`map`
 
 `Go`中的`map`在并发读的时候没问题，但是并发写就不行了（线程不安全），会发生竞态问题。
 
@@ -113,9 +193,9 @@ coding3min
 	})
 ```
 
-## 2.4.4 小结
+## 2.4.5 小结
 
-本节介绍了字典`map`类型，这种类型在很多语言中都有，并且学习了它的增加删除元素的方法。
+本节介绍了字典`map`类型，这种类型在很多语言中都有，并且学习了它的增加删除元素的方法，以及更新value要注意的点。
 
 还介绍了并发环境下使用的线程安全的 `sync.Map`。
 

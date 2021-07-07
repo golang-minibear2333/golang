@@ -3,7 +3,7 @@
 * @Author:  minibear2333
 * @Date:    2020-04-08 22:11
 * @url:     https://github.com/golang-minibear2333/golang
-*/
+ */
 package main
 
 import "fmt"
@@ -45,8 +45,59 @@ func inMap(key string, m map[string]string) {
 	}
 }
 
+// map 的拷贝
+func copyMap() {
+	fmt.Println("map 的拷贝")
+	originalMap := make(map[string]int)
+	originalMap["one"] = 1
+	originalMap["two"] = 2
+
+	// Create the target map
+	targetMap := make(map[string]int)
+
+	// Copy from the original map to the target map
+	for key, value := range originalMap {
+		targetMap[key] = value
+	}
+	fmt.Println(targetMap)
+}
+
+// 深度拷贝
+func copyDeepMap() {
+	fmt.Println("深度拷贝")
+	originalMap := make(map[string]*int)
+	var num int = 1
+	originalMap["one"] = &num
+
+	// Create the target map
+	targetMap := make(map[string]*int)
+
+	// Copy from the original map to the target map
+	for key, value := range originalMap {
+		var tmpNum int = *value
+		targetMap[key] = &tmpNum
+	}
+}
+
+type Person struct {
+	age int
+}
+
+// 注意修改map中value内部数据
+func updateMapValue() {
+	originalMap := make(map[string]Person)
+	originalMap["minibear2333"] = Person{age: 26}
+	originalMap["minibear2333"].age = 5
+
+	originalPointMap := make(map[string]*Person)
+	originalPointMap["minibear2333"] = &Person{age: 26}
+	originalPointMap["minibear2333"].age = 5
+}
 func main() {
 	mapDemo1()
 	// 小熊的话：能用数组别用map，数组快占用空间小
 	// 但是要在保证快速开发的情况下再考虑用数组优化
+	copyMap()
+	copyDeepMap()
+
 }
