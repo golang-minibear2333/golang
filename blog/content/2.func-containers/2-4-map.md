@@ -67,7 +67,7 @@ PS: 在取值的时候`m[key]`，假如`key`不存在，不会报错，会返回
 	}
 ```
 
-### 2.4.3 map 内部元素的修改
+## 2.4.3 map 内部元素的修改
 
 map 可以拷贝吗？
 
@@ -118,7 +118,7 @@ originalMap["minibear2333"] = Person{age: 26}
 originalMap["minibear2333"].age = 5
 ```
 
-你可以 [试下源码函数 updateMapValue](https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.4-map/map1.go) ，会报这个错误
+你可以 [试下源码函数 updateMapValue](https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.4-map/map1.go#L89) ，会报这个错误
 
 > Cannot assign to originalMap["minibear2333"].age
 
