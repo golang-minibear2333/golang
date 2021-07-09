@@ -203,13 +203,17 @@ func sub(a, b int) int {
 
 你可以参考函数测速例子
 
+> 源码位置：https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.1-func/append_string.go
+
 定义一个测速函数。
 
 ```go
-func speedTime(handler func() (string), funcName string) {
+func speedTime(handler func() (string) {
 	t := time.Now()
 	handler()
 	elapsed := time.Since(t)
+	// 利用反射获得函数名
+    funcName := runtime.FuncForPC(reflect.ValueOf(handler).Pointer()).Name()
 	fmt.Println(funcName+"spend time:", elapsed)
 }
 ```
@@ -217,8 +221,8 @@ func speedTime(handler func() (string), funcName string) {
 传入不同的函数都可以测速度。
 
 ```go
-speedTime(appendStr, "appendStr")
-speedTime(appendStrQuick, "appendStrQuick")
+speedTime(appendStr)
+speedTime(appendStrQuick)
 ```
 
 小`Tips`：

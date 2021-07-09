@@ -1,14 +1,11 @@
-/*
-* @Title:   快速拼接字符串
-* @Author:  minibear2333
-* @Date:    2020-03-17 00:12
-* @url:     https://github.com/golang-minibear2333/golang
-*/
+//快速拼接字符串
 package main
 
 import (
 	"bytes"
 	"fmt"
+	"reflect"
+	"runtime"
 	"time"
 )
 
@@ -26,7 +23,7 @@ func init() {
 	base 里面的字符串都是不可变的，每次运算都会产生一个新的字符串，
 	所以会产生很多临时的无用的字符串，不仅没有用，还会给 gc 带来额外的负担，
 	所以性能比较差
- */
+*/
 func appendStr() (resStr string) {
 	resStr = ""
 	for i := 0; i < len(S); i++ {
@@ -35,7 +32,7 @@ func appendStr() (resStr string) {
 	return resStr
 }
 
-func appendStrQuick() (string) {
+func appendStrQuick() string {
 	var res bytes.Buffer
 	for i := 0; i < len(S); i++ {
 		res.WriteString(string(S[i]))
@@ -43,13 +40,14 @@ func appendStrQuick() (string) {
 	return res.String()
 }
 
-func speedTime(handler func() (string), funcName string) {
+func speedTime(handler func() string) {
 	t := time.Now()
 	handler()
 	elapsed := time.Since(t)
+	funcName := runtime.FuncForPC(reflect.ValueOf(handler).Pointer()).Name()
 	fmt.Println(funcName+"spend time:", elapsed)
 }
 func main() {
-	speedTime(appendStr, "appendStr")
-	speedTime(appendStrQuick, "appendStrQuick")
+	speedTime(appendStr)
+	speedTime(appendStrQuick)
 }
