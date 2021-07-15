@@ -29,11 +29,10 @@ headless: true
     * [3.4 异常处理](3.grammar-advancement/3-4-异常处理)
 * **第四章、并发和并行**
     * [4.1 并发特性](4.concurrent/4-1-go语言中的并发特性)
-    * [4.2 channel](4.concurrent/channel)
-    * [4.3 select](4.concurrent/select)
-    * [4.4 设置超时](4.concurrent/timeout)
-    * [设置可热更新的定时器](a.timer/reset/reset-time)
-    * [goroutine等待](番外.常用操作/等待goroutine完成任务_循环中使用goroutine)
+    * [4.2 channel](4.concurrent/4-2-channel)
+    * [4.3 select](4.concurrent/4-3-select)
+    * [4.4 设置超时](4.concurrent/4-4-timeout)
+    * [4.5 并发等待](4.concurrent/4-5-goroutine-wait)
     * -并发安全
     * -协程池
     * -消费者生产者框架
@@ -47,7 +46,13 @@ headless: true
     * -json库
     * -http库
     * 跨平台编译
-* **第六章、性能调优**
+* **第六章、调试与测试**
+    * -单元测试
+    * -基准测试
+    * -mock
+    * -自动化测试
+    * -调试
+* **第七章、性能调优**
     * -cpu调度
     * -内存管理
     * -垃圾回收
@@ -55,11 +60,6 @@ headless: true
     * -逃逸分析
     * -链路追踪
     * -自监控
-* **第七章、调试与测试**
-    * -调试
-    * -单元测试
-    * -mock
-    * -自动化测试
 * **第八章、反射**
 * **第九章、优秀开源组件**
     * -日志
@@ -73,8 +73,8 @@ headless: true
     * -分布式锁
     * -分布式一致性算法
 * **第x章、web应用**
-  * -GRPC
-  * -Protobuf
+    * -GRPC
+    * -Protobuf
 * **第x章、微服务**
 * **第x章、服务治理**
 * **第x章、GO语言版本分析**

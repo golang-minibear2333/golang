@@ -1,6 +1,6 @@
 baseURL = "https://golang.coding3min.com/"
 languageCode = "en-us"
-title = "go语言精进之路"
+title = "Go语言精进之路"
 theme="book"
 
 # (Optional) Set this to true to enable 'Last Modified by' date and git author

@@ -1,8 +1,57 @@
-# timeout
+# 4.2 channel
 
-## 超时机制
+## **...本节正在编写，未完待续，催更请留言，我会收到邮件**
 
-通过前面的内容我们了解到，channel 的读写操作非常简单，只需要通过 <- 操作符即可实现，但是 channel 的使用不当却会带来大麻烦。我们先来看之前的一段代码：
+> 本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/timeout.go
+
+channel 是 `goroutine` 之间互相通讯的东西。类似我们 `Unix` 上的管道（可以在进程间传递消息），用来 `goroutine` 之间发消息和接收消息。其实，就是在做 `goroutine` 之间的内存共享。`channel`
+是类型相关的，也就是说一个 `channel` 只能传递一种类型的值，这个类型需要在 `channel` 声明时指定。
+
+## 4.2.1 声明与初始化
+
+channel 的一般声明形式：
+
+```go
+var chanName chan ElementType
+```
+
+与普通变量的声明不同的是在类型前面加了 `channel` 关键字，`ElementType` 则指定了这个 `channel` 所能传递的元素类型。示例：
+
+```go
+var a chan int //声明一个传递元素类型为int的channel
+var b chan float64
+var c chan string
+```
+
+初始化一个 `channel` 也非常简单，直接使用 `Go` 语言内置的 `make()` 函数，示例：
+
+```go
+a := make(chan int) //初始化一个int型的名为a的channel
+b := make(chan float64)
+c := make(chan string)
+```
+
+channel 最频繁的操作就是写入和读取，这两个操作也非常简单，示例：
+
+```go
+a := make(chan int)
+a <- 1  //将数据写入channel
+z := <-a  //从channel中读取数据
+fmt.Println(z)
+```
+
+正常来说，一个发送，一个接收，协作合理，完美无缺。但是，事实令人咋舌。输出死锁：
+
+```go
+fatal error: all goroutines are asleep - deadlock!
+
+goroutine 1 [chan send]:
+main.main()
+        .../golang-minibear2333/golang/4.concurrent/channel.go:7 +0x59
+```
+
+## 4.4.1 超时机制
+
 
 ```go
 a := make(chan int)
@@ -89,3 +138,7 @@ func main() {
 	}
 }
 ```
+
+## 小结
+
+这一节简单介绍了go语言中的channel（信道），go语言主张不要通过共享内存来通信，而应通过通信来共享内存，通过`channel`的方式可以完成不同`goroutine`之间的通信。

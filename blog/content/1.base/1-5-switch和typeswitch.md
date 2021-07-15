@@ -20,7 +20,7 @@ ifelse
 ![](https://coding3min.oss-accelerate.aliyuncs.com/coding3min/2020-04-14-125252.jpg)
 
 ```go
-if 20<0{
+    if 20<0{
 
 	}else{
 		fmt.Println("no")
@@ -36,6 +36,7 @@ no
 ![](https://coding3min.oss-accelerate.aliyuncs.com/coding3min/2020-04-14-125322.jpg)
 
 `switch` 好理解,是一个替代`if else else else`接口而提出的,如下，`switch` 后跟变量，`case` 后跟常量，只要变量值和常量匹配，就执行该分支下的语句。
+
 ```go
 switch name {
 	case "coding3min":
@@ -46,9 +47,11 @@ switch name {
 	}
 ```
 
-当然`switch`语句会逐个匹配`case`语句，一个一个的判断过去，直到有符合的语句存在。
+和`c++`不同，不需要给每个`case`都手动加入`break`，当然`switch`语句会逐个匹配`case`语句，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出`switch`。
+
 ```go
-switch {
+func switchDemo(number int) {
+    switch {
 	case number >= 90:
 		fmt.Println("优秀")
 	case number >= 80:
@@ -58,14 +61,18 @@ switch {
 	default:
 		fmt.Println("太搓了")
 	}
+}
 ```
+
 如果没有一个是匹配的，就执行`default`后的语句。
 
-注意`switch`后可以跟空，如上
+注意`switch`后可以跟空，如上，原因是之前已经出现过`number`变量
+
 ```go
 switch {
 ```
-这样`case`就必须是表达式。
+
+如果为空，这样`case`就必须是表达式。
 
 ## 1.5.3 switch 的高级玩法？
 
