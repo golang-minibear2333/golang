@@ -29,13 +29,14 @@ headless: true
     * [3.4 异常处理](3.grammar-advancement/3-4-异常处理)
 * **第四章、并发和并行**
     * [4.1 并发特性](4.concurrent/4-1-go语言中的并发特性)
-    * [4.2 channel](4.concurrent/4-2-channel)
-    * [4.3 select](4.concurrent/4-3-select)
-    * [4.4 设置超时](4.concurrent/4-4-timeout)
-    * [4.5 并发等待](4.concurrent/4-5-goroutine-wait)
+    * [4.2 并发等待 ](4.concurrent/4-2-goroutine-wait)
+    * [4.3 channel](4.concurrent/4-3-channel)
+    * [4.4 select](4.concurrent/4-4-select)
+    * [4.5 设置超时](4.concurrent/4-5-timeout)
     * -并发安全
     * -协程池
     * -消费者生产者框架
+    * -GMP调度原理
 * **第五章、标准库**
     * [Go代码基本标准规范](番外.常用操作/Go代码基本标准规范)
     * [文件操作](番外.常用操作/Go文件操作大全)
@@ -78,6 +79,7 @@ headless: true
 * **第x章、微服务**
 * **第x章、服务治理**
 * **第x章、GO语言版本分析**
+* **第x章、Go语言工程化实践**
 * **番外1、拓展应用**
     * [小工具](tools/README)
     * [Go与Dockerfile](番外.常用操作/Golang打镜像Dockerfile的写法)

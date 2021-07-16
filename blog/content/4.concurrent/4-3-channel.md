@@ -2,20 +2,23 @@
 
 ## **...本节正在编写，未完待续，催更请留言，我会收到邮件**
 
-> 本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/timeout.go
+> 本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/channel.go
 
-channel 是 `goroutine` 之间互相通讯的东西。类似我们 `Unix` 上的管道（可以在进程间传递消息），用来 `goroutine` 之间发消息和接收消息。其实，就是在做 `goroutine` 之间的内存共享。`channel`
-是类型相关的，也就是说一个 `channel` 只能传递一种类型的值，这个类型需要在 `channel` 声明时指定。
+我们平时肯定没少接触过队列，在
+
+channel 是 `goroutine` 之间互相通讯的东西。类似我们 `Unix` 上的管道（可以在进程间传递消息），用来 `goroutine` 之间发消息和接收消息。其实，就是在做 `goroutine` 之间的内存共享。
+
+`channel`是类型相关的，也就是说一个 `channel` 只能传递一种类型的值，这个类型需要在 `channel` 声明时指定。
 
 ## 4.2.1 声明与初始化
 
 channel 的一般声明形式：
 
 ```go
-var chanName chan ElementType
+var chanName chan 类型
 ```
 
-与普通变量的声明不同的是在类型前面加了 `channel` 关键字，`ElementType` 则指定了这个 `channel` 所能传递的元素类型。示例：
+与普通变量的声明不同的是在类型前面加了 `channel` 关键字，`类型` 则指定了这个 `channel` 所能传递的元素类型。示例：
 
 ```go
 var a chan int //声明一个传递元素类型为int的channel
@@ -50,17 +53,27 @@ main.main()
         .../golang-minibear2333/golang/4.concurrent/channel.go:7 +0x59
 ```
 
+来看下完整的代码
+
+```go
+func main() {
+    a := make(chan int)
+    a <- 1   //将数据写入channel
+    z := <-a //从channel中读取数据
+    fmt.Println(z)
+}
+```
+
+* 观察上面三行代码，第 2 行往 channel 内写入了数据，第 3 行从 channel 中读取了数据
+* 但是这是在一个方法中，并且没有使用 Go 关键字，说明他们在同一个协程
+* 
+
+如果程序运行正常当然不会出什么问题，可如果第二行数据写入失败，或者 channel 中没有数据，那么第 3 行代码会因为永远无法从 a
+中读取到数据而一直处于阻塞状态。
+
 ## 4.4.1 超时机制
 
 
-```go
-a := make(chan int)
-a <- 1
-z := <-a
-```
-
-观察上面三行代码，第 2 行往 channel 内写入了数据，第 3 行从 channel 中读取了数据，如果程序运行正常当然不会出什么问题，可如果第二行数据写入失败，或者 channel 中没有数据，那么第 3 行代码会因为永远无法从 a
-中读取到数据而一直处于阻塞状态。
 
 相反的，如果 channel 中的数据一直没有被读取，那么写入操作也会一直处于阻塞状态。如果不正确处理这个情况，很可能会导致整个 goroutine 锁死，这就是超时问题。Go
 语言没有针对超时提供专门的处理机制，但是我们却可以利用 select 来巧妙地实现超时处理机制，下面看一个示例：
