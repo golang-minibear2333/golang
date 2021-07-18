@@ -1,6 +1,6 @@
 # 4.2 并发等待
 
-> 本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/goroutine-wait/
+> 本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.2-goroutine-wait/
 
 ## 4.2.1 简介
 

@@ -1,7 +1,5 @@
 # 4.2 channel
 
-## **...本节正在编写，未完待续，催更请留言，我会收到邮件**
-
 > 本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/channel.go
 
 我们平时肯定没少接触过队列，在

@@ -3,7 +3,7 @@
 * @Author:  minibear2333
 * @Date:    2020-03-27 20:23
 * @url:     https://github.com/golang-minibear2333/golang
-*/
+ */
 package main
 
 import (
@@ -37,7 +37,7 @@ func selectDemo() {
 		select 语句会随机执行一个case，如果没有case可以运行，就会一直阻塞，直到有case可以运行
 		case 必须是一个通信操作，要么是发送，要么是接收
 		如果有default体，就只运行default，其他全部忽略
-	 */
+	*/
 
 	countAdd, countSub := 0, 0
 	// 形式1：异步式，这里会接收一个值，然后sendDemo()会卡在插入3之前
