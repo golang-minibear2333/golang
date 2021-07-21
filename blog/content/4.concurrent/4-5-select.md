@@ -2,28 +2,49 @@
 
 ## **...本节正在编写，未完待续，催更请留言，我会收到邮件**
 
-> 本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/select.go
+> 本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.5-select
 
 ## 4.3.1 select与switch
 
-让我们来复习一下`switch`语句，在`switch`语句中，会逐个匹配`case`语句，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出`switch`。
-
-内部可以是值，也可以是表达式，如果`switch`后未接参数，就必须是已有变量的表达式。
+让我们来复习一下`switch`语句，在`switch`语句中，会逐个匹配`case`语句(可以是值也可以是表达式)，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出`switch`。
 
 ```go
-switch number{
-    case number >= 90:
-    fmt.Println("优秀")
-    case number >= 80:
-    fmt.Println("良好")
-    case number >= 60:
-    fmt.Println("凑合")
-    default:
-    fmt.Println("太搓了")
+func demo(number int){
+    switch{
+        case number >= 90:
+        fmt.Println("优秀")
+        default:
+        fmt.Println("太搓了")
+    }
 }
 ```
 
-而 `select` 用于处理异步 `IO` 问题，它的语法与 `switch` 非常类似。
+而 `select` 用于处理通道，它的语法与 `switch` 非常类似。
+
+```golang
+func main() {
+	chanInt1, chanInt2 := make(chan int), make(chan int)
+	go func() {
+		defer close(chanInt1)
+		defer close(chanInt2)
+		chanInt1 <- 1
+		chanInt2 <- 2
+	}()
+	time.Sleep(time.Millisecond)
+	select {
+	case data := <-chanInt1:
+		fmt.Println(data)
+	case data := <-chanInt2:
+		fmt.Println(data)
+	default:
+		fmt.Println("全部阻塞")
+	}
+}
+```
+
+比如这样接收数值
+
+
 
 ## 4.3.4 超时机制
 
@@ -91,6 +112,9 @@ received two
 该函数执行完成耗时： 2.004695535s
 ```
 
+## 泄露防止
+
+及时通知select
 
 ## 小结
 

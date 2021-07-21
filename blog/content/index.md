@@ -31,8 +31,9 @@ headless: true
     * [4.1 并发特性](4.concurrent/4-1-go语言中的并发特性)
     * [4.2 并发等待 ](4.concurrent/4-2-goroutine-wait)
     * [4.3 channel](4.concurrent/4-3-channel)
-    * [4.4 select](4.concurrent/4-4-select)
-    * [4.5 设置超时](4.concurrent/4-5-timeout)
+    * [4.4 deadlock](4.concurrent/4-4-deadlock)
+    * [4.5 select](4.concurrent/4-5-select)
+    * [4.6 设置超时](4.concurrent/4-6-timeout)
     * -并发安全
     * -协程池
     * -消费者生产者框架
@@ -47,6 +48,7 @@ headless: true
     * -json库
     * -http库
     * 跨平台编译
+    * 模板
 * **第六章、调试与测试**
     * -单元测试
     * -基准测试
@@ -80,6 +82,7 @@ headless: true
 * **第x章、服务治理**
 * **第x章、GO语言版本分析**
 * **第x章、Go语言工程化实践**
+    * 构建约束
 * **番外1、拓展应用**
     * [小工具](tools/README)
     * [Go与Dockerfile](番外.常用操作/Golang打镜像Dockerfile的写法)

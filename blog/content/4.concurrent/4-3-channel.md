@@ -58,10 +58,10 @@ a := make(chan int,100)
 
 ```go
 func pendingForever() {
-a := make(chan int)
-a <- 1   //将数据写入channel
-z := <-a //从channel中读取数据
-fmt.Println(z)
+    a := make(chan int)
+    a <- 1   //将数据写入channel
+    z := <-a //从channel中读取数据
+    fmt.Println(z)
 }
 ```
 
@@ -72,10 +72,10 @@ fmt.Println(z)
 
 ```go
 fatal error: all goroutines are asleep - deadlock!
-
+	
 goroutine 1 [chan send]:
 main.main()
-.../4.concurrent/channel.go:7 +0x59
+    .../4.concurrent/channel.go:7 +0x59
 ```
 
 死锁的原因是没有其他协程来接收数据，隧道因为是无缓冲的，所以直接永远的阻塞在发送方。
@@ -84,13 +84,13 @@ main.main()
 
 ```go
 func normal() {
-chanInt := make(chan int)
-go func() {
-chanInt <- 1
-}()
-
-res := <-chanInt
-fmt.Println(res)
+    chanInt := make(chan int)
+    go func() {
+    chanInt <- 1
+    }()
+    
+    res := <-chanInt
+    fmt.Println(res)
 }
 ```
 
@@ -100,17 +100,17 @@ fmt.Println(res)
 
 ```go
 func standard() {
-chanInt := make(chan int)
-go func() {
-defer close(chanInt)
-var produceData = []int{1, 2, 3}
-for _, v := range produceData {
-chanInt <- v
-}
-}()
-for v := range chanInt {
-fmt.Println(v)
-}
+    chanInt := make(chan int)
+    go func() {
+        defer close(chanInt)
+        var produceData = []int{1, 2, 3}
+        for _, v := range produceData {
+            chanInt <- v
+        }
+    }()
+    for v := range chanInt {
+        fmt.Println(v)
+    }
 }
 ```
 
@@ -147,14 +147,14 @@ x, ok := <-ch
 
 ```go
 func main() {
-var chanInt chan int = make(chan int, 10)
-go func() {
-defer fmt.Println("chanInt is closed")
-defer close(chanInt)
-chanInt <- 1
-}()
-res := <-chanInt
-fmt.Println(res)
+    var chanInt chan int = make(chan int, 10)
+    go func() {
+        defer fmt.Println("chanInt is closed")
+        defer close(chanInt)
+        chanInt <- 1
+    }()
+    res := <-chanInt
+    fmt.Println(res)
 }
 ```
 
@@ -181,8 +181,8 @@ PS2: 如果传入`nil`,如 `close(nil)` 会 `panic`。
 
 ```go
 func send(c chan<- int, wg *sync.WaitGroup) {
-c <- rand.Int()
-wg.Done()
+    c <- rand.Int()
+    wg.Done()
 }
 ```
 
@@ -191,10 +191,10 @@ wg.Done()
 
 ```go
 func received(c <-chan int, wg *sync.WaitGroup) {
-for gotData := range c {
-fmt.Println(gotData)
-}
-wg.Done()
+    for gotData := range c {
+        fmt.Println(gotData)    
+    }
+    wg.Done()
 }
 ```
 
@@ -202,19 +202,19 @@ wg.Done()
 
 ```go
 func main() {
-chanInt := make(chan int, 10)
-done := make(chan struct{})
-defer close(done)
-go func() {
-defer close(chanInt)
-// 发送
-}()
-go func() {
-...
-// 接收
-done <- struct{}{}
-}()
-<-done
+    chanInt := make(chan int, 10)
+    done := make(chan struct{})
+    defer close(done)
+    go func() {
+        defer close(chanInt)
+        // 发送
+    }()
+    go func() {
+        ...
+        // 接收
+        done <- struct{}{}
+    }()
+    <-done
 }
 ```
 
@@ -279,4 +279,4 @@ go func() {
 - 只能且必须在发送端使用`defer`关闭通道。
 - 正式使用一般多发送多接收，并使用`done`信号通知的方式进行通知。
 
-在工作中，通道的使用更为复杂，下一节将介绍`select`，敬请期待！
+在工作中，通道的使用更为复杂，下一节将介绍两个面试高频的问题，敬请期待！

@@ -5,6 +5,7 @@
 *.so
 *.dylib
 go_build_*
+.DS_Store
 
 # Test binary, built with `go test -c`
 *.test
