@@ -1,0 +1,36 @@
+name: Github-Pages-push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    defaults:
+      run:
+        working-directory: ./blog
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.84.0'
+          extended: true
+
+      - name: Build
+        run: hugo --gc --minify --cleanDestinationDir
+      
+      - name: Pushes to another repository
+        uses: nkoppel/push-files-to-another-repository@master
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-files: 'blog/public/*'
+          destination-github-username: 'golang-minibear2333'
+          destination-repository-name: 'golang-minibear2333.github.io'
+          user-email: 'pzqu@qq.com'
