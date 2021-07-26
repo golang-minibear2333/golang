@@ -3,7 +3,7 @@
 * @Author:  minibear2333
 * @Date:    2020-04-05 22:01
 * @url:     https://github.com/golang-minibear2333/golang
-*/
+ */
 package main
 
 import "fmt"
@@ -25,9 +25,9 @@ func structDemo1() {
 	}
 	fmt.Println(body2)
 
-	//结构体数组
+	//结构体切片
 	bodys := []Body{
-		Body{"jack", 12}, Body{"lynn", 18},
+		{"jack", 12}, {"lynn", 18},
 	}
 	fmt.Println(bodys)
 
@@ -35,7 +35,7 @@ func structDemo1() {
 	class1 := struct {
 		bodys []Body
 	}{
-		[]Body{Body{"jerry", 24}},
+		[]Body{{"jerry", 24}},
 	}
 	fmt.Println(class1)
 }
@@ -55,7 +55,7 @@ func structDemo2() {
 func funcGetStructPtr(bodyPtr *Body) {
 	bodyPtr.name = "lisa"
 }
-func funGetStruct(body Body){
+func funGetStruct(body Body) {
 	body.name = "jj"
 }
 

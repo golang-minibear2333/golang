@@ -1,20 +1,16 @@
-/*
-* @Title:   数组定义赋值与遍历
-* @Author:  minibear2333
-* @Date:    2020-04-03 19:42
-* @url:     https://github.com/golang-minibear2333/golang
-*/
+// 数组定义赋值与遍历
 package main
 
 import (
 	"fmt"
+
 	"github.com/golang-minibear2333/golang/tools"
 )
 
 func arrayDefine() {
 	//声明定长数组
 	var a1 [10]int
-	//声明不定长数组
+	//声明不定长数组(切片)
 	var a2 []int
 
 	//初始化数组
@@ -27,7 +23,7 @@ func arrayDefine() {
 	}
 	/* 输出每个数组元素的值 */
 	for j := 0; j < 10; j++ {
-		fmt.Printf("Element[%d] = %d\n", j, a1[j] )
+		fmt.Printf("Element[%d] = %d\n", j, a1[j])
 	}
 
 	//忽略未使用错误
@@ -37,6 +33,6 @@ func arrayDefine() {
 	tools.IgnoreUnused(b2)
 }
 
-func main(){
+func main() {
 
 }

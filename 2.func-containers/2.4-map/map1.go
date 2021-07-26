@@ -87,7 +87,8 @@ type Person struct {
 func updateMapValue() {
 	originalMap := make(map[string]Person)
 	originalMap["minibear2333"] = Person{age: 26}
-	originalMap["minibear2333"].age = 5
+	// 放开以下注释体验报错
+	//originalMap["minibear2333"].age = 5
 
 	originalPointMap := make(map[string]*Person)
 	originalPointMap["minibear2333"] = &Person{age: 26}

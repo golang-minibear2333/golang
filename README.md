@@ -2,7 +2,11 @@
 
 大家好，我是小熊，本书基于Go语言版本 `1.16` 版本，后续可能会再调整，目录也还未明确，正在**努力持续更新中**，整体进度未明。
 
-如果对这个项目感兴趣，请点击一下 [**Star**](https://github.com/golang-minibear2333/golang) ，项目会 **持续更新**，感谢大家的支持。
+![](https://img.shields.io/github/watchers/golang-minibear2333/golang.svg)
+![](https://img.shields.io/github/stars/golang-minibear2333/golang.svg)
+![](https://img.shields.io/github/forks/golang-minibear2333/golang.svg)
+
+如果对这个项目感兴趣 请 -->   [***点击这里跳转项目进行Star***](https://github.com/golang-minibear2333/golang) ，项目会 **持续更新**，感谢大家的支持。
 
 -------
 
@@ -16,13 +20,14 @@
 
 * 哪有那么多人生开挂，不过都是厚积薄发 。
 * 我的个人网站: https://coding3min.com
-* 我用`Golang` 刷 [算法的项目](https://github.com/minibear2333/interview-leetcode)
+* 我写的另一本书 [程序员的魔法书](https://leetcode.coding3min.com/) 专门针对面试
 
 基本会先更新在公众号，再同步到站点上。若想一起学习，欢迎加我的微信：qupzhi。
 
 也可以关注公众号：
 
-![](blog/content/qrcode.jpg)
+![](qrcode.jpg)
+
 
 ## 本书定位
 
@@ -42,8 +47,12 @@
 
 虽然网上有很多入门与实战方面的书籍，但我想总结一下我工作或学习过程中接触到的知识，以供查阅。
 
+## 关于版权
+
+本书可能会借鉴其他书籍资料，一些网络图片，本书不作为商业用途，仅供学习交流，所借鉴内容来源于网络，会在文章末尾处标记引用位置。如源文章标记禁止引用则不会引用。
+
+因本书开源社区共同维护，难以控制，如有侵权，请留言提出，会在第一时间做出调整修改。
+
 ## 批评和建议
 
 如果有任何建议或疑问欢迎随时在本书的评论区与我交流，会尽量在 1-2 天内回复你。
-
-
