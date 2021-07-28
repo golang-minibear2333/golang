@@ -12,7 +12,6 @@ type Server struct {
 	Period int64
 }
 
-
 func main() {
 	s := CreateServer(1)
 	go s.Start()
@@ -21,6 +20,7 @@ func main() {
 	time.Sleep(time.Duration(10) * time.Second)
 	s.Stop()
 	fmt.Println("good bye")
+	time.Sleep(time.Duration(10) * time.Second)
 }
 
 func CreateServer(Period int64) *Server {
@@ -44,18 +44,17 @@ func (s *Server) Start() {
 		case <-s.tk.C:
 			fmt.Println("定时唤醒:", time.Now().Format("2006-01-02 15:04:05"))
 		case <-s.reset:
-			s.tk.Stop()
-			s.tk = time.NewTicker(time.Duration(s.Period) * time.Second)
+			s.tk.Reset(time.Duration(s.Period) * time.Second)
 		}
 	}
-}
-
-func (s *Server) Stop() {
-	close(s.Close)
-	close(s.reset)
 }
 
 func (s *Server) Update(p int64) {
 	s.Period = p
 	s.reset <- struct{}{}
+}
+
+func (s *Server) Stop() {
+	close(s.Close)
+	close(s.reset)
 }
