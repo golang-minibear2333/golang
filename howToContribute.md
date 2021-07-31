@@ -33,6 +33,8 @@ $ git push
 在 `GitHub` 网站上提交 `pull request`。
 当然了，如果你不会提`pr`，你可以参考我[给开源大项目贡献代码的文章](https://coding3min.com/653.html)
 
+更详细请看 [开源指北](https://gitee.com/opensource-guide/guide/)
+
 到这里就完成贡献的整个过程了。
 
 ## 同步代码

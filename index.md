@@ -52,7 +52,7 @@ headless: true
     * [命令行操作](番外.常用操作/flag包读取命令行配置.md)
     * -时间处理
     * -字符串处理
-    * -json库
+    * [json库](5.standard-library/json.md)
     * -http库
     * 跨平台编译
     * 模板
