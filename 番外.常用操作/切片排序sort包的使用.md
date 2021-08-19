@@ -55,41 +55,41 @@ func Example2() {
 type stature float32
 type weight float32
 
-type Pepole struct {
+type People struct {
     name     string
     h        stature
     w          weight
 }
 
-// By is the type of a "less" function that defines the ordering of its Pepole arguments.
-type By func(p1, p2 *Pepole) bool
+// By is the type of a "less" function that defines the ordering of its People arguments.
+type By func(p1, p2 *People) bool
 // Sort is a method on the function type, By, that sorts the argument slice according to the function.
-func (by By) Sort(p []Pepole) {
-    ps := &pepoleSorter{
-        pepole:  pepole,
+func (by By) Sort(p []People) {
+    ps := &peopleSorter{
+        people:  people,
         by:      by, // The Sort method's receiver is the function (closure) that defines the sort order.
     }
     sort.Sort(ps)
 }
-// pepoleSorter joins a By function and a slice of Pepole to be sorted.
-type pepoleSorter struct {
-    pepole   []Pepole
-    by       func(p1, p2 *Pepole) bool // Closure used in the Less method.
+// peopleSorter joins a By function and a slice of People to be sorted.
+type peopleSorter struct {
+    people   []People
+    by       func(p1, p2 *People) bool // Closure used in the Less method.
 }
 // Len is part of sort.Interface.
-func (s *pepoleSorter) Len() int {
-    return len(s.pepole)
+func (s *peopleSorter) Len() int {
+    return len(s.people)
 }
 // Swap is part of sort.Interface.
-func (s *pepoleSorter) Swap(i, j int) {
-    s.pepole[i], s.pepole[j] = s.pepole[j], s.pepole[i]
+func (s *peopleSorter) Swap(i, j int) {
+    s.people[i], s.people[j] = s.people[j], s.people[i]
 }
 // Less is part of sort.Interface. It is implemented by calling the "by" closure in the sorter.
-func (s *pepoleSorter) Less(i, j int) bool {
-    return s.by(&s.pepole[i], &s.pepole[j])
+func (s *peopleSorter) Less(i, j int) bool {
+    return s.by(&s.people[i], &s.people[j])
 }
 
-var pepole = []Pepole{
+var people = []People{
     {"Rose",    1.58, 66.6},
     {"Daisley", 1.78, 58.4},
     {"Lumiya",  1.65, 57.9},
@@ -99,28 +99,28 @@ var pepole = []Pepole{
 // ExampleSortKeys demonstrates a technique for sorting a struct type using programmable sort criteria.
 func Example_sortKeys() {
     // Closures that order the Planet structure.
-    name := func(p1, p2 *Pepole) bool {
+    name := func(p1, p2 *People) bool {
         return p1.name < p2.name
     }
-    stature := func(p1, p2 *Pepole) bool {
+    stature := func(p1, p2 *People) bool {
         return p1.h < p2.h
     }
-    weight  := func(p1, p2 *Pepole) bool {
+    weight  := func(p1, p2 *People) bool {
         return p1.w < p2.w
     }
-    decreasingWeight := func(p1, p2 *Pepole) bool {
+    decreasingWeight := func(p1, p2 *People) bool {
         return !weight(p1, p2)
     }
 
-    // Sort the pepole by the various criteria.
-    By(name).Sort(pepole)
-    fmt.Println("By name:", pepole)
-    By(stature).Sort(pepole)
-    fmt.Println("By stature:", pepole)
-    By(weight).Sort(pepole)
-    fmt.Println("By weight:", pepole)
-    By(decreasingWeight).Sort(pepole)
-    fmt.Println("By decreasing weight:", pepole)
+    // Sort the people by the various criteria.
+    By(name).Sort(people)
+    fmt.Println("By name:", people)
+    By(stature).Sort(people)
+    fmt.Println("By stature:", people)
+    By(weight).Sort(people)
+    fmt.Println("By weight:", people)
+    By(decreasingWeight).Sort(people)
+    fmt.Println("By decreasing weight:", people)
 
     // Output:
     // By name: [{Daisley 1.78 58.4} {Lumiya 1.65 57.9} {Rose 1.58 66.6} {Sola 1.68 55.77}]
