@@ -38,25 +38,25 @@ headless: true
     * -消费者生产者框架
     * -GMP调度原理
     * -服务器监控实战
-* **第x章、反射**
-* **第x章、调试与测试**
-    * -单元测试
+* **第五章、标准库**
+  * [5.1 Go代码基本标准规范](5.standard-library/5.1-Go代码基本标准规范.md)
+  * [5.2 json库](5.standard-library/5.2-json.md)
+  * [5.3 文件操作](5.standard-library/5.3-Go文件操作大全.md)
+  * [5.3 排序](5.standard-library/切片排序sort包的使用.md)
+  * [5.4 命令行操作](5.standard-library/flag包读取命令行配置.md)
+  * -时间处理
+  * -字符串处理
+  * -http库
+  * 跨平台编译
+  * 模板
+  * 在线工具系统实战
+* **第六章、反射**
+* **第七章、调试与测试**
+    * [单元测试](https://mp.weixin.qq.com/s/ltRpuolYuOa8cXivLZLlUw)
     * -基准测试
     * -mock
     * -自动化测试
     * -调试
-* **第x章、标准库**
-    * [Go代码基本标准规范](番外.常用操作/Go代码基本标准规范.md)
-    * [文件操作](番外.常用操作/Go文件操作大全.md)
-    * [排序](番外.常用操作/切片排序sort包的使用.md)
-    * [命令行操作](番外.常用操作/flag包读取命令行配置.md)
-    * -时间处理
-    * -字符串处理
-    * [json库](5.standard-library/json.md)
-    * -http库
-    * 跨平台编译
-    * 模板
-    * 在线工具系统实战
 * **第x章、性能调优**
     * -cpu调度
     * -内存管理
@@ -95,7 +95,7 @@ headless: true
     * -分布式计算
 * **第x章、Go语言工程化实战**
     * 构建约束
-    * [Go与Dockerfile](番外.常用操作/Golang打镜像Dockerfile的写法.md)
+    * [Go与Dockerfile](工程化实践/Golang打镜像Dockerfile的写法.md)
 * **第x章、Go语言运维实战**
 * **第x章、Go语言监控实战**
     * -自监控
