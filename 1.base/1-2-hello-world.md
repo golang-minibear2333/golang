@@ -34,7 +34,7 @@ Go 语言专门针对多处理器系统应用程序的编程进行了优化，�
 
 网络编程：这一块目前应用最广，包括 Web 应用、API 应用、下载应用、内存数据库。
 
-云平台：google 开发的 groupcache，couchbase 的部分组建云平台，目前国外很多云平台在采用 Go 开发，CloudFoundy 的部分组建，前 VMare 的技术总监自己出来搞的 apcera 云平台。
+云平台：google 开发的 groupcache，couchbase 的部分组件云平台，目前国外很多云平台在采用 Go 开发，CloudFoundry 的部分组件，前 VMware 的技术总监自己出来搞的 apcera 云平台。
 
 ## 1.2.3 Go 语言成功的项目
 
@@ -43,10 +43,10 @@ docker：基于 lxc 的一个虚拟打包工具，能够实现 PAAS 平台的组
 packer：用来生成不同平台的镜像文件，例如 VM、vbox、AWS 等，作者是 vagrant 的作者  
 skynet：分布式调度框架  
 Doozer：分布式同步工具，类似 ZooKeeper  
-Heka：mazila 开源的日志处理系统  
+Heka：mozilla 开源的日志处理系统  
 cbfs：couchbase 开源的分布式文件系统  
 tsuru：开源的 PAAS 平台，和 SAE 实现的功能一模一样  
-groupcache：memcahe 作者写的用于 Google 下载系统的缓存系统  
+groupcache：memcache 作者写的用于 Google 下载系统的缓存系统  
 god：类似 redis 的缓存系统，但是支持分布式和扩展性  
 gor：网络流量抓包和重放工具
 
