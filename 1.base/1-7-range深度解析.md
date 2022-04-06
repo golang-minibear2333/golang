@@ -98,6 +98,31 @@ k:0, v:{1 a}
 k:1, v:{2 b}  
 ```
 
+`for-range`接收新值的变量地址都是同一个地址，所以，如果通过(取地址的方式访问)&key或者&value来访问值可能看到不期望的值。
+
+```go
+var tmpKey *int
+var tmpValue *struct{
+    int
+    string
+}
+for k,v := range tmp {
+    if k == 0 {
+        tmpKey = &k
+        tmpValue = &v
+    }
+}
+fmt.Println(*tmpKey)
+fmt.Println(*tmpValue)
+```
+
+`OutPut`
+
+```json
+1
+{2 b}
+```
+
 ## 1.7.4 编程 Tips
 
 - 遍历过程中可以适情况放弃接收 `index` 或 `value`，可以一定程度上提升性能
