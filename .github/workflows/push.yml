@@ -32,11 +32,11 @@ jobs:
         run: hugo --gc --minify --cleanDestinationDir
 
       - name: Pushes to another repository
-        uses: nkoppel/push-files-to-another-repository@master
+        uses: nkoppel/push-files-to-another-repository@v1.1.0
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
           source-files: '.tmp/public/*'
-          destination-github-username: 'golang-minibear2333'
-          destination-repository-name: 'golang-minibear2333.github.io'
-          user-email: 'pzqu@qq.com'
+          destination-username: 'golang-minibear2333'
+          destination-repository: 'golang-minibear2333.github.io'
+          commit-email: 'pzqu@qq.com'
