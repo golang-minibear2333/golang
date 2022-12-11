@@ -8,6 +8,7 @@ headless: true
 * **帮助与提示**
     * [0.0 如何参与贡献](howToContribute.md)
     * [0.1 书籍推荐](books-share.md)
+* **————基础篇————**
 * **第一章、Go基础**
     * [1.1 安装与下载](1.base/1-1-install-download.md)
     * [1.2 跑起来](1.base/1-2-hello-world.md)
@@ -27,31 +28,43 @@ headless: true
     * [3.2 结构体](3.grammar-advancement/3-2-struct.md)
     * [3.3 接口与多态](3.grammar-advancement/3-3-接口与多态.md)
     * [3.4 异常处理](3.grammar-advancement/3-4-异常处理.md)
+    * -反射 TODO
 * **第四章、并发和并行**
     * [4.1 并发特性](4.concurrent/4-1-go语言中的并发特性.md)
     * [4.2 并发等待 ](4.concurrent/4-2-goroutine-wait.md)
     * [4.3 channel](4.concurrent/4-3-channel.md)
     * [4.4 deadlock](4.concurrent/4-4-deadlock.md)
     * [4.5 select](4.concurrent/4-5-select.md)
-    * -并发安全
-    * -协程池
-    * -消费者生产者框架
-    * -GMP调度原理
-    * -服务器监控实战
+    * -并发安全和锁 TODO
+    * -原子操作 TODO
+    * -协程池 TODO
+    * -消费者生产者框架 TODO
+    * -GMP调度原理 TODO
+* **————框架篇————**
 * **第五章、标准库**
-  * [5.1 Go代码基本标准规范](5.standard-library/5.1-Go代码基本标准规范.md)
-  * [5.2 json库](5.standard-library/5.2-json.md)
-  * [5.3 文件操作](5.standard-library/5.3-Go文件操作大全.md)
-  * [5.3 排序](5.standard-library/切片排序sort包的使用.md)
-  * [5.4 命令行操作](5.standard-library/flag包读取命令行配置.md)
-  * -时间处理
-  * -字符串处理
-  * -http库
-  * 跨平台编译
-  * 模板
-  * 在线工具系统实战
-* **第六章、反射**
-* **第七章、调试与测试**
+    * [5.1 Go代码基本标准规范](5.standard-library/5.1-Go代码基本标准规范.md)
+    * [5.2 json库](5.standard-library/5.2-json.md)
+    * [5.3 文件操作](5.standard-library/5.3-Go文件操作大全.md)
+    * [5.3 排序](5.standard-library/切片排序sort包的使用.md)
+    * [5.4 命令行操作](5.standard-library/flag包读取命令行配置.md)
+    * -时间处理 TODO
+    * -字符串处理 TODO
+    * -跨平台编译 TODO
+    * -模板 TODO
+    * -在线工具系统实战 TODO
+* **第x章、常用开源框架**
+    * -日志
+    * -配置管理
+    * -接口文档
+    * -错误码控制
+    * -mysql
+    * -redis
+    * -mongo
+    * rabbitmq
+    * kafka
+    * -为开源项目贡献代码
+* **————测试调试篇————**
+* **第x章、调试与测试**
     * [单元测试](https://mp.weixin.qq.com/s/ltRpuolYuOa8cXivLZLlUw)
     * -基准测试
     * -mock
@@ -64,41 +77,35 @@ headless: true
     * -PProf
     * -逃逸分析
     * -链路追踪
-* **第x章、优秀开源组件**
-    * -日志
-    * -配置管理
-    * -接口文档
-    * -错误码控制
-    * -mysql
-    * -redis
-    * -mongo
-    * rabbitmq
-    * kafka
-    * -为开源项目贡献代码
-* **第x章、web开发实战**
-    * -HTTP
-    * -GRPC
-    * -Protobuf
-    * -gin
-* **第x章、爬虫实战**
-* **第x章、在线教育系统实战**
-    * -在线考试系统实战
-    * -知识付费系统实战
-    * -在线课堂系统实战
+* **————网络编程篇————**
+* **第x章、HTTP框架**
+    * -http库实现GET POST PUT DEL请求
+    * -websocket实现在线聊天室
+    * -常用API框架
+    * -gin框架实现SSO单点登陆系统
+    * -beego实现博客
+    * -buffalo实现变更发布系统
+    * -echo实现工单管理系统
+    * -Iris实现
+    * -revel实现
+* **第x章、RPC**
 * **第x章、微服务**
     * 熔断与限流
+* **第x章、爬虫实战**
 * **第x章、分布式系统**
-    * -分布式ID生成器
-    * -分布式锁
-    * -分布式一致性算法
-    * -分布式定时任务
-    * -分布式计算
+  * -分布式ID生成器
+  * -分布式锁
+  * -分布式一致性算法
+  * -分布式定时任务
+  * -分布式计算
+* **————工程化篇————**
 * **第x章、Go语言工程化实战**
     * 构建约束
     * [Go与Dockerfile](工程化实践/Golang打镜像Dockerfile的写法.md)
 * **第x章、Go语言运维实战**
 * **第x章、Go语言监控实战**
     * -自监控
+* **————拓展学习————**
 * **第x章、kubernetes开发实战**
 * **第x章、服务治理**
 * **番外1、拓展应用**
