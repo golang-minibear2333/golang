@@ -89,6 +89,13 @@ golang.org/x/text v0.3.0 = > github.com/golang/text v0.3.0
 * exclude：忽略指定版本的依赖包
 * replace：由于在国内访问golang.org/x的各个包都需要翻墙，你可以在go.mod中使用replace替换成github上对应的库。
 
+注意上面的代码片段中出现了两个特殊的注释
+
+* `incompatible` 表示不兼容标识，假如其当前版本为v3.6.0，因为其Module名字未遵循Golang所推荐的风格，即Module名中附带版本信息，我们称这个Module为不规范的Module。
+在使用上没有区别，如果是我们自己开发的module，需要从 `xxx.com/xxx` 变到 `xxx.com/xxx/v2`
+
+* `indirect` 是指间接依赖的包，比如 a module 使用了 b module，但b module的go.mod不完整，或者未启用 go module的话，会把未记录在b的go.mod中又依赖了的包作为间接依赖，放到a的go.mod文件里
+
 ## 1.3.3 go.sum 文件
 
 每一行都是由 模块路径，模块版本，哈希检验值 组成，其中哈希检验值是用来保证当前缓存的模块不会被篡改。hash 是以h1:开头的字符串，表示生成checksum的算法是第一版的hash算法（sha256）。
