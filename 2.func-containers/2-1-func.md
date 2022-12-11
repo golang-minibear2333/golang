@@ -215,7 +215,7 @@ func speedTime(handler func() (string) {
 	// 利用反射获得函数名
     funcName := runtime.FuncForPC(reflect.ValueOf(handler).Pointer()).Name()
 	fmt.Println(funcName+"spend time:", elapsed)
-}
+})
 ```
 
 传入不同的函数都可以测速度。

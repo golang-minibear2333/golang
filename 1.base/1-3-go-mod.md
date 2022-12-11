@@ -137,7 +137,7 @@ go mod vendor ：导出项目所有依赖到vendor下
 
 写入go.mod有两种方法：
 
-* 你只要在项目中有 import 并使用或者使用下划线强制占用，然后 go build 就会 go module 就会自动下载并添加。
+* 你只要在项目中有 import 并使用或者使用下划线强制占用，然后 go build 时 go module 就会自动下载并添加。
 * `go mod tidy`
 
 ## 1.3.5 vendor是什么
