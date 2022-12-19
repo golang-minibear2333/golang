@@ -35,13 +35,14 @@ headless: true
     * [4.3 channel](4.concurrent/4-3-channel.md)
     * [4.4 deadlock](4.concurrent/4-4-deadlock.md)
     * [4.5 select](4.concurrent/4-5-select.md)
-    * -并发安全和锁 TODO
+    * [4.6 定时器](4.concurrent/4-6-cron.md)
+    * -并发安全和锁
     * -原子操作 TODO
     * -协程池 TODO
     * -消费者生产者框架 TODO
     * -GMP调度原理 TODO
 * **————框架篇————**
-* **第五章、标准库**
+* **第五章、常用标准库**
     * [5.1 Go代码基本标准规范](5.standard-library/5.1-Go代码基本标准规范.md)
     * [5.2 json库](5.standard-library/5.2-json.md)
     * [5.3 文件操作](5.standard-library/5.3-Go文件操作大全.md)
@@ -52,17 +53,21 @@ headless: true
     * -跨平台编译 TODO
     * -模板 TODO
     * -在线工具系统实战 TODO
-* **第x章、常用开源框架**
+* **第x章、常用数据操作**
+    * -mysql
+    * -redis
+    * -mongo
+    * -rabbitmq
+    * -kafka
+    * -etcd
+    * -rabbitmq
+    * -zookeeper
+    * -ElasticSearch
+* **第x章、常用第三方包**
     * -日志
     * -配置管理
     * -接口文档
     * -错误码控制
-    * -mysql
-    * -redis
-    * -mongo
-    * rabbitmq
-    * kafka
-    * -为开源项目贡献代码
 * **————测试调试篇————**
 * **第x章、调试与测试**
     * [单元测试](https://mp.weixin.qq.com/s/ltRpuolYuOa8cXivLZLlUw)
