@@ -1,4 +1,4 @@
-# 4.6
+# 4.6 定时器
 
 > 本节源码位置 https://github.com/golang-minibear2333/golang/tree/master/4.concurrent/4.6-cron
 
@@ -22,7 +22,7 @@ time.Sleep(time.Second*1)
 第一种方式，直接在需要等待处使用，效果和`Sleep`一样，一使用就卡在那了内部就是使用了`Timer`。
 
 ```go
-    fmt.Println(time.Now())
+fmt.Println(time.Now())
 <-time.After(1*time.Second)
 fmt.Println(time.Now())
 ```
@@ -30,7 +30,7 @@ fmt.Println(time.Now())
 也可以把他拆分开，在任意地方进行等待
 
 ```go
-    timer := time.NewTimer(1 * time.Second)
+timer := time.NewTimer(1 * time.Second)
 <-timer.C
 fmt.Println(time.Now())
 ```

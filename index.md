@@ -36,8 +36,9 @@ headless: true
     * [4.4 deadlock](4.concurrent/4-4-deadlock.md)
     * [4.5 select](4.concurrent/4-5-select.md)
     * [4.6 定时器](4.concurrent/4-6-cron.md)
-    * -并发安全和锁
+    * [4.7 并发安全和锁](4.concurrent/4-7-lock.md)
     * -原子操作 TODO
+    * -并发安全与类型 TODO
     * -协程池 TODO
     * -消费者生产者框架 TODO
     * -GMP调度原理 TODO
