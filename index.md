@@ -37,10 +37,9 @@ headless: true
     * [4.5 select](4.concurrent/4-5-select.md)
     * [4.6 定时器](4.concurrent/4-6-cron.md)
     * [4.7 并发安全和锁](4.concurrent/4-7-lock.md)
-    * -原子操作 TODO
-    * -并发安全与类型 TODO
+    * [4.8 原子操作](4.concurrent/4-8-原子操作.md)
+    * [4.9 sync包](4.concurrent/4-9-sync.md)
     * -协程池 TODO
-    * -消费者生产者框架 TODO
     * -GMP调度原理 TODO
 * **————框架篇————**
 * **第五章、常用标准库**
