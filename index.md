@@ -28,7 +28,7 @@ headless: true
     * [3.2 结构体](3.grammar-advancement/3-2-struct.md)
     * [3.3 接口与多态](3.grammar-advancement/3-3-接口与多态.md)
     * [3.4 异常处理](3.grammar-advancement/3-4-异常处理.md)
-    * -反射 TODO
+    * [3.5 反射](3.grammar-advancement/3-5-反射.md)
 * **第四章、并发和并行**
     * [4.1 并发特性](4.concurrent/4-1-go语言中的并发特性.md)
     * [4.2 并发等待 ](4.concurrent/4-2-goroutine-wait.md)
@@ -39,21 +39,21 @@ headless: true
     * [4.7 并发安全和锁](4.concurrent/4-7-lock.md)
     * [4.8 原子操作](4.concurrent/4-8-原子操作.md)
     * [4.9 sync包](4.concurrent/4-9-sync.md)
-    * -协程池 TODO
-    * -GMP调度原理 TODO
+    * [4.10 pool](4.concurrent/4-10-pool.md)
+    * [4.11 GMP调度原理](https://coding3min.com/question/go-gmp)
 * **————框架篇————**
 * **第五章、常用标准库**
     * [5.1 Go代码基本标准规范](5.standard-library/5.1-Go代码基本标准规范.md)
     * [5.2 json库](5.standard-library/5.2-json.md)
     * [5.3 文件操作](5.standard-library/5.3-Go文件操作大全.md)
     * [5.3 排序](5.standard-library/切片排序sort包的使用.md)
-    * [5.4 命令行操作](5.standard-library/flag包读取命令行配置.md)
-    * -时间处理 TODO
+    * [5.4 命令行操作](https://mp.weixin.qq.com/s/y3MuEAY12PRlS2ARgzYtIA)
+    * [5.5 时间处理](https://mp.weixin.qq.com/s/OBkigY4x2KamsWR6iMP_uQ)
     * -字符串处理 TODO
-    * -跨平台编译 TODO
     * -模板 TODO
     * -在线工具系统实战 TODO
-* **第x章、常用数据操作**
+* **第6章、常用数据操作**
+    * -说明
     * -mysql
     * -redis
     * -mongo
@@ -64,6 +64,7 @@ headless: true
     * -zookeeper
     * -ElasticSearch
 * **第x章、常用第三方包**
+    * -命令行工具
     * -日志
     * -配置管理
     * -接口文档
@@ -86,13 +87,8 @@ headless: true
 * **第x章、HTTP框架**
     * -http库实现GET POST PUT DEL请求
     * -websocket实现在线聊天室
-    * -常用API框架
-    * -gin框架实现SSO单点登陆系统
-    * -beego实现博客
-    * -buffalo实现变更发布系统
-    * -echo实现工单管理系统
-    * -Iris实现
-    * -revel实现
+    * -gin框架
+    * -对go写web的态度
 * **第x章、RPC**
 * **第x章、微服务**
     * 熔断与限流
